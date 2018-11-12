@@ -4,17 +4,34 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "android": "node node_modules/react-native/local-cli/cli.js run-android --appIdSuffix debug",
+    "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
+    "fmt": "prettier --write 'src/**/*.ts{,x}' && tslint 'src/**/*.ts{,x}' --fix --project tsconfig.json",
+    "lint": "tslint 'src/**/*.ts{,x}' --format stylish --project tsconfig.json"
   },
   "dependencies": {
     "react": "16.6.0-alpha.8af6728",
-    "react-native": "0.57.4"
+    "react-native": "0.57.4",
+    "react-navigation": "^2.18.2"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.9",
+    "@types/react": "^16.7.3",
+    "@types/react-native": "^0.57.7",
+    "@types/react-navigation": "^2.13.1",
+    "@types/react-test-renderer": "^16.0.3",
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.49.0",
-    "react-test-renderer": "16.6.0-alpha.8af6728"
+    "prettier": "^1.15.2",
+    "prettier-check": "^2.0.0",
+    "react-test-renderer": "16.6.0-alpha.8af6728",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "typescript": "^3.1.6"
   },
   "jest": {
     "preset": "react-native"
