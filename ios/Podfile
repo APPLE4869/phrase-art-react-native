@@ -9,4 +9,6 @@ target 'PhraseArt' do
 
   # Firebase
   pod 'Firebase/Core', '~> 5.11.0'
+  pod 'Fabric', '~> 1.7.13'
+  pod 'Crashlytics', '~> 3.10.7'
 end
