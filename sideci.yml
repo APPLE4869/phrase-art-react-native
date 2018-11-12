@@ -1,0 +1,8 @@
+linter:
+  tslint:
+    npm_install: true
+    options:
+      config: 'tslint.json'
+      exclude: 'node_modules/**'
+      project: 'tsconfig.json'
+    glob: '**/*.ts{,x}'
