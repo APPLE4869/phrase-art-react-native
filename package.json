@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "android": "node node_modules/react-native/local-cli/cli.js run-android --appIdSuffix debug",
+    "android": "node node_modules/react-native/local-cli/cli.js run-android",
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "fmt": "prettier --write 'src/**/*.ts{,x}' && tslint 'src/**/*.ts{,x}' --fix --project tsconfig.json",
     "lint": "tslint 'src/**/*.ts{,x}' --format stylish --project tsconfig.json"
@@ -15,6 +15,7 @@
   "dependencies": {
     "react": "16.6.0-alpha.8af6728",
     "react-native": "0.57.4",
+    "react-native-firebase": "^5.1.0",
     "react-navigation": "^2.18.2"
   },
   "devDependencies": {
