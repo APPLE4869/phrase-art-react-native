@@ -1,8 +1,21 @@
 import { createStackNavigator } from "react-navigation";
-import PhraseDetail from "../components/screens/PhraseDetail";
-import PhraseList from "../components/screens/PhraseList";
+import PhraseDetailScreen from "../components/screens/PhraseDetailScreen";
+import PhraseListScreen from "../components/screens/PhraseListScreen";
+import { colors } from "../styles";
 
-export default createStackNavigator({
-  PhraseDetailScreen: { screen: PhraseDetail },
-  PhraseListScreen: { screen: PhraseList }
-});
+export default createStackNavigator(
+  {
+    PhraseList: { screen: PhraseListScreen, navigationOptions: { title: "名言一覧" } },
+    PhraseDetail: { screen: PhraseDetailScreen, navigationOptions: { title: "名言詳細" } }
+  },
+  {
+    initialRouteName: "PhraseList",
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.primary
+      },
+      headerTintColor: colors.white,
+      headerTitleStyle: {}
+    }
+  }
+);
