@@ -15,6 +15,7 @@ interface Props {
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
+  initializePhrasesListStatus: any;
 }
 
 interface State {
@@ -32,6 +33,7 @@ class PhraseItemList extends React.Component<Props, State> {
     this.onRefresh = this.onRefresh.bind(this);
 
     this.props.initializePhrases();
+    this.props.initializePhrasesListStatus();
     this.fetchPhrases();
   }
 
@@ -55,24 +57,24 @@ class PhraseItemList extends React.Component<Props, State> {
     this.setState({ loading: false });
   }
 
-  fetchPhrases(offset: number = 0) {
+  async fetchPhrases(offset: number = 0) {
     const { fetchPhrases, phrasesListStatus, fetchPhrasesBySubcategoryId } = this.props;
 
     const subcategoryId = phrasesListStatus.subcategoryId;
 
     if (subcategoryId) {
-      fetchPhrasesBySubcategoryId(subcategoryId, offset);
+      await fetchPhrasesBySubcategoryId(subcategoryId, offset);
     } else {
-      fetchPhrases(offset);
+      await fetchPhrases(offset);
     }
   }
 
   async onRefresh() {
-    const { initializePhrases, fetchPhrases } = this.props;
+    const { initializePhrases } = this.props;
 
     initializePhrases();
 
-    await fetchPhrases();
+    await this.fetchPhrases();
     this.setState({ stopFetching: false });
   }
 
@@ -117,7 +119,8 @@ const mapStateToProps = (state: RootState) => ({
 const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
-  initializePhrases: PhrasesAction.initializePhrases
+  initializePhrases: PhrasesAction.initializePhrases,
+  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus,
 };
 
 const enhancer = connect(

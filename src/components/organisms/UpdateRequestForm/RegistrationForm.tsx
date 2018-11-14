@@ -53,8 +53,8 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
 
     if (!auth || !auth.jwt) {
       Alert.alert(
-        "会員登録が必要です",
-        "名言の登録を申請するには、会員登録が必要です。\n設定から会員登録を行ってください。",
+        "ログインする必要があります",
+        "名言の登録を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。",
         [{ text: "OK", onPress: navigateBack }]
       );
     }

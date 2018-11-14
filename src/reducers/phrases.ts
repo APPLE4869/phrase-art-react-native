@@ -3,7 +3,8 @@ import {
   ADD_PHRASE,
   ADD_PHRASES,
   INITIALIZE_PHRASES,
-  SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID
+  SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID,
+  INITIALIZE_PHRASES_LIST_STATUS
 } from "../actions/phrases";
 import PhraseDTO from "../models/dto/PhraseDTO";
 
@@ -38,7 +39,10 @@ export default (state: State = initialState, action: Action) => {
       return { ...state, phrasesListStatus: { subcategoryId: action.payload } };
     }
     case INITIALIZE_PHRASES: {
-      return { ...state, phrases: [], phrasesListStatus: { subcategoryId: undefined } };
+      return { ...state, phrases: [] };
+    }
+    case INITIALIZE_PHRASES_LIST_STATUS: {
+      return { ...state, phrasesListStatus: { subcategoryId: undefined } }
     }
     default: {
       return state;

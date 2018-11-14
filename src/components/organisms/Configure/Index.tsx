@@ -65,7 +65,7 @@ class Index extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <ConfigureIndexItem title="ログイン" onPress={() => navigation.navigate("ConfigureLogin")} />
-        <ConfigureIndexItem title="会員登録" onPress={() => navigation.navigate("ConfigureSignup")} />
+        <ConfigureIndexItem title="アカウント作成" onPress={() => navigation.navigate("ConfigureSignup")} />
       </View>
     );
   }
