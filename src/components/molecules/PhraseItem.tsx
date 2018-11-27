@@ -1,10 +1,10 @@
 import * as React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Phrase } from "../../lib/phrases";
+import PhraseDTO from "../../models/dto/PhraseDTO";
 import { colors } from "../../styles";
 
 interface Props {
-  phrase: Phrase;
+  phrase: PhraseDTO;
   navigateDetail: (phraseId: string) => void;
 }
 
@@ -21,8 +21,10 @@ export default class PhraseItem extends React.Component<Props> {
 
     return (
       <TouchableOpacity onPress={() => navigateDetail(phrase.id)} style={styles.item}>
-        <Text style={styles.itemGroup}>{phrase.group}</Text>
-        <Text style={styles.itemText}>{this.itemTextView(phrase.text)}</Text>
+        <Text style={styles.itemGroup}>{phrase.categoryName}</Text>
+        <Text style={styles.itemGroup}>{phrase.subcategoryName}</Text>
+        <Text style={styles.itemText}>{phrase.content}</Text>
+        <Text style={styles.itemGroup}>{this.itemTextView(phrase.authorName)}</Text>
       </TouchableOpacity>
     );
   }

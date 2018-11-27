@@ -1,7 +1,7 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
-import ItemList from "../organisms/ItemList";
-import DefaultTemplate from "../templates/DefaultTemplate";
+import ItemList from "../../organisms/ItemList";
+import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
   navigation: NavigationParams;

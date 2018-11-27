@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation";
-import PhraseDetailScreen from "../components/screens/PhraseDetailScreen";
-import PhraseListScreen from "../components/screens/PhraseListScreen";
+import PhraseDetailScreen from "../components/screens/Phrase/DetailScreen";
+import PhraseListScreen from "../components/screens/Phrase/ListScreen";
 import { colors } from "../styles";
 
 export default createStackNavigator(
@@ -12,10 +12,14 @@ export default createStackNavigator(
     initialRouteName: "PhraseList",
     navigationOptions: {
       headerStyle: {
-        backgroundColor: colors.primary
+        backgroundColor: colors.special.navigationBarBackground,
+        elevation: 0,
+        borderBottomColor: colors.special.navigationBarBorder
       },
-      headerTintColor: colors.white,
-      headerTitleStyle: {}
+      headerBackTitle: "戻る",
+      headerTintColor: colors.clickable,
+      headerTitleStyle: { color: colors.baseBlack },
+      headerPressColorAndroid: colors.baseBlack
     }
   }
 );
