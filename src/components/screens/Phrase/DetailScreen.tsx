@@ -26,8 +26,6 @@ class PhraseDetailScreen extends React.Component<Props> {
   render() {
     const { phrase } = this.props;
 
-    console.log(phrase);
-
     if (phrase === undefined) {
       return null;
     }

@@ -26,6 +26,8 @@ class ItemList extends React.Component<Props> {
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
+        onEndReached={() => this.props.fetchPhrases()}
+        onEndReachedThreshold={2}
       />
     );
   }

@@ -62,7 +62,7 @@ export function fetchPhrasesBySubcategoryId(subcategoryId: string) {
     const response: AxiosResponse<PhrasesResponse> = await ApiClient.get(`/subcategories/${subcategoryId}/phrases`);
 
     const phrases: PhraseDTO[] = response.data.phrases.map(phrase => new PhraseDTO(phrase));
-
+    console.log(phrases);
     dispatch({ type: ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID, payload: phrases });
   };
 }

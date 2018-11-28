@@ -1,11 +1,13 @@
 import { createStackNavigator } from "react-navigation";
+import CategoryListScreen from "../components/screens/Category/ListScreen";
 import PhraseDetailScreen from "../components/screens/Phrase/DetailScreen";
-import PhraseListScreen from "../components/screens/Phrase/ListScreen";
+import PhraseListScreenScreen from "../components/screens/Phrase/ListScreen";
+import SubcategoryListScreen from "../components/screens/Subcategory/ListScreen";
 import { colors } from "../styles";
 
-export default createStackNavigator(
+const MainStack = createStackNavigator(
   {
-    PhraseList: { screen: PhraseListScreen, navigationOptions: { title: "名言一覧" } },
+    PhraseList: { screen: PhraseListScreenScreen, navigationOptions: { title: "名言一覧" } },
     PhraseDetail: { screen: PhraseDetailScreen, navigationOptions: { title: "名言詳細" } }
   },
   {
@@ -21,5 +23,37 @@ export default createStackNavigator(
       headerTitleStyle: { color: colors.baseBlack },
       headerPressColorAndroid: colors.baseBlack
     }
+  }
+);
+
+const CategoryStack = createStackNavigator(
+  {
+    CategoryList: { screen: CategoryListScreen, navigationOptions: { title: "カテゴリー" } },
+    SubcategoryList: { screen: SubcategoryListScreen, navigationOptions: { title: "サブカテゴリー" } }
+  },
+  {
+    initialRouteName: "CategoryList",
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: colors.special.navigationBarBackground,
+        elevation: 0,
+        borderBottomColor: colors.special.navigationBarBorder
+      }
+    }
+  }
+);
+
+export default createStackNavigator(
+  {
+    Main: {
+      screen: MainStack
+    },
+    CategoryModal: {
+      screen: CategoryStack
+    }
+  },
+  {
+    mode: "modal",
+    headerMode: "none"
   }
 );

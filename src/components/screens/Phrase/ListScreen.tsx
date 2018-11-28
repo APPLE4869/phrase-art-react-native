@@ -1,5 +1,7 @@
 import * as React from "react";
+import { Button } from "react-native";
 import { NavigationParams } from "react-navigation";
+import { colors } from "../../../styles";
 import ItemList from "../../organisms/ItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
@@ -8,6 +10,14 @@ interface Props {
 }
 
 export default class PhraseListScreen extends React.Component<Props> {
+  static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
+    return {
+      headerLeft: (
+        <Button onPress={() => navigation.navigate("CategoryModal")} title="カテゴリー" color={colors.clickable} />
+      )
+    };
+  };
+
   constructor(props: Props) {
     super(props);
 
