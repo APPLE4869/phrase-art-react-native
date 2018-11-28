@@ -10,32 +10,52 @@ interface Props {
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
+  initializePhrases: any;
 }
 
 interface State {
   loading: boolean;
+  stopFetching: boolean;
 }
 
 class PhraseItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { loading: false };
+    this.state = { loading: false, stopFetching: false };
 
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
-    this.props.fetchPhrases();
+
+    const { initializePhrases, fetchPhrases } = this.props;
+
+    initializePhrases();
+    fetchPhrases();
   }
 
   async fetchPhraseWithAwait() {
-    if (this.state.loading === true) {
+    if (this.isUnableToFetch()) {
       return;
     }
 
+    const { phrases, fetchPhrases } = this.props;
+
     this.setState({ loading: true });
 
-    await this.props.fetchPhrases();
+    const offset: number = phrases.length;
+    await fetchPhrases(offset);
+
+    if (this.props.phrases.length === offset) {
+      // 取得件数が0の場合は、それ以降の取得処理を停止
+      this.setState({ stopFetching: true });
+    }
 
     this.setState({ loading: false });
+  }
+
+  isUnableToFetch(): boolean {
+    const { loading, stopFetching } = this.state;
+
+    return loading || stopFetching;
   }
 
   render() {
@@ -63,7 +83,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchPhrases: PhrasesAction.fetchPhrases
+  fetchPhrases: PhrasesAction.fetchPhrases,
+  initializePhrases: PhrasesAction.initializePhrases
 };
 
 const enhancer = connect(

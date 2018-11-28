@@ -47,6 +47,7 @@ class CategoryItemList extends React.Component<Props, State> {
     await fetchCategories(offset);
 
     if (this.props.categories.length === offset) {
+      // 取得件数が0の場合は、それ以降の取得処理を停止
       this.setState({ stopFetching: true });
     }
 

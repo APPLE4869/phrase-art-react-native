@@ -46,6 +46,7 @@ class SubcategoryItemList extends React.Component<Props, State> {
     await fetchSubcategoriesByCategoryId(categoryId, offset);
 
     if (this.props.subcategories.length === offset) {
+      // 取得件数が0の場合は、それ以降の取得処理を停止
       this.setState({ stopFetching: true });
     }
 

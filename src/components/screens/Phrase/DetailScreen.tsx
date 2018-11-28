@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Image, Text, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/phrases";
@@ -32,19 +32,14 @@ class PhraseDetailScreen extends React.Component<Props> {
 
     return (
       <MarginTemplate>
-        <View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>グループ</Text>
-            <Text style={styles.rowContent}>{phrase.categoryName}</Text>
+        <View style={styles.item}>
+          <View style={styles.itemCategoryArea}>
+            <Text style={styles.itemCategoryAreaMain}>{phrase.categoryName}</Text>
+            <Image style={{width: 8, height: 8}} source={require("../../../../assets/images/icon/angle-right-gray2.png")} />
+            <Text style={styles.itemCategoryAreaSub}>{phrase.subcategoryName}</Text>
           </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>名言</Text>
-            <Text style={styles.rowContent}>{phrase.content}</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.rowLabel}>作者</Text>
-            <Text style={styles.rowContent}>{phrase.authorName}</Text>
-          </View>
+          <Text style={styles.itemPhraseContent}>{phrase.content}</Text>
+          <Text style={styles.itemAuthorName}>{phrase.authorName}</Text>
         </View>
       </MarginTemplate>
     );
@@ -52,17 +47,34 @@ class PhraseDetailScreen extends React.Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  row: {
-    marginBottom: 25
+  item: {
+    width: "100%"
   },
-  rowLabel: {
-    marginBottom: 5,
+  itemCategoryArea: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  itemCategoryAreaMain: {
+    color: colors.grayLevel2,
     fontSize: 13,
-    color: colors.grayLevel2
+    marginRight: 7
   },
-  rowContent: {
-    fontSize: 16,
-    lineHeight: 24
+  itemCategoryAreaSub: {
+    color: colors.grayLevel2,
+    fontSize: 13,
+    marginLeft: 12
+  },
+  itemPhraseContent: {
+    fontSize: 15,
+    lineHeight: 24,
+    letterSpacing: 0.8,
+    marginVertical: 13,
+    color: colors.baseBlack
+  },
+  itemAuthorName: {
+    fontSize: 13,
+    letterSpacing: 1,
+    color: colors.baseBlack
   }
 });
 

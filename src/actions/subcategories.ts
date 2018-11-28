@@ -24,7 +24,6 @@ export type Action = AddSubcategories | InitializeSubcategories;
 // カテゴリー(Category)を取得
 export function fetchSubcategoriesByCategoryId(categoryId: string, offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    console.log(`/categories/${categoryId}/subcategories?offset=${offset}`);
     const response: AxiosResponse<SubcategoriesResponse> = await ApiClient.get(
       `/categories/${categoryId}/subcategories?offset=${offset}`
     );
