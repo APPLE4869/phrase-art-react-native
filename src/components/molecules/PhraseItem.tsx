@@ -1,10 +1,10 @@
 import * as React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { Phrase } from "../../lib/phrases";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import PhraseDTO from "../../models/dto/PhraseDTO";
 import { colors } from "../../styles";
 
 interface Props {
-  phrase: Phrase;
+  phrase: PhraseDTO;
   navigateDetail: (phraseId: string) => void;
 }
 
@@ -21,8 +21,16 @@ export default class PhraseItem extends React.Component<Props> {
 
     return (
       <TouchableOpacity onPress={() => navigateDetail(phrase.id)} style={styles.item}>
-        <Text style={styles.itemGroup}>{phrase.group}</Text>
-        <Text style={styles.itemText}>{this.itemTextView(phrase.text)}</Text>
+        <View style={styles.itemCategoryArea}>
+          <Text style={styles.itemCategoryAreaMain}>{phrase.categoryName}</Text>
+          <Image
+            style={{ width: 8, height: 8 }}
+            source={require("../../../assets/images/icon/angle-right-gray2.png")}
+          />
+          <Text style={styles.itemCategoryAreaSub}>{phrase.subcategoryName}</Text>
+        </View>
+        <Text style={styles.itemPhraseContent}>{this.itemTextView(phrase.content)}</Text>
+        <Text style={styles.itemAuthorName}>{phrase.authorName}</Text>
       </TouchableOpacity>
     );
   }
@@ -30,21 +38,35 @@ export default class PhraseItem extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   item: {
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#d6d7da",
+    borderBottomWidth: 1,
     paddingVertical: 20,
-    paddingHorizontal: "5%"
+    paddingHorizontal: 15,
+    borderBottomColor: colors.grayLevel4
   },
-  itemGroup: {
-    fontSize: 13,
-    marginBottom: 5,
+  itemCategoryArea: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  itemCategoryAreaMain: {
+    color: colors.grayLevel2,
+    fontSize: 12,
+    marginRight: 7
+  },
+  itemCategoryAreaSub: {
+    color: colors.grayLevel2,
+    fontSize: 12,
+    marginLeft: 12
+  },
+  itemPhraseContent: {
+    fontSize: 14,
+    lineHeight: 21,
     letterSpacing: 0.8,
-    color: colors.grayLevel3
+    marginVertical: 10,
+    color: colors.baseBlack
   },
-  itemText: {
-    fontSize: 16,
+  itemAuthorName: {
+    fontSize: 12,
     letterSpacing: 1,
-    lineHeight: 24,
-    color: colors.grayLevel1
+    color: colors.baseBlack
   }
 });

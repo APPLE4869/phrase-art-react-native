@@ -1,12 +1,17 @@
 export const colors = {
   white: "#fff",
   black: "#000",
-  primary: "#ff0055",
-  grayLevel1: "#212121",
-  grayLevel2: "#343434",
-  grayLevel3: "#585858",
-  grayLevel4: "#767676",
-  grayLevel5: "#aaaaaa",
-  grayLevel6: "#cccccc",
-  grayLevel7: "#f2f2f2"
+  baseBlack: "#212121",
+  grayLevel1: "#555555",
+  grayLevel2: "#777777",
+  grayLevel3: "#AAAAAA",
+  grayLevel4: "#E2E2E2",
+  grayLevel5: "#F2F2F2",
+  clickable: "#007AFF",
+  danger: "#FF3B30",
+  accent: "#4CD964",
+  special: {
+    navigationBarBackground: "#F5F5F7",
+    navigationBarBorder: "#DDDDDD"
+  }
 };
