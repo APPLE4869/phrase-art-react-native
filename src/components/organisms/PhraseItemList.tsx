@@ -12,7 +12,7 @@ interface Props {
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
 }
 
-class ItemList extends React.Component<Props> {
+class PhraseItemList extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
@@ -52,4 +52,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(ItemList);
+export default enhancer(PhraseItemList);
