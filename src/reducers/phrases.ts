@@ -1,16 +1,28 @@
-import { Action, ADD_PHRASE, ADD_PHRASES, INITIALIZE_PHRASES } from "../actions/phrases";
+import {
+  Action,
+  ADD_PHRASE,
+  ADD_PHRASES,
+  INITIALIZE_PHRASES,
+  SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID
+} from "../actions/phrases";
 import PhraseDTO from "../models/dto/PhraseDTO";
+
+export interface PhrasesListStatus {
+  subcategoryId: string | undefined;
+}
 
 // Stateの型定義
 export interface State {
   readonly phrase: PhraseDTO | undefined;
   readonly phrases: PhraseDTO[];
+  readonly phrasesListStatus: PhrasesListStatus;
 }
 
 // Stateの初期値
 export const initialState: State = {
   phrase: undefined,
-  phrases: []
+  phrases: [],
+  phrasesListStatus: { subcategoryId: undefined }
 };
 
 // Reducer
@@ -22,8 +34,11 @@ export default (state: State = initialState, action: Action) => {
     case ADD_PHRASES: {
       return { ...state, phrases: state.phrases.concat(action.payload) };
     }
+    case SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID: {
+      return { ...state, phrasesListStatus: { subcategoryId: action.payload } };
+    }
     case INITIALIZE_PHRASES: {
-      return { ...state, phrases: [] };
+      return { ...state, phrases: [], phrasesListStatus: { subcategoryId: undefined } };
     }
     default: {
       return state;

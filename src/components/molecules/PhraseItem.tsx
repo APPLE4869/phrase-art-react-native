@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PhraseDTO from "../../models/dto/PhraseDTO";
 import { colors } from "../../styles";
 
@@ -23,7 +23,10 @@ export default class PhraseItem extends React.Component<Props> {
       <TouchableOpacity onPress={() => navigateDetail(phrase.id)} style={styles.item}>
         <View style={styles.itemCategoryArea}>
           <Text style={styles.itemCategoryAreaMain}>{phrase.categoryName}</Text>
-          <Image style={{width: 8, height: 8}} source={require("../../../assets/images/icon/angle-right-gray2.png")} />
+          <Image
+            style={{ width: 8, height: 8 }}
+            source={require("../../../assets/images/icon/angle-right-gray2.png")}
+          />
           <Text style={styles.itemCategoryAreaSub}>{phrase.subcategoryName}</Text>
         </View>
         <Text style={styles.itemPhraseContent}>{this.itemTextView(phrase.content)}</Text>
@@ -38,7 +41,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 20,
     paddingHorizontal: 15,
-    borderBottomColor: colors.grayLevel4,
+    borderBottomColor: colors.grayLevel4
   },
   itemCategoryArea: {
     flexDirection: "row",

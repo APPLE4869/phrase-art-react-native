@@ -5,7 +5,7 @@ import PhraseListScreenScreen from "../components/screens/Phrase/ListScreen";
 import SubcategoryListScreen from "../components/screens/Subcategory/ListScreen";
 import { colors } from "../styles";
 
-const MainStack = createStackNavigator(
+const PhraseStack = createStackNavigator(
   {
     PhraseList: { screen: PhraseListScreenScreen, navigationOptions: { title: "名言一覧" } },
     PhraseDetail: { screen: PhraseDetailScreen, navigationOptions: { title: "名言詳細" } }
@@ -45,8 +45,8 @@ const CategoryStack = createStackNavigator(
 
 export default createStackNavigator(
   {
-    Main: {
-      screen: MainStack
+    Phrase: {
+      screen: PhraseStack
     },
     CategoryModal: {
       screen: CategoryStack

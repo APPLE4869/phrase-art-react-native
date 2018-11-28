@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Image, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/phrases";
@@ -35,7 +35,10 @@ class PhraseDetailScreen extends React.Component<Props> {
         <View style={styles.item}>
           <View style={styles.itemCategoryArea}>
             <Text style={styles.itemCategoryAreaMain}>{phrase.categoryName}</Text>
-            <Image style={{width: 8, height: 8}} source={require("../../../../assets/images/icon/angle-right-gray2.png")} />
+            <Image
+              style={{ width: 8, height: 8 }}
+              source={require("../../../../assets/images/icon/angle-right-gray2.png")}
+            />
             <Text style={styles.itemCategoryAreaSub}>{phrase.subcategoryName}</Text>
           </View>
           <Text style={styles.itemPhraseContent}>{phrase.content}</Text>

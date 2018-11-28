@@ -19,3 +19,7 @@ interface SubcategoryProperty {
 export interface SubcategoriesResponse {
   subcategories: SubcategoryProperty[];
 }
+
+export interface SubcategoryResponse {
+  subcategory: SubcategoryProperty;
+}

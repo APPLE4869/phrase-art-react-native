@@ -1,14 +1,16 @@
-import { Action, ADD_SUBCATEGORIES, INITIALIZE_SUBCATEGORIES } from "../actions/subcategories";
+import { Action, ADD_SUBCATEGORIES, ADD_SUBCATEGORY, INITIALIZE_SUBCATEGORIES } from "../actions/subcategories";
 import SubcategoryDTO from "../models/dto/SubcategoryDTO";
 
 // Stateの型定義
 export interface State {
   readonly subcategories: SubcategoryDTO[];
+  readonly subcategory: SubcategoryDTO | undefined;
 }
 
 // Stateの初期値
 export const initialState: State = {
-  subcategories: []
+  subcategories: [],
+  subcategory: undefined
 };
 
 // Reducer
@@ -19,6 +21,9 @@ export default (state: State = initialState, action: Action) => {
     }
     case INITIALIZE_SUBCATEGORIES: {
       return { ...state, subcategories: [] };
+    }
+    case ADD_SUBCATEGORY: {
+      return { ...state, subcategory: action.payload }
     }
     default: {
       return state;

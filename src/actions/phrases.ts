@@ -8,6 +8,7 @@ export const ADD_PHRASE = "ADD_PHRASE:phrases";
 export const ADD_PHRASES = "ADD_PHRASES:phrases";
 export const ADD_PHRASES_NARROWED_DOWN_BY_CATEGORY_ID = "ADD_PHRASES_NARROWED_DOWN_BY_CATEGORY_ID:phrases";
 export const ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID = "ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID:phrases";
+export const SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID = "SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID:phrases";
 export const INITIALIZE_PHRASES = "INITIALIZE_PHRASES:phrases";
 
 interface AddPhrase {
@@ -30,12 +31,23 @@ interface AddPhrasesBySubcategoryId {
   payload: PhraseDTO[];
 }
 
+interface SetPhrasesStatusAbountSubcategoryId {
+  type: typeof SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID;
+  payload: string;
+}
+
 interface InitializePhrases {
   type: typeof INITIALIZE_PHRASES;
 }
 
 // Reducer用に利用するActionの型を定義
-export type Action = AddPhrase | AddPhrases | AddPhrasesByCategoryId | AddPhrasesBySubcategoryId | InitializePhrases;
+export type Action =
+  | AddPhrase
+  | AddPhrases
+  | AddPhrasesByCategoryId
+  | AddPhrasesBySubcategoryId
+  | SetPhrasesStatusAbountSubcategoryId
+  | InitializePhrases;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -84,6 +96,10 @@ export function fetchPhraseById(id: string) {
 
     dispatch({ type: ADD_PHRASE, payload: phrase });
   };
+}
+
+export function setPhrasesStatusAbountSubcategoryId(subcategoryId: string): SetPhrasesStatusAbountSubcategoryId {
+  return { type: SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID, payload: subcategoryId };
 }
 
 // 取得した名言(Phrases)を初期化

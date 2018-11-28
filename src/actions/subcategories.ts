@@ -1,10 +1,11 @@
 import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
-import SubcategoryDTO, { SubcategoriesResponse } from "../models/dto/SubcategoryDTO";
+import SubcategoryDTO, { SubcategoriesResponse, SubcategoryResponse } from "../models/dto/SubcategoryDTO";
 import ApiClient from "../providers/ApiClient";
 
 // Actions
 export const ADD_SUBCATEGORIES = "ADD_SUBCATEGORIES:categories";
+export const ADD_SUBCATEGORY = "ADD_SUBCATEGORY:categories";
 export const INITIALIZE_SUBCATEGORIES = "INITIALIZE_SUBCATEGORIES:categories";
 
 interface AddSubcategories {
@@ -12,12 +13,17 @@ interface AddSubcategories {
   payload: SubcategoryDTO[];
 }
 
+interface AddSubcategory {
+  type: typeof ADD_SUBCATEGORY;
+  payload: SubcategoryDTO;
+}
+
 interface InitializeSubcategories {
   type: typeof INITIALIZE_SUBCATEGORIES;
 }
 
 // Reducer用に利用するActionの型を定義
-export type Action = AddSubcategories | InitializeSubcategories;
+export type Action = AddSubcategories | AddSubcategory | InitializeSubcategories;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -33,6 +39,18 @@ export function fetchSubcategoriesByCategoryId(categoryId: string, offset: numbe
     );
 
     dispatch({ type: ADD_SUBCATEGORIES, payload: subcategories });
+  };
+}
+
+export function fetchSubcategoryById(id: string) {
+  return async (dispatch: Dispatch<Action>) => {
+    const response: AxiosResponse<SubcategoryResponse> = await ApiClient.get(
+      `/subcategories/${id}`
+    );
+
+    const subcategory: SubcategoryDTO = new SubcategoryDTO(response.data.subcategory);
+
+    dispatch({ type: ADD_SUBCATEGORY, payload: subcategory });
   };
 }
 
