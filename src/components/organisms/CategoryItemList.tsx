@@ -9,14 +9,54 @@ import CategoryItem from "../molecules/CategoryItem";
 interface Props {
   categories: CategoryDTO[];
   fetchCategories: any;
+  initializeCategories: any;
   onPress: (categoryId: string) => void;
 }
 
-class CategoryItemList extends React.Component<Props> {
+interface State {
+  loading: boolean;
+  stopFetching: boolean;
+}
+
+class CategoryItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.props.fetchCategories();
+    this.state = { loading: false, stopFetching: false };
+
+    this.fetchCategoriesWithAwait = this.fetchCategoriesWithAwait.bind(this);
+
+    const { initializeCategories, fetchCategories } = this.props;
+
+    initializeCategories();
+
+    // 初期表示用のカテゴリーを取得
+    fetchCategories();
+  }
+
+  async fetchCategoriesWithAwait() {
+    if (this.isUnableToFetch()) {
+      return;
+    }
+
+    const { fetchCategories, categories } = this.props;
+
+    this.setState({ loading: true });
+
+    const offset: number = categories.length;
+    await fetchCategories(offset);
+
+    if (this.props.categories.length === offset) {
+      this.setState({ stopFetching: true });
+    }
+
+    this.setState({ loading: false });
+  }
+
+  isUnableToFetch(): boolean {
+    const { loading, stopFetching } = this.state;
+
+    return loading || stopFetching;
   }
 
   render() {
@@ -28,6 +68,8 @@ class CategoryItemList extends React.Component<Props> {
         data={categories}
         keyExtractor={(category: CategoryDTO) => category.id}
         renderItem={({ item: category }) => <CategoryItem category={category} onPress={onPress} />}
+        onEndReached={() => this.fetchCategoriesWithAwait()}
+        onEndReachedThreshold={3}
       />
     );
   }
@@ -44,7 +86,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchCategories: CategoriesAction.fetchCategories
+  fetchCategories: CategoriesAction.fetchCategories,
+  initializeCategories: CategoriesAction.initializeCategories
 };
 
 const enhancer = connect(

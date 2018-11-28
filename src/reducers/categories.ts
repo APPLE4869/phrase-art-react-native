@@ -1,4 +1,4 @@
-import { Action, ADD_CATEGORIES } from "../actions/categories";
+import { Action, ADD_CATEGORIES, INITIALIZE_CATEGORIES } from "../actions/categories";
 import CategoryDTO from "../models/dto/CategoryDTO";
 
 // Stateの型定義
@@ -15,7 +15,10 @@ export const initialState: State = {
 export default (state: State = initialState, action: Action) => {
   switch (action.type) {
     case ADD_CATEGORIES: {
-      return { ...state, categories: action.payload };
+      return { ...state, categories: state.categories.concat(action.payload) };
+    }
+    case INITIALIZE_CATEGORIES: {
+      return { ...state, categories: [] };
     }
     default: {
       return state;

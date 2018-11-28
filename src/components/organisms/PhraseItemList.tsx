@@ -12,11 +12,30 @@ interface Props {
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
 }
 
-class PhraseItemList extends React.Component<Props> {
+interface State {
+  loading: boolean;
+}
+
+class PhraseItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    this.state = { loading: false };
+
+    this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
     this.props.fetchPhrases();
+  }
+
+  async fetchPhraseWithAwait() {
+    if (this.state.loading === true) {
+      return;
+    }
+
+    this.setState({ loading: true });
+
+    await this.props.fetchPhrases();
+
+    this.setState({ loading: false });
   }
 
   render() {
@@ -26,8 +45,8 @@ class PhraseItemList extends React.Component<Props> {
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
-        onEndReached={() => this.props.fetchPhrases()}
-        onEndReachedThreshold={2}
+        onEndReached={() => this.fetchPhraseWithAwait()}
+        onEndReachedThreshold={3}
       />
     );
   }
