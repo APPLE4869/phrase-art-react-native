@@ -44,9 +44,7 @@ export function fetchSubcategoriesByCategoryId(categoryId: string, offset: numbe
 
 export function fetchSubcategoryById(id: string) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<SubcategoryResponse> = await ApiClient.get(
-      `/subcategories/${id}`
-    );
+    const response: AxiosResponse<SubcategoryResponse> = await ApiClient.get(`/subcategories/${id}`);
 
     const subcategory: SubcategoryDTO = new SubcategoryDTO(response.data.subcategory);
 

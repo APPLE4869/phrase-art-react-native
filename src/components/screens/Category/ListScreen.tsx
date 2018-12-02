@@ -12,7 +12,9 @@ interface Props {
 export default class CategoryListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerRight: <Button onPress={() => navigation.navigate("Phrase")} title="キャンセル" color={colors.clickable} />
+      headerRight: (
+        <Button onPress={() => navigation.navigate("PhraseList")} title="キャンセル" color={colors.clickable} />
+      )
     };
   };
 

@@ -19,7 +19,9 @@ interface Props {
 class CategoryListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerRight: <Button onPress={() => navigation.navigate("Phrase")} title="キャンセル" color={colors.clickable} />
+      headerRight: (
+        <Button onPress={() => navigation.navigate("PhraseList")} title="キャンセル" color={colors.clickable} />
+      )
     };
   };
 
@@ -50,7 +52,7 @@ class CategoryListScreen extends React.Component<Props> {
     // サブカテゴリーに属する名言を取得
     fetchPhrasesBySubcategoryId(subcategoryId);
 
-    navigation.navigate("Phrase", { subcategoryId });
+    navigation.navigate("PhraseList", { subcategoryId });
   }
 
   render() {

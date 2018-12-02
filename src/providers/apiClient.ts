@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from "axios";
 
 const axiosConfig: AxiosRequestConfig = {
   timeout: 5000,
-  baseURL: __DEV__ ? "http://localhost:5000/api/" : "https://phrase-art.herokuapp.com/api/"
+  baseURL: __DEV__ ? "http://localhost:5000/api/public/" : "https://phrase-art.herokuapp.com/api/public/"
 };
 
 const apiClient = axios.create(axiosConfig);

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import * as SubcategoriesAction from "../../actions/subcategories";
 import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
@@ -59,7 +59,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById,
+  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById
 };
 
 const enhancer = connect(

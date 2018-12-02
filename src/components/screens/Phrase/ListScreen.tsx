@@ -2,9 +2,9 @@ import * as React from "react";
 import { Button, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { colors } from "../../../styles";
+import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 import PhraseItemList from "../../organisms/PhraseItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
-import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 
 interface Props {
   navigation: NavigationParams;
@@ -32,7 +32,7 @@ export default class PhraseListScreen extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <View style={{width: "100%"}}>
+        <View style={{ width: "100%" }}>
           <CategoryPanelOnList />
           <PhraseItemList navigateDetail={this.navigateDetail} />
         </View>
