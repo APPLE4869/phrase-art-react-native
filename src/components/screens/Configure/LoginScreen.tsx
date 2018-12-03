@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Text } from "react-native";
 import { NavigationParams } from "react-navigation";
+import Login from "../../organisms/Configure/Login";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
@@ -13,9 +13,15 @@ export default class LoginScreen extends React.Component<Props> {
   }
 
   render() {
+    const { navigation } = this.props;
+
     return (
       <DefaultTemplate>
-        <Text>login</Text>
+        <Login
+          navigateConfigureIndex={() => {
+            navigation.navigate("ConfigureIndex");
+          }}
+        />
       </DefaultTemplate>
     );
   }

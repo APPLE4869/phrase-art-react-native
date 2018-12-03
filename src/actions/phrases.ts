@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
 import PhraseDTO, { PhraseResponse, PhrasesResponse } from "../models/dto/PhraseDTO";
-import ApiClient from "../providers/ApiClient";
+import { apiPublicClient } from "../providers/apiClient";
 
 // Actions
 export const ADD_PHRASE = "ADD_PHRASE:phrases";
@@ -54,7 +54,7 @@ export type Action =
 // 名言(Phrase)を取得
 export function fetchPhrases(offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<PhrasesResponse> = await ApiClient.get(`/phrases?offset=${offset}`);
+    const response: AxiosResponse<PhrasesResponse> = await apiPublicClient.get(`/phrases?offset=${offset}`);
 
     const phrases: PhraseDTO[] = response.data.phrases.map(phrase => new PhraseDTO(phrase));
 
@@ -65,7 +65,7 @@ export function fetchPhrases(offset: number = 0) {
 // カテゴリーIDに紐づく名言(Phrase)を取得
 export function fetchPhrasesByCategoryId(categoryId: string, offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<PhrasesResponse> = await ApiClient.get(
+    const response: AxiosResponse<PhrasesResponse> = await apiPublicClient.get(
       `/categories/${categoryId}/phrases?offset=${offset}`
     );
 
@@ -78,7 +78,7 @@ export function fetchPhrasesByCategoryId(categoryId: string, offset: number = 0)
 // サブカテゴリーIDに紐づく名言(Phrase)を取得
 export function fetchPhrasesBySubcategoryId(subcategoryId: string, offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<PhrasesResponse> = await ApiClient.get(
+    const response: AxiosResponse<PhrasesResponse> = await apiPublicClient.get(
       `/subcategories/${subcategoryId}/phrases?offset=${offset}`
     );
 
@@ -90,7 +90,7 @@ export function fetchPhrasesBySubcategoryId(subcategoryId: string, offset: numbe
 
 export function fetchPhraseById(id: string) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<PhraseResponse> = await ApiClient.get(`/phrases/${id}`);
+    const response: AxiosResponse<PhraseResponse> = await apiPublicClient.get(`/phrases/${id}`);
 
     const phrase: PhraseDTO = new PhraseDTO(response.data.phrase);
 

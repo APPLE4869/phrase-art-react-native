@@ -21,7 +21,7 @@ export default class InProgressScreen extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <Text>InProgress</Text>
+        <Text>申請一覧</Text>
       </DefaultTemplate>
     );
   }

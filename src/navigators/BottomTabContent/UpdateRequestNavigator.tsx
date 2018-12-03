@@ -4,7 +4,7 @@ import { colors } from "../../styles";
 
 const PhraseStack = createStackNavigator(
   {
-    UpdateRequestInProgress: { screen: UpdateRequestInProgressScreen, navigationOptions: { title: "設定" } }
+    UpdateRequestInProgress: { screen: UpdateRequestInProgressScreen, navigationOptions: { title: "申請一覧" } }
   },
   {
     initialRouteName: "UpdateRequestInProgress",

@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
 import CategoryDTO, { CategoriesResponse } from "../models/dto/CategoryDTO";
-import ApiClient from "../providers/ApiClient";
+import { apiPublicClient } from "../providers/apiClient";
 
 // Actions
 export const ADD_CATEGORIES = "ADD_CATEGORIES:categories";
@@ -24,7 +24,7 @@ export type Action = AddCategories | InitializeCategories;
 // カテゴリー(Category)を取得
 export function fetchCategories(offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<CategoriesResponse> = await ApiClient.get(`/categories?offset=${offset}`);
+    const response: AxiosResponse<CategoriesResponse> = await apiPublicClient.get(`/categories?offset=${offset}`);
 
     const categories: CategoryDTO[] = response.data.categories.map(category => new CategoryDTO(category));
 
