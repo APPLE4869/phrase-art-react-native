@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Alert } from "react-native";
 import { Dispatch } from "redux";
+import ApplicationError from "../models/ApplicationError";
 import { apiPublicClient } from "../providers/apiClient";
 
 // Actions
@@ -46,14 +47,14 @@ export function register(username: string, password: string) {
       });
 
       if (response.status !== 200) {
-        throw new Error(response.data.error);
+        throw new Error(response.data.message);
       }
 
       const jwt: string = await loginRequest(username, password);
 
       dispatch({ type: ADD_JWT, payload: jwt });
     } catch (e) {
-      Alert.alert(e.message);
+      new ApplicationError(e).alertMessage();
 
       throw e;
     }

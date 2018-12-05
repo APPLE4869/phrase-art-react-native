@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: colors.clickable,
     borderRadius: 30,
-    height: 45
+    height: 45,
+    marginBottom: 30
   },
   isDisabled: {
     backgroundColor: colors.grayLevel3

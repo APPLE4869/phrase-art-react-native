@@ -22,9 +22,9 @@ export type Action = AddCategories | InitializeCategories;
 // ----- 以下、アクションメソッド定義 -----//
 
 // カテゴリー(Category)を取得
-export function fetchCategories(offset: number = 0) {
+export function fetchCategories() {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<CategoriesResponse> = await apiPublicClient.get(`/categories?offset=${offset}`);
+    const response: AxiosResponse<CategoriesResponse> = await apiPublicClient.get("/categories");
 
     const categories: CategoryDTO[] = response.data.categories.map(category => new CategoryDTO(category));
 

@@ -5,7 +5,7 @@ import * as authAction from "../../../actions/auth";
 import * as loadingAction from "../../../actions/loading";
 import { formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
-import FormGroup from "../../molecules/FormGroup";
+import TextField from "../../molecules/FormGroup/TextField";
 
 interface Props {
   navigateConfigureIndex: () => void;
@@ -71,8 +71,8 @@ class Login extends React.Component<Props, State> {
 
     return (
       <View style={formStyle.container}>
-        <FormGroup label="ユーザー名" placeholder="TaroYamada" onChangeText={this.onChangeUsername} />
-        <FormGroup label="パスワード" onChangeText={this.onChangePassword} secureTextEntry={true} marginBottom={40} />
+        <TextField label="ユーザー名" marginTop={30} placeholder="TaroYamada" onChangeText={this.onChangeUsername} />
+        <TextField label="パスワード" onChangeText={this.onChangePassword} secureTextEntry={true} marginBottom={40} />
         <FormButton title="ログインする" onPress={this.onSubmit} disabled={disabledButton} />
       </View>
     );

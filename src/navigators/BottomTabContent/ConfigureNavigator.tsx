@@ -2,7 +2,7 @@ import { createStackNavigator } from "react-navigation";
 import ConfigureIndexScreen from "../../components/screens/Configure/IndexScreen";
 import ConfigureLoginScreen from "../../components/screens/Configure/LoginScreen";
 import ConfigureSignupScreen from "../../components/screens/Configure/SignupScreen";
-import { colors } from "../../styles";
+import NavigationOptions from "./NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {
@@ -12,17 +12,7 @@ const PhraseStack = createStackNavigator(
   },
   {
     initialRouteName: "ConfigureIndex",
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: colors.special.navigationBarBackground,
-        elevation: 0,
-        borderBottomColor: colors.special.navigationBarBorder
-      },
-      headerBackTitle: null,
-      headerTintColor: colors.clickable,
-      headerTitleStyle: { color: colors.baseBlack },
-      headerPressColorAndroid: colors.baseBlack
-    }
+    navigationOptions: NavigationOptions
   }
 );
 

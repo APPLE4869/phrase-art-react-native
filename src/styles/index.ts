@@ -20,7 +20,6 @@ export const colors = {
 export const formStyle = {
   container: {
     width: "100%",
-    marginTop: 30,
     paddingHorizontal: "10%"
   }
 };

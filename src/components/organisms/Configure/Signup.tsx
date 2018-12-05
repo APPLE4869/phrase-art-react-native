@@ -5,7 +5,7 @@ import * as authAction from "../../../actions/auth";
 import * as loadingAction from "../../../actions/loading";
 import { formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
-import FormGroup from "../../molecules/FormGroup";
+import TextField from "../../molecules/FormGroup/TextField";
 
 interface Props {
   navigateConfigureIndex: () => void;
@@ -71,13 +71,14 @@ class Signup extends React.Component<Props, State> {
 
     return (
       <View style={formStyle.container}>
-        <FormGroup
+        <TextField
+          marginTop={30}
           label="ユーザー名"
           placeholder="TaroYamada"
           description="半角英数字で入力してください。"
           onChangeText={this.onChangeUsername}
         />
-        <FormGroup
+        <TextField
           label="パスワード"
           onChangeText={this.onChangePassword}
           description="8文字以上で入力してください。"

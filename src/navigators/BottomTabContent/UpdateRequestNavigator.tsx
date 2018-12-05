@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation";
 import UpdateRequestInProgressScreen from "../../components/screens/UpdateRequest/InProgressScreen";
-import { colors } from "../../styles";
+import NavigationOptions from "./NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {
@@ -8,17 +8,7 @@ const PhraseStack = createStackNavigator(
   },
   {
     initialRouteName: "UpdateRequestInProgress",
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: colors.special.navigationBarBackground,
-        elevation: 0,
-        borderBottomColor: colors.special.navigationBarBorder
-      },
-      headerBackTitle: null,
-      headerTintColor: colors.clickable,
-      headerTitleStyle: { color: colors.baseBlack },
-      headerPressColorAndroid: colors.baseBlack
-    }
+    navigationOptions: NavigationOptions
   }
 );
 

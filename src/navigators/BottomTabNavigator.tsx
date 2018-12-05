@@ -52,7 +52,9 @@ export default createBottomTabNavigator(
   },
   {
     backBehavior: "none",
-    navigationOptions: ({navigation}) => { return { tabBarVisible: navigation.state.index === 0 } },
+    navigationOptions: ({ navigation }) => {
+      return { tabBarVisible: navigation.state.index === 0 };
+    },
     tabBarOptions: {
       activeTintColor: colors.clickable,
       activeBackgroundColor: colors.transparentClickable,

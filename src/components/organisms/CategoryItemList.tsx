@@ -24,34 +24,12 @@ class CategoryItemList extends React.Component<Props, State> {
 
     this.state = { loading: false, stopFetching: false };
 
-    this.fetchCategoriesWithAwait = this.fetchCategoriesWithAwait.bind(this);
+    const { categories, fetchCategories } = this.props;
 
-    const { initializeCategories, fetchCategories } = this.props;
-
-    initializeCategories();
-
-    // 初期表示用のカテゴリーを取得
-    fetchCategories();
-  }
-
-  async fetchCategoriesWithAwait() {
-    if (this.isUnableToFetch()) {
-      return;
+    if (categories.length === 0) {
+      // 初期表示用のカテゴリーを取得
+      fetchCategories();
     }
-
-    const { fetchCategories, categories } = this.props;
-
-    this.setState({ loading: true });
-
-    const offset: number = categories.length;
-    await fetchCategories(offset);
-
-    if (this.props.categories.length === offset) {
-      // 取得件数が0の場合は、それ以降の取得処理を停止
-      this.setState({ stopFetching: true });
-    }
-
-    this.setState({ loading: false });
   }
 
   isUnableToFetch(): boolean {
@@ -69,8 +47,6 @@ class CategoryItemList extends React.Component<Props, State> {
         data={categories}
         keyExtractor={(category: CategoryDTO) => category.id}
         renderItem={({ item: category }) => <CategoryItem category={category} onPress={onPress} />}
-        onEndReached={() => this.fetchCategoriesWithAwait()}
-        onEndReachedThreshold={3}
       />
     );
   }

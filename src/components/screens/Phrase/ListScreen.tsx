@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, View } from "react-native";
+import { Button, Image, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { colors } from "../../../styles";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
@@ -15,6 +15,11 @@ export default class PhraseListScreen extends React.Component<Props> {
     return {
       headerLeft: (
         <Button onPress={() => navigation.navigate("CategoryModal")} title="カテゴリー" color={colors.clickable} />
+      ),
+      headerRight: (
+        <TouchableOpacity onPress={() => navigation.navigate("UpdateRequestFormRegistrationRequest")}>
+          <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/plus.png")} />
+        </TouchableOpacity>
       )
     };
   };

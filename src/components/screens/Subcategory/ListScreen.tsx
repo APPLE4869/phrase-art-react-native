@@ -28,10 +28,10 @@ class CategoryListScreen extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.navigateSubcategoryList = this.navigateSubcategoryList.bind(this);
+    this.navigateSubcategoryPhraseList = this.navigateSubcategoryPhraseList.bind(this);
   }
 
-  navigateSubcategoryList(subcategoryId: string) {
+  navigateSubcategoryPhraseList(subcategoryId: string) {
     const {
       initializePhrases,
       fetchPhrasesBySubcategoryId,
@@ -60,7 +60,7 @@ class CategoryListScreen extends React.Component<Props> {
 
     return (
       <DefaultTemplate>
-        <SubcategoryItemList categoryId={categoryId} onPress={this.navigateSubcategoryList} />
+        <SubcategoryItemList categoryId={categoryId} onPress={this.navigateSubcategoryPhraseList} />
       </DefaultTemplate>
     );
   }
