@@ -10,6 +10,7 @@ export const ADD_PHRASES_NARROWED_DOWN_BY_CATEGORY_ID = "ADD_PHRASES_NARROWED_DO
 export const ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID = "ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID:phrases";
 export const SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID = "SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID:phrases";
 export const INITIALIZE_PHRASES = "INITIALIZE_PHRASES:phrases";
+export const INITIALIZE_PHRASES_LIST_STATUS = "INITIALIZE_PHRASES_LIST_STATUS:phrases";
 
 interface AddPhrase {
   type: typeof ADD_PHRASE;
@@ -40,6 +41,10 @@ interface InitializePhrases {
   type: typeof INITIALIZE_PHRASES;
 }
 
+interface InitializePhrasesListStatus {
+  type: typeof INITIALIZE_PHRASES_LIST_STATUS;
+}
+
 // Reducer用に利用するActionの型を定義
 export type Action =
   | AddPhrase
@@ -47,7 +52,8 @@ export type Action =
   | AddPhrasesByCategoryId
   | AddPhrasesBySubcategoryId
   | SetPhrasesStatusAbountSubcategoryId
-  | InitializePhrases;
+  | InitializePhrases
+  | InitializePhrasesListStatus;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -105,4 +111,9 @@ export function setPhrasesStatusAbountSubcategoryId(subcategoryId: string): SetP
 // 取得した名言(Phrases)を初期化
 export function initializePhrases(): InitializePhrases {
   return { type: INITIALIZE_PHRASES };
+}
+
+// 設定されている名言リストのステータスを初期化
+export function initializePhrasesListStatus(): InitializePhrasesListStatus {
+  return { type: INITIALIZE_PHRASES_LIST_STATUS };
 }

@@ -8,7 +8,7 @@ const PhraseStack = createStackNavigator(
   {
     ConfigureIndex: { screen: ConfigureIndexScreen, navigationOptions: { title: "設定" } },
     ConfigureLogin: { screen: ConfigureLoginScreen, navigationOptions: { title: "ログイン" } },
-    ConfigureSignup: { screen: ConfigureSignupScreen, navigationOptions: { title: "会員登録" } }
+    ConfigureSignup: { screen: ConfigureSignupScreen, navigationOptions: { title: "アカウント作成" } }
   },
   {
     initialRouteName: "ConfigureIndex",
