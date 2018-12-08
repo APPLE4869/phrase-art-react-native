@@ -1,10 +1,11 @@
 import * as React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../actions/phrases";
 import PhraseDTO from "../../models/dto/PhraseDTO";
 import { State as RootState } from "../../reducers";
 import * as PhrasesReducers from "../../reducers/phrases";
+import { colors } from "../../styles";
 import PhraseItem from "../molecules/PhraseItem";
 
 interface Props {
@@ -19,14 +20,16 @@ interface Props {
 interface State {
   loading: boolean;
   stopFetching: boolean;
+  refreshLoading: boolean;
 }
 
 class PhraseItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { loading: false, stopFetching: false };
+    this.state = { loading: false, stopFetching: false, refreshLoading: false };
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
 
     this.props.initializePhrases();
     this.fetchPhrases();
@@ -64,13 +67,24 @@ class PhraseItemList extends React.Component<Props, State> {
     }
   }
 
-  isUnableToFetch(): boolean {
-    const { loading, stopFetching } = this.state;
+  async onRefresh() {
+    const { initializePhrases, fetchPhrases } = this.props;
 
-    return loading || stopFetching;
+    initializePhrases();
+
+    await fetchPhrases();
+    this.setState({ stopFetching: false });
+  }
+
+  isUnableToFetch(): boolean {
+    const { loading, stopFetching, refreshLoading } = this.state;
+
+    return loading || stopFetching || refreshLoading;
   }
 
   render() {
+    const { refreshLoading } = this.state;
+
     return (
       <FlatList
         style={styles.container}
@@ -79,6 +93,10 @@ class PhraseItemList extends React.Component<Props, State> {
         renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
         onEndReached={() => this.fetchPhraseWithAwait()}
         onEndReachedThreshold={3}
+        refreshing={refreshLoading}
+        refreshControl={
+          <RefreshControl refreshing={refreshLoading} onRefresh={this.onRefresh} tintColor={colors.grayLevel4} />
+        }
       />
     );
   }
@@ -86,7 +104,8 @@ class PhraseItemList extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%"
+    width: "100%",
+    flex: 1
   }
 });
 

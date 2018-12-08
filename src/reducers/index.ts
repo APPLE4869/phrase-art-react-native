@@ -4,6 +4,10 @@ import categories, { State as CategoriesState } from "./categories";
 import loading, { State as LoadingState } from "./loading";
 import phrases, { State as PhrasesState } from "./phrases";
 import subcategories, { State as SubcategoriesState } from "./subcategories";
+import updateRequests, { State as UpdateRequestState } from "./updateRequest";
+import phraseRegistrationRequest, {
+  State as PhraseRegistrationRequestState
+} from "./updateRequest/phraseRegistrationRequest";
 
 export interface State {
   phrases: PhrasesState;
@@ -11,6 +15,8 @@ export interface State {
   subcategories: SubcategoriesState;
   auth: AuthState;
   loading: LoadingState;
+  updateRequests: UpdateRequestState;
+  phraseRegistrationRequest: PhraseRegistrationRequestState;
 }
 
 export default combineReducers({
@@ -18,5 +24,7 @@ export default combineReducers({
   categories,
   subcategories,
   auth,
-  loading
+  loading,
+  updateRequests,
+  phraseRegistrationRequest
 });

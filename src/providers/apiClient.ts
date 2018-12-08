@@ -14,9 +14,20 @@ const apiPublicClient = axios.create(axiosPublicConfig);
 const apiPrivateClient = axios.create(axiosPrivateConfig);
 
 // JWTのトークン埋め込み用の処理
+apiPublicClient.interceptors.request.use(async request => {
+  const jwt = window.store.getState().auth.jwt;
+  if (jwt) {
+    request.headers.common.Authorization = `Bearer ${jwt}`;
+  }
+  return request;
+});
+
+// JWTのトークン埋め込み用の処理
 apiPrivateClient.interceptors.request.use(async request => {
   const jwt = window.store.getState().auth.jwt;
-  request.headers.common.Authorization = `Bearer ${jwt}`;
+  if (jwt) {
+    request.headers.common.Authorization = `Bearer ${jwt}`;
+  }
   return request;
 });
 

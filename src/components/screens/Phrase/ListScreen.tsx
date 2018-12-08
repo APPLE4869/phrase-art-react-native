@@ -37,7 +37,7 @@ export default class PhraseListScreen extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <View style={{ width: "100%" }}>
+        <View style={{ width: "100%", flex: 1 }}>
           <CategoryPanelOnList />
           <PhraseItemList navigateDetail={this.navigateDetail} />
         </View>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
@@ -17,6 +17,35 @@ interface State {}
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
+    this.handleLogoutDialog = this.handleLogoutDialog.bind(this);
+  }
+
+  handleLogoutDialog() {
+    const { logout } = this.props;
+
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["キャンセル", "ログアウト"],
+          title: "ログアウトしますか？",
+          destructiveButtonIndex: 1,
+          cancelButtonIndex: 0
+        },
+        buttonIndex => {
+          if (buttonIndex === 1) {
+            logout();
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        "ログアウトしますか？",
+        "",
+        [{ text: "キャンセル", style: "cancel" }, { text: "ログアウト", onPress: () => logout() }],
+        { cancelable: true }
+      );
+    }
   }
 
   render() {
@@ -27,7 +56,7 @@ class Index extends React.Component<Props, State> {
       // TODO : ログアウトはConfirmをつける予定
       return (
         <View style={styles.container}>
-          <ConfigureIndexItem title="ログアウト" onPress={() => this.props.logout()} hiddenRightArrow={true} />
+          <ConfigureIndexItem title="ログアウト" onPress={() => this.handleLogoutDialog()} hiddenRightArrow={true} />
         </View>
       );
     }

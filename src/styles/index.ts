@@ -13,7 +13,9 @@ export const colors = {
   accent: "#4CD964",
   special: {
     navigationBarBackground: "#F5F5F7",
-    navigationBarBorder: "#DDDDDD"
+    navigationBarBorder: "#DDDDDD",
+    approve: "#00CED1",
+    reject: "#FF8C00"
   }
 };
 

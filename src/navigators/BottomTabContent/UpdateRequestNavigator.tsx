@@ -1,13 +1,15 @@
 import { createStackNavigator } from "react-navigation";
-import UpdateRequestInProgressScreen from "../../components/screens/UpdateRequest/InProgressScreen";
+import PhraseUpdateRequestScreen from "../../components/screens/UpdateRequest/Details/PhraseUpdateRequest";
+import UpdateRequestListScreen from "../../components/screens/UpdateRequest/ListScreen";
 import NavigationOptions from "./NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {
-    UpdateRequestInProgress: { screen: UpdateRequestInProgressScreen, navigationOptions: { title: "申請一覧" } }
+    UpdateRequestList: { screen: UpdateRequestListScreen, navigationOptions: { title: "申請一覧" } },
+    PhraseUpdateRequest: { screen: PhraseUpdateRequestScreen }
   },
   {
-    initialRouteName: "UpdateRequestInProgress",
+    initialRouteName: "UpdateRequestList",
     navigationOptions: NavigationOptions
   }
 );

@@ -63,12 +63,13 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
   async fetchCategoriesAndsetInitialCategoryId() {
     const { fetchCategories } = this.props;
 
-    if (this.props.categories.length === 0) {
-      // 初期表示用のカテゴリーを取得
-      await fetchCategories();
-    }
+    // 初期表示用のカテゴリーを取得
+    await fetchCategories();
 
-    this.state = { ...this.state, categoryId: this.props.categories[0].id };
+    const { categories } = this.props;
+    if (categories.length > 0) {
+      this.setState({ categoryId: categories[0].id });
+    }
   }
 
   onChangeCategoryId(categoryId: string) {
@@ -113,11 +114,11 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
 
   async onSubmit() {
     const { startLoading, endLoading, navigateNextScreen, submitRegisterRequest } = this.props;
-    const { categoryId, subcategoryName, author, content } = this.state;
+    const { categoryId, subcategoryName, content, author } = this.state;
     startLoading();
 
     try {
-      await submitRegisterRequest(categoryId, subcategoryName, author, content);
+      await submitRegisterRequest(categoryId, subcategoryName, content, author);
     } finally {
       endLoading();
     }
