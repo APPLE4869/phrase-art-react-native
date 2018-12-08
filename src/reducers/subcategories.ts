@@ -23,7 +23,7 @@ export default (state: State = initialState, action: Action) => {
       return { ...state, subcategories: [] };
     }
     case ADD_SUBCATEGORY: {
-      return { ...state, subcategory: action.payload }
+      return { ...state, subcategory: action.payload };
     }
     default: {
       return state;

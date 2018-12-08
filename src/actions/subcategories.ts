@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
 import SubcategoryDTO, { SubcategoriesResponse, SubcategoryResponse } from "../models/dto/SubcategoryDTO";
-import ApiClient from "../providers/ApiClient";
+import { apiPublicClient } from "../providers/apiClient";
 
 // Actions
 export const ADD_SUBCATEGORIES = "ADD_SUBCATEGORIES:categories";
@@ -30,7 +30,7 @@ export type Action = AddSubcategories | AddSubcategory | InitializeSubcategories
 // カテゴリー(Category)を取得
 export function fetchSubcategoriesByCategoryId(categoryId: string, offset: number = 0) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<SubcategoriesResponse> = await ApiClient.get(
+    const response: AxiosResponse<SubcategoriesResponse> = await apiPublicClient.get(
       `/categories/${categoryId}/subcategories?offset=${offset}`
     );
 
@@ -44,9 +44,7 @@ export function fetchSubcategoriesByCategoryId(categoryId: string, offset: numbe
 
 export function fetchSubcategoryById(id: string) {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<SubcategoryResponse> = await ApiClient.get(
-      `/subcategories/${id}`
-    );
+    const response: AxiosResponse<SubcategoryResponse> = await apiPublicClient.get(`/subcategories/${id}`);
 
     const subcategory: SubcategoryDTO = new SubcategoryDTO(response.data.subcategory);
 

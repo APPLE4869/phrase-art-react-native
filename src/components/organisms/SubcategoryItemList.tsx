@@ -25,10 +25,7 @@ class SubcategoryItemList extends React.Component<Props, State> {
 
     this.state = { loading: false, stopFetching: false };
 
-    const { categoryId, fetchSubcategoriesByCategoryId, initializeSubcategories } = this.props;
-
-    initializeSubcategories();
-
+    const { categoryId, fetchSubcategoriesByCategoryId } = this.props;
     // 初期表示用のサブカテゴリーを取得
     fetchSubcategoriesByCategoryId(categoryId);
   }
@@ -51,6 +48,10 @@ class SubcategoryItemList extends React.Component<Props, State> {
     }
 
     this.setState({ loading: false });
+  }
+
+  componentWillUnmount() {
+    this.props.initializeSubcategories();
   }
 
   isUnableToFetch(): boolean {

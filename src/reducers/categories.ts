@@ -15,7 +15,7 @@ export const initialState: State = {
 export default (state: State = initialState, action: Action) => {
   switch (action.type) {
     case ADD_CATEGORIES: {
-      return { ...state, categories: state.categories.concat(action.payload) };
+      return { ...state, categories: action.payload };
     }
     case INITIALIZE_CATEGORIES: {
       return { ...state, categories: [] };

@@ -6,12 +6,22 @@ export const colors = {
   grayLevel2: "#777777",
   grayLevel3: "#AAAAAA",
   grayLevel4: "#E2E2E2",
-  grayLevel5: "#F2F2F2",
+  grayLevel5: "#FAFAFA",
   clickable: "#007AFF",
+  transparentClickable: "rgba(0, 11, 255, 0.1)",
   danger: "#FF3B30",
   accent: "#4CD964",
   special: {
     navigationBarBackground: "#F5F5F7",
-    navigationBarBorder: "#DDDDDD"
+    navigationBarBorder: "#DDDDDD",
+    approve: "#00CED1",
+    reject: "#FF8C00"
+  }
+};
+
+export const formStyle = {
+  container: {
+    width: "100%",
+    paddingHorizontal: "10%"
   }
 };
