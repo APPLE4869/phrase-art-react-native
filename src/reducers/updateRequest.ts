@@ -4,7 +4,7 @@ import {
   ADD_REQUESTING_UPDATE_REQUESTS,
   INITIALIZE_FINISHED_UPDATE_REQUESTS,
   INITIALIZE_REQUESTING_UPDATE_REQUESTS
-} from "../actions/UpdateRequest/updateRequest";
+} from "../actions/UpdateRequest/updateRequestList";
 import PhraseUpdateRequestDTO from "../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
 import SubcategoryModificationRequestDTO from "../models/dto/UpdateRequestList/SubcategoryModificationRequestDTO";
 

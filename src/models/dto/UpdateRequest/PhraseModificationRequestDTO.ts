@@ -1,0 +1,60 @@
+import { PhraseDecisionProperty } from "./PhraseDecisionDTO";
+
+export default class PhraseModificationRequestDTO {
+  readonly id: string;
+  readonly finished: boolean;
+  readonly decisionExpiresAt: string;
+  readonly categoryId: string;
+  readonly categoryName: string;
+  readonly subcategoryId?: string;
+  readonly subcategoryName?: string;
+  readonly phraseContent: string;
+  readonly phraseAuthorName: string;
+  readonly approvedCount: number;
+  readonly rejectedCount: number;
+
+  constructor({
+    id,
+    finished,
+    decisionExpiresAt,
+    categoryId,
+    categoryName,
+    subcategoryId,
+    subcategoryName,
+    phraseContent,
+    phraseAuthorName,
+    approvedCount,
+    rejectedCount
+  }: PhraseModificationRequestProperty) {
+    this.id = id;
+    this.finished = finished;
+    this.decisionExpiresAt = decisionExpiresAt;
+    this.categoryId = categoryId;
+    this.categoryName = categoryName;
+    this.subcategoryId = subcategoryId;
+    this.subcategoryName = subcategoryName;
+    this.phraseContent = phraseContent;
+    this.phraseAuthorName = phraseAuthorName;
+    this.approvedCount = approvedCount;
+    this.rejectedCount = rejectedCount;
+  }
+}
+
+interface PhraseModificationRequestProperty {
+  id: string;
+  finished: boolean;
+  decisionExpiresAt: string;
+  categoryId: string;
+  categoryName: string;
+  subcategoryId?: string;
+  subcategoryName?: string;
+  phraseContent: string;
+  phraseAuthorName: string;
+  approvedCount: number;
+  rejectedCount: number;
+}
+
+export interface PhraseModificationRequestResponse {
+  phraseModificationRequest: PhraseModificationRequestProperty;
+  phraseDecision: PhraseDecisionProperty;
+}

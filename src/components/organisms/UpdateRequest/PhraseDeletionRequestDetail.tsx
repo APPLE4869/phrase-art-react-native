@@ -1,11 +1,11 @@
 import moment from "moment";
 import * as React from "react";
-import { StyleSheet, Alert, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
-import * as RegistrationAction from "../../../actions/UpdateRequest/registrationRequest";
+import * as PhraseDeletionRequestAction from "../../../actions/UpdateRequest/phraseDeletionRequest";
 import PhraseDecisionDTO from "../../../models/dto/UpdateRequest/PhraseDecisionDTO";
-import PhraseRegistrationRequestDTO from "../../../models/dto/UpdateRequest/PhraseRegistrationRequestDTO";
+import PhraseDeletionRequestDTO from "../../../models/dto/UpdateRequest/PhraseDeletionRequestDTO";
 import UpdateRequestDTO from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
@@ -18,7 +18,7 @@ import StandardText from "../../atoms/StandardText";
 
 interface Props {
   updateRequestId: string;
-  phraseRegistrationRequest?: PhraseRegistrationRequestDTO;
+  phraseDeletionRequest?: PhraseDeletionRequestDTO;
   phraseDecision?: PhraseDecisionDTO;
   fetchById: any;
   approve: any;
@@ -30,7 +30,7 @@ interface State {
   choiceButtonGroupActiveIndex?: 0 | 1;
 }
 
-class RegistrationRequestDetail extends React.Component<Props, State> {
+class DeletionRequestDetail extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -54,7 +54,9 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   async onPressForPositive() {
-    if (!this.isLoggedIn()) return;
+    if (!this.isLoggedIn()) {
+      return;
+    }
 
     const { updateRequestId, approve, fetchById } = this.props;
 
@@ -67,7 +69,9 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   async onPressForNegative() {
-    if (!this.isLoggedIn()) return;
+    if (!this.isLoggedIn()) {
+      return;
+    }
 
     const { updateRequestId, reject, fetchById } = this.props;
 
@@ -93,11 +97,11 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   isExpired(): boolean {
-    const { phraseRegistrationRequest } = this.props;
-    if (!phraseRegistrationRequest) {
+    const { phraseDeletionRequest } = this.props;
+    if (!phraseDeletionRequest) {
       return true;
     }
-    const { decisionExpiresAt } = phraseRegistrationRequest;
+    const { decisionExpiresAt } = phraseDeletionRequest;
 
     const decisionExpiresAtMoment = moment(decisionExpiresAt);
     const currentMoment = moment();
@@ -105,7 +109,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   render() {
-    const { phraseRegistrationRequest: request } = this.props;
+    const { phraseDeletionRequest: request } = this.props;
     const { choiceButtonGroupActiveIndex } = this.state;
 
     if (!request) {
@@ -121,7 +125,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
         <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
         <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
-          <IconImageWithLabel type={UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE} />
+          <IconImageWithLabel type={UpdateRequestDTO.PHRASE_DELETION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
         </View>
         <ChoiceButtonGroup
@@ -158,13 +162,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  phraseRegistrationRequest: state.phraseRegistrationRequest.phraseRegistrationRequest,
-  phraseDecision: state.phraseRegistrationRequest.phraseDecision,
+  phraseDeletionRequest: state.phraseDeletionRequest.phraseDeletionRequest,
+  phraseDecision: state.phraseDeletionRequest.phraseDecision,
   auth: state.auth
 });
 
 const mapDispatchToProps = {
-  fetchById: RegistrationAction.fetchById,
+  fetchById: PhraseDeletionRequestAction.fetchById,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };
@@ -174,4 +178,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(RegistrationRequestDetail);
+export default enhancer(DeletionRequestDetail);

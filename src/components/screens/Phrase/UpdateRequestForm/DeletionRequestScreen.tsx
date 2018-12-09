@@ -1,13 +1,13 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
-import RegistrationForm from "../../../organisms/UpdateRequestForm/RegistrationForm";
+import DeletionForm from "../../../organisms/UpdateRequestForm/DeletionForm";
 import DefaultTemplate from "../../../templates/DefaultTemplate";
 
 interface Props {
   navigation: NavigationParams;
 }
 
-export default class RegistrationRequestScreen extends React.Component<Props> {
+export default class DeletionRequestScreen extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
@@ -21,7 +21,8 @@ export default class RegistrationRequestScreen extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <RegistrationForm
+        <DeletionForm
+          phrase={this.props.navigation.getParam("phrase")}
           navigateNextScreen={() => {
             this.props.navigation.navigate("PhraseList");
           }}

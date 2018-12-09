@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { ActionSheetIOS, Alert, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/phrases";
@@ -12,15 +12,84 @@ interface Props {
   navigation: NavigationParams;
   phrase: PhraseDTO | undefined;
   fetchPhraseById: any; // typeof PhrasesAction.fetchPhraseById;
+  auth: any;
 }
 
 class PhraseDetailScreen extends React.Component<Props> {
+  static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
+    return {
+      headerRight: (
+        <TouchableOpacity activeOpacity={1} onPress={navigation.getParam("handleEditDialog")}>
+          <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/edit.png")} />
+        </TouchableOpacity>
+      )
+    };
+  };
+
   constructor(props: Props) {
     super(props);
 
     const phraseId = this.props.navigation.getParam("phraseId");
 
     this.props.fetchPhraseById(phraseId);
+
+    this.handleEditDialog = this.handleEditDialog.bind(this);
+    this.navigateModificationRequest = this.navigateModificationRequest.bind(this);
+    this.navigateDeletionRequest = this.navigateDeletionRequest.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ handleEditDialog: this.handleEditDialog });
+  }
+
+  handleEditDialog() {
+    const { auth } = this.props;
+
+    if (!auth || !auth.jwt) {
+      Alert.alert(
+        "ログインする必要があります",
+        "名言の修正・削除を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。",
+        [{ text: "OK" }]
+      );
+      return;
+    }
+
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["キャンセル", "修正を申請する", "削除を申請する"],
+          cancelButtonIndex: 0
+        },
+        buttonIndex => {
+          if (buttonIndex === 1) {
+            this.navigateModificationRequest();
+          } else if (buttonIndex === 2) {
+            this.navigateDeletionRequest();
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        "修正、削除のどちらを申請するか選択してください。",
+        undefined,
+        [
+          { text: "キャンセル", style: "cancel" },
+          { text: "修正を申請する", onPress: this.navigateModificationRequest },
+          { text: "削除を申請する", onPress: this.navigateDeletionRequest }
+        ],
+        { cancelable: true }
+      );
+    }
+  }
+
+  navigateModificationRequest() {
+    const { phrase, navigation } = this.props;
+    navigation.navigate("UpdateRequestFormModificationRequest", { phrase });
+  }
+
+  navigateDeletionRequest() {
+    const { phrase, navigation } = this.props;
+    navigation.navigate("UpdateRequestFormDeletionRequest", { phrase });
   }
 
   render() {
@@ -82,7 +151,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  phrase: state.phrases.phrase
+  phrase: state.phrases.phrase,
+  auth: state.auth
 });
 
 const mapDispatchToProps = {

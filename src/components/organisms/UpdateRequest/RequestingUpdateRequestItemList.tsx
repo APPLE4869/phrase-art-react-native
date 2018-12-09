@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import * as UpdateRequestActions from "../../../actions/UpdateRequest/updateRequest";
+import * as UpdateRequestListActions from "../../../actions/UpdateRequest/updateRequestList";
 import PhraseUpdateRequestDTO from "../../../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
 import SubcategoryModificationRequestDTO from "../../../models/dto/UpdateRequestList/SubcategoryModificationRequestDTO";
 import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
@@ -122,8 +122,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchRequestingUpdateRequests: UpdateRequestActions.fetchRequestingUpdateRequests,
-  initializeRequestingUpdateRequests: UpdateRequestActions.initializeRequestingUpdateRequests
+  fetchRequestingUpdateRequests: UpdateRequestListActions.fetchRequestingUpdateRequests,
+  initializeRequestingUpdateRequests: UpdateRequestListActions.initializeRequestingUpdateRequests
 };
 
 const enhancer = connect(

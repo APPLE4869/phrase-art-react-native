@@ -1,12 +1,12 @@
 import { createStackNavigator } from "react-navigation";
-import PhraseUpdateRequestScreen from "../../components/screens/UpdateRequest/Details/PhraseUpdateRequest";
 import UpdateRequestListScreen from "../../components/screens/UpdateRequest/ListScreen";
+import PhraseUpdateRequestDetailScreen from "../../components/screens/UpdateRequest/PhraseUpdateRequestDetail";
 import NavigationOptions from "./NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {
     UpdateRequestList: { screen: UpdateRequestListScreen, navigationOptions: { title: "申請一覧" } },
-    PhraseUpdateRequest: { screen: PhraseUpdateRequestScreen }
+    PhraseUpdateRequestDetail: { screen: PhraseUpdateRequestDetailScreen }
   },
   {
     initialRouteName: "UpdateRequestList",

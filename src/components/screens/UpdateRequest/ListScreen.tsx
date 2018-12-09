@@ -40,7 +40,7 @@ export default class ListScreen extends React.Component<Props, State> {
       // navigation.navigate("PhraseUpdateRequest", { updateRequestId, updateRequestType });
     } else {
       // 名言更新申請
-      navigation.navigate("PhraseUpdateRequest", { updateRequestId, updateRequestType });
+      navigation.navigate("PhraseUpdateRequestDetail", { updateRequestId, updateRequestType });
     }
   }
 

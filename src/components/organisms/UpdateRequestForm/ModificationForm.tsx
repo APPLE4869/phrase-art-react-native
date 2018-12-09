@@ -3,8 +3,9 @@ import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
-import * as registrationRequestAction from "../../../actions/UpdateRequest/phraseRegistrationRequest";
+import * as phraseModificationRequestAction from "../../../actions/UpdateRequest/phraseModificationRequest";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
+import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
@@ -12,12 +13,13 @@ import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
 
 interface Props {
+  phrase: PhraseDTO;
   navigateNextScreen: () => void;
   categories: CategoryDTO[];
   fetchCategories: any;
   startLoading: any;
   endLoading: any;
-  submitRegisterRequest: any;
+  submitPhraseModificationRequest: any;
   initializeCategories: any;
 }
 
@@ -28,11 +30,17 @@ interface State {
   content: string;
 }
 
-class RegistrationForm extends React.Component<Props, State> {
+class ModificationForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { categoryId: "", subcategoryName: "", author: "", content: "" };
+    const { phrase } = this.props;
+    this.state = {
+      categoryId: phrase.categoryId,
+      subcategoryName: phrase.subcategoryName || "",
+      author: phrase.authorName,
+      content: phrase.content
+    };
 
     this.onChangeCategoryId = this.onChangeCategoryId.bind(this);
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
@@ -50,7 +58,7 @@ class RegistrationForm extends React.Component<Props, State> {
     await fetchCategories();
 
     const { categories } = this.props;
-    if (categories.length > 0) {
+    if (!this.state.categoryId && categories.length > 0) {
       this.setState({ categoryId: categories[0].id });
     }
   }
@@ -84,20 +92,34 @@ class RegistrationForm extends React.Component<Props, State> {
   isDisabled(): boolean {
     const { subcategoryName, author, content } = this.state;
 
-    if (subcategoryName && author && content) {
+    if (subcategoryName && author && content && this.isAnyChanged()) {
       return false;
     }
 
     return true;
   }
 
+  isAnyChanged(): boolean {
+    const { phrase: current } = this.props;
+    const { categoryId, subcategoryName, author, content } = this.state;
+    if (
+      current.categoryId !== categoryId ||
+      current.subcategoryName !== subcategoryName ||
+      current.authorName !== author ||
+      current.content !== content
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   async onSubmit() {
-    const { startLoading, endLoading, navigateNextScreen, submitRegisterRequest } = this.props;
+    const { phrase, startLoading, endLoading, navigateNextScreen, submitPhraseModificationRequest } = this.props;
     const { categoryId, subcategoryName, content, author } = this.state;
     startLoading();
 
     try {
-      await submitRegisterRequest(categoryId, subcategoryName, content, author);
+      await submitPhraseModificationRequest(phrase.id, categoryId, subcategoryName, content, author);
     } finally {
       endLoading();
     }
@@ -143,7 +165,7 @@ class RegistrationForm extends React.Component<Props, State> {
           defaultValue={content}
           isTextarea={true}
         />
-        <FormButton title="登録申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
+        <FormButton title="修正申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
       </ScrollView>
     );
   }
@@ -158,7 +180,7 @@ const mapDispatchToProps = {
   initializeCategories: CategoriesAction.initializeCategories,
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading,
-  submitRegisterRequest: registrationRequestAction.submitRegisterRequest
+  submitPhraseModificationRequest: phraseModificationRequestAction.submitPhraseModificationRequest
 };
 
 const enhancer = connect(
@@ -166,4 +188,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(RegistrationForm);
+export default enhancer(ModificationForm);

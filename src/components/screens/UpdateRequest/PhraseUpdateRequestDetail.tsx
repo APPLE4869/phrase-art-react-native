@@ -1,8 +1,10 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
-import UpdateRequestDTO, { UpdateRequestType } from "../../../../models/dto/UpdateRequestList/UpdateRequestDTO";
-import RegistrationRequestDetail from "../../../organisms/UpdateRequest/RegistrationRequestDetail";
-import DefaultTemplate from "../../../templates/DefaultTemplate";
+import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
+import DeletionRequestDetail from "../../organisms/UpdateRequest/PhraseDeletionRequestDetail";
+import ModificationRequestDetail from "../../organisms/UpdateRequest/PhraseModificationRequestDetail";
+import RegistrationRequestDetail from "../../organisms/UpdateRequest/PhraseRegistrationRequestDetail";
+import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
   navigation: NavigationParams;
@@ -47,13 +49,13 @@ export default class PhraseUpdateRequest extends React.Component<Props> {
       case UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE:
         return (
           <DefaultTemplate>
-            <RegistrationRequestDetail updateRequestId={this.updateRequestId} />
+            <ModificationRequestDetail updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
       default:
         return (
           <DefaultTemplate>
-            <RegistrationRequestDetail updateRequestId={this.updateRequestId} />
+            <DeletionRequestDetail updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
     }
