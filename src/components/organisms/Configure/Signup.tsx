@@ -85,7 +85,7 @@ class Signup extends React.Component<Props, State> {
           secureTextEntry={true}
           marginBottom={40}
         />
-        <FormButton title="会員登録する" onPress={this.onSubmit} disabled={disabledButton} />
+        <FormButton title="アカウントを作成する" onPress={this.onSubmit} disabled={disabledButton} />
       </View>
     );
   }

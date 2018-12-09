@@ -1,6 +1,6 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
-import { PhraseUpdateRequestType } from "../../../../models/dto/UpdateRequest/UpdateRequestDTO";
+import UpdateRequestDTO, { UpdateRequestType } from "../../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import RegistrationRequestDetail from "../../../organisms/UpdateRequest/RegistrationRequestDetail";
 import DefaultTemplate from "../../../templates/DefaultTemplate";
 
@@ -10,14 +10,14 @@ interface Props {
 
 export default class PhraseUpdateRequest extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
-    const type: PhraseUpdateRequestType = navigation.getParam("type");
+    const updateRequestType: UpdateRequestType = navigation.getParam("updateRequestType");
 
     let title = null;
-    switch (type) {
-      case "PhraseRegistrationRequest":
+    switch (updateRequestType) {
+      case UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE:
         title = "名言登録申請";
         break;
-      case "PhraseModificationRequest":
+      case UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE:
         title = "名言修正申請";
         break;
       default:
@@ -26,31 +26,31 @@ export default class PhraseUpdateRequest extends React.Component<Props> {
     return { title };
   };
   private updateRequestId: string;
-  private type: PhraseUpdateRequestType;
+  private updateRequestType: UpdateRequestType;
 
   constructor(props: Props) {
     super(props);
 
     const { navigation } = this.props;
     this.updateRequestId = navigation.getParam("updateRequestId");
-    this.type = navigation.getParam("type");
+    this.updateRequestType = navigation.getParam("updateRequestType");
   }
 
   render() {
-    switch (this.type) {
-      case "PhraseRegistrationRequest":
+    switch (this.updateRequestType) {
+      case UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE:
         return (
           <DefaultTemplate>
             <RegistrationRequestDetail updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
-      case "PhraseModificationRequest":
+      case UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE:
         return (
           <DefaultTemplate>
             <RegistrationRequestDetail updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
-      case "PhraseDeletionRequest":
+      default:
         return (
           <DefaultTemplate>
             <RegistrationRequestDetail updateRequestId={this.updateRequestId} />

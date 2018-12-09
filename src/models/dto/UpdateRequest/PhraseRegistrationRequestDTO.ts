@@ -3,38 +3,38 @@ import { PhraseDecisionProperty } from "./PhraseDecisionDTO";
 export default class PhraseRegistrationRequestDTO {
   readonly id: string;
   readonly finished: boolean;
-  readonly updateRequestType: PhraseUpdateRequestType;
-  readonly phraseUpdateRequestType: PhraseRegistrationRequestType;
   readonly decisionExpiresAt: string;
+  readonly categoryId: string;
   readonly categoryName: string;
+  readonly subcategoryId?: string;
   readonly subcategoryName?: string;
   readonly phraseContent: string;
-  readonly authorName: string;
+  readonly phraseAuthorName: string;
   readonly approvedCount: number;
   readonly rejectedCount: number;
 
   constructor({
     id,
     finished,
-    updateRequestType,
-    phraseUpdateRequestType,
     decisionExpiresAt,
+    categoryId,
     categoryName,
+    subcategoryId,
     subcategoryName,
     phraseContent,
-    authorName,
+    phraseAuthorName,
     approvedCount,
     rejectedCount
   }: PhraseRegistrationRequestProperty) {
     this.id = id;
     this.finished = finished;
-    this.updateRequestType = updateRequestType;
-    this.phraseUpdateRequestType = phraseUpdateRequestType;
     this.decisionExpiresAt = decisionExpiresAt;
+    this.categoryId = categoryId;
     this.categoryName = categoryName;
+    this.subcategoryId = subcategoryId;
     this.subcategoryName = subcategoryName;
     this.phraseContent = phraseContent;
-    this.authorName = authorName;
+    this.phraseAuthorName = phraseAuthorName;
     this.approvedCount = approvedCount;
     this.rejectedCount = rejectedCount;
   }
@@ -43,19 +43,16 @@ export default class PhraseRegistrationRequestDTO {
 interface PhraseRegistrationRequestProperty {
   id: string;
   finished: boolean;
-  updateRequestType: PhraseUpdateRequestType;
-  phraseUpdateRequestType: PhraseRegistrationRequestType;
   decisionExpiresAt: string;
+  categoryId: string;
   categoryName: string;
+  subcategoryId?: string;
   subcategoryName?: string;
   phraseContent: string;
-  authorName: string;
+  phraseAuthorName: string;
   approvedCount: number;
   rejectedCount: number;
 }
-
-type PhraseUpdateRequestType = "PhraseUpdateRequest";
-type PhraseRegistrationRequestType = "PhraseRegistrationRequest";
 
 export interface PhraseRegistrationRequestResponse {
   phraseRegistrationRequest: PhraseRegistrationRequestProperty;

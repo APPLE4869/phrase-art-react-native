@@ -120,7 +120,7 @@ const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
   initializePhrases: PhrasesAction.initializePhrases,
-  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus,
+  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus
 };
 
 const enhancer = connect(

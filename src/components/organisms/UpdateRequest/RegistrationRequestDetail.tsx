@@ -1,11 +1,12 @@
 import moment from "moment";
 import * as React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Alert, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as RegistrationAction from "../../../actions/UpdateRequest/registrationRequest";
 import PhraseDecisionDTO from "../../../models/dto/UpdateRequest/PhraseDecisionDTO";
 import PhraseRegistrationRequestDTO from "../../../models/dto/UpdateRequest/PhraseRegistrationRequestDTO";
+import UpdateRequestDTO from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
@@ -22,6 +23,7 @@ interface Props {
   fetchById: any;
   approve: any;
   reject: any;
+  auth: any;
 }
 
 interface State {
@@ -52,6 +54,8 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   async onPressForPositive() {
+    if (!this.isLoggedIn()) return;
+
     const { updateRequestId, approve, fetchById } = this.props;
 
     await approve(updateRequestId);
@@ -63,6 +67,8 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   async onPressForNegative() {
+    if (!this.isLoggedIn()) return;
+
     const { updateRequestId, reject, fetchById } = this.props;
 
     await reject(updateRequestId);
@@ -71,6 +77,19 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     await fetchById(updateRequestId);
 
     this.setState({ choiceButtonGroupActiveIndex: 1 });
+  }
+
+  isLoggedIn() {
+    const { auth } = this.props;
+
+    if (!auth || !auth.jwt) {
+      Alert.alert(
+        "ログインする必要があります",
+        "承認または否認をするには、ログインする必要があります。\n設定からアカウントを作成してください。"
+      );
+      return false;
+    }
+    return true;
   }
 
   isExpired(): boolean {
@@ -100,9 +119,9 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
           <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
         </View>
         <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
-        <StandardText text={request.authorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
+        <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
-          <IconImageWithLabel type={request.phraseUpdateRequestType} />
+          <IconImageWithLabel type={UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
         </View>
         <ChoiceButtonGroup
@@ -140,7 +159,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootState) => ({
   phraseRegistrationRequest: state.phraseRegistrationRequest.phraseRegistrationRequest,
-  phraseDecision: state.phraseRegistrationRequest.phraseDecision
+  phraseDecision: state.phraseRegistrationRequest.phraseDecision,
+  auth: state.auth
 });
 
 const mapDispatchToProps = {

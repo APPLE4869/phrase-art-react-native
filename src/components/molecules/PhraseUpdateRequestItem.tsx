@@ -1,9 +1,7 @@
 import * as React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import UpdateRequestDTO, {
-  PhraseUpdateRequestType,
-  UpdateRequestType
-} from "../../models/dto/UpdateRequest/UpdateRequestDTO";
+import PhraseUpdateRequestDTO from "../../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
+import { UpdateRequestType } from "../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { colors } from "../../styles";
 import DecisionCounts from "../atoms/DecisionCounts";
 import IconImageWithLabel from "../atoms/IconImageWithLabel";
@@ -12,12 +10,8 @@ import RemainingTime from "../atoms/RemainingTime";
 import StandardText from "../atoms/StandardText";
 
 interface Props {
-  updateRequest: UpdateRequestDTO;
-  onPress: (
-    updateRequestId: string,
-    updateRequestType: UpdateRequestType,
-    phraseUpdateRequestType: PhraseUpdateRequestType
-  ) => void;
+  phraseUpdateRequest: PhraseUpdateRequestDTO;
+  onPress: (updateRequestId: string, updateRequestType: UpdateRequestType) => void;
 }
 
 const MAX_ITEM_TEXT: number = 35;
@@ -29,39 +23,40 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
   }
 
   render() {
-    const { updateRequest, onPress } = this.props;
+    const { phraseUpdateRequest, onPress } = this.props;
 
-    if (updateRequest.updateRequestType === "PhraseUpdateRequest") {
-      return (
-        <TouchableOpacity
-          onPress={() =>
-            onPress(updateRequest.id, updateRequest.updateRequestType, updateRequest.phraseUpdateRequestType)
-          }
-          activeOpacity={1}
-          style={styles.container}
-        >
-          <View style={styles.itemTop}>
-            <InlineCategoryNames
-              categoryName={updateRequest.categoryName}
-              subcategoryName={updateRequest.subcategoryName}
-            />
-            <RemainingTime decisionExpiresAt={updateRequest.decisionExpiresAt} />
-          </View>
-          <StandardText
-            text={this.itemTextView(updateRequest.phraseContent)}
-            fontSize={14}
-            textStyle={{ color: colors.grayLevel1, marginVertical: 10 }}
+    return (
+      <TouchableOpacity
+        onPress={() => onPress(phraseUpdateRequest.id, phraseUpdateRequest.type)}
+        activeOpacity={1}
+        style={styles.container}
+      >
+        <View style={styles.itemTop}>
+          <InlineCategoryNames
+            categoryName={phraseUpdateRequest.categoryName}
+            subcategoryName={phraseUpdateRequest.subcategoryName}
           />
-          <StandardText text={updateRequest.authorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
-          <View style={styles.itemBottom}>
-            <IconImageWithLabel type={updateRequest.phraseUpdateRequestType} />
-            <DecisionCounts approvedCount={updateRequest.approvedCount} rejectedCount={updateRequest.rejectedCount} />
-          </View>
-        </TouchableOpacity>
-      );
-    } else {
-      return null;
-    }
+          <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+        </View>
+        <StandardText
+          text={this.itemTextView(phraseUpdateRequest.phraseContent)}
+          fontSize={14}
+          textStyle={{ color: colors.grayLevel1, marginVertical: 10 }}
+        />
+        <StandardText
+          text={phraseUpdateRequest.phraseAuthorName}
+          fontSize={12}
+          textStyle={{ color: colors.grayLevel1 }}
+        />
+        <View style={styles.itemBottom}>
+          <IconImageWithLabel type={phraseUpdateRequest.type} />
+          <DecisionCounts
+            approvedCount={phraseUpdateRequest.approvedCount}
+            rejectedCount={phraseUpdateRequest.rejectedCount}
+          />
+        </View>
+      </TouchableOpacity>
+    );
   }
 }
 

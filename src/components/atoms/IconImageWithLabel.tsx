@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Image, View } from "react-native";
-import { PhraseUpdateRequestType } from "../../models/dto/UpdateRequest/UpdateRequestDTO";
+import UpdateRequestDTO, { UpdateRequestType } from "../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import StandardText from "../atoms/StandardText";
 
 interface Props {
-  type: PhraseUpdateRequestType;
+  type: UpdateRequestType;
 }
 
 export default class RemainingTime extends React.Component<Props> {
@@ -12,22 +12,26 @@ export default class RemainingTime extends React.Component<Props> {
     super(props);
   }
 
-  iconImageAndLabel(type: PhraseUpdateRequestType) {
+  iconImageAndLabel(type: UpdateRequestType) {
     let imageIcon;
     let label;
 
     switch (type) {
-      case "PhraseRegistrationRequest":
+      case UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE:
         imageIcon = require("../../../assets/images/icon/update-request/registration.png");
         label = "名言登録";
         break;
-      case "PhraseModificationRequest":
+      case UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE:
         imageIcon = require("../../../assets/images/icon/update-request/modification.png");
         label = "名言修正";
         break;
-      default:
+      case UpdateRequestDTO.PHRASE_DELETION_REQUEST_TYPE:
         imageIcon = require("../../../assets/images/icon/update-request/deletion.png");
         label = "名言削除";
+        break;
+      default:
+        imageIcon = require("../../../assets/images/icon/update-request/modification.png");
+        label = "サブカテゴリー修正";
         break;
     }
 
