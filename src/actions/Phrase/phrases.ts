@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
-import PhraseDTO, { PhraseResponse, PhrasesResponse } from "../models/dto/PhraseDTO";
-import { apiPublicClient } from "../providers/apiClient";
+import PhraseDTO, { PhraseResponse, PhrasesResponse } from "../../models/dto/PhraseDTO";
+import { apiPublicClient } from "../../providers/apiClient";
 
 // Actions
 export const ADD_PHRASE = "ADD_PHRASE:phrases";

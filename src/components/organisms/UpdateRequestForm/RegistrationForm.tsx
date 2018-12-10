@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Alert, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
-import * as registrationRequestAction from "../../../actions/UpdateRequest/registrationRequest";
+import * as registrationRequestAction from "../../../actions/UpdateRequest/phraseRegistrationRequest";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
 import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
@@ -13,14 +13,12 @@ import TextField from "../../molecules/FormGroup/TextField";
 
 interface Props {
   navigateNextScreen: () => void;
-  navigateBack: () => void;
   categories: CategoryDTO[];
   fetchCategories: any;
   startLoading: any;
   endLoading: any;
   submitRegisterRequest: any;
   initializeCategories: any;
-  auth: any;
 }
 
 interface State {
@@ -28,16 +26,13 @@ interface State {
   subcategoryName: string;
   author: string;
   content: string;
-  disabledButton: boolean;
 }
 
-class RegistrationRequestScreen extends React.Component<Props, State> {
+class RegistrationForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.verifyAuth();
-
-    this.state = { categoryId: "", subcategoryName: "", author: "", content: "", disabledButton: true };
+    this.state = { categoryId: "", subcategoryName: "", author: "", content: "" };
 
     this.onChangeCategoryId = this.onChangeCategoryId.bind(this);
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
@@ -46,18 +41,6 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.fetchCategoriesAndsetInitialCategoryId();
-  }
-
-  verifyAuth() {
-    const { auth, navigateBack } = this.props;
-
-    if (!auth || !auth.jwt) {
-      Alert.alert(
-        "ログインする必要があります",
-        "名言の登録を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。",
-        [{ text: "OK", onPress: navigateBack }]
-      );
-    }
   }
 
   async fetchCategoriesAndsetInitialCategoryId() {
@@ -74,22 +57,18 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
 
   onChangeCategoryId(categoryId: string) {
     this.setState({ categoryId });
-    this.updateDisabledButtonStatus();
   }
 
   onChangeSubcategoryName(subcategoryName: string) {
     this.setState({ subcategoryName });
-    this.updateDisabledButtonStatus();
   }
 
   onChangeAuthor(author: string) {
     this.setState({ author });
-    this.updateDisabledButtonStatus();
   }
 
   onChangeContent(content: string) {
     this.setState({ content });
-    this.updateDisabledButtonStatus();
   }
 
   categoryItems() {
@@ -102,14 +81,14 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
     });
   }
 
-  updateDisabledButtonStatus() {
+  isDisabled(): boolean {
     const { subcategoryName, author, content } = this.state;
 
     if (subcategoryName && author && content) {
-      this.setState({ disabledButton: false });
-    } else {
-      this.setState({ disabledButton: true });
+      return false;
     }
+
+    return true;
   }
 
   async onSubmit() {
@@ -127,7 +106,7 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
   }
 
   render() {
-    const { categoryId, subcategoryName, author, content, disabledButton } = this.state;
+    const { categoryId, subcategoryName, author, content } = this.state;
     const { categories } = this.props;
 
     if (categories.length === 0) {
@@ -158,21 +137,20 @@ class RegistrationRequestScreen extends React.Component<Props, State> {
         />
         <TextField
           label="内容"
-          placeholder="「自分なら世界を変える事が出来る」 そんなことを本気で信じた人達が、この世界を変えてきたのだ。"
+          placeholder="「自分なら世界を変える事が出来る」そんなことを本気で信じた人達が、この世界を変えてきたのだ。"
           onChangeText={this.onChangeContent}
           marginBottom={40}
           defaultValue={content}
           isTextarea={true}
         />
-        <FormButton title="登録申請する" onPress={this.onSubmit} disabled={disabledButton} />
+        <FormButton title="登録申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
       </ScrollView>
     );
   }
 }
 
 const mapStateToProps = (state: RootState) => ({
-  categories: state.categories.categories,
-  auth: state.auth
+  categories: state.categories.categories
 });
 
 const mapDispatchToProps = {
@@ -188,4 +166,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(RegistrationRequestScreen);
+export default enhancer(RegistrationForm);

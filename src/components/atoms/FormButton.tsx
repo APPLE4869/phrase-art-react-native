@@ -5,7 +5,8 @@ import { colors } from "../../styles";
 interface Props {
   title: string;
   onPress: () => void;
-  disabled: boolean;
+  disabled?: boolean;
+  dangerColor?: true;
 }
 
 export default class FormButton extends React.Component<Props> {
@@ -26,12 +27,12 @@ export default class FormButton extends React.Component<Props> {
   }
 
   render() {
-    const { title, disabled } = this.props;
+    const { title, disabled, dangerColor } = this.props;
 
     return (
       <TouchableOpacity
         activeOpacity={1}
-        style={[styles.button, disabled ? styles.isDisabled : {}]}
+        style={[styles.button, dangerColor ? styles.isDangerButton : {}, disabled ? styles.isDisabled : {}]}
         onPress={this.onTouch}
       >
         <Text style={styles.buttonText}>{title}</Text>
@@ -58,5 +59,8 @@ const styles = StyleSheet.create({
     color: colors.white,
     letterSpacing: 2,
     fontWeight: "bold"
+  },
+  isDangerButton: {
+    backgroundColor: colors.danger
   }
 });

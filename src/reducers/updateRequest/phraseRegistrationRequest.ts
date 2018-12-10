@@ -3,7 +3,7 @@ import {
   ADD_PHRASE_DECISION,
   ADD_PHRASE_REGISTRATION_REQUEST,
   CHANGE_DECISION_RESULT
-} from "../../actions/UpdateRequest/registrationRequest";
+} from "../../actions/UpdateRequest/phraseRegistrationRequest";
 import PhraseDecisionDTO from "../../models/dto/UpdateRequest/PhraseDecisionDTO";
 import PhraseRegistrationRequestDTO from "../../models/dto/UpdateRequest/PhraseRegistrationRequestDTO";
 

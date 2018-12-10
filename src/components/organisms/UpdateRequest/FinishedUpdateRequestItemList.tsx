@@ -1,24 +1,19 @@
 import * as React from "react";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import * as UpdateRequestActions from "../../../actions/UpdateRequest/updateRequest";
-import UpdateRequestDTO, {
-  PhraseUpdateRequestType,
-  UpdateRequestType
-} from "../../../models/dto/UpdateRequest/UpdateRequestDTO";
+import * as UpdateRequestListActions from "../../../actions/UpdateRequest/updateRequestList";
+import PhraseUpdateRequestDTO from "../../../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
+import SubcategoryModificationRequestDTO from "../../../models/dto/UpdateRequestList/SubcategoryModificationRequestDTO";
+import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import PhraseUpdateRequestItem from "../../molecules/PhraseUpdateRequestItem";
 
 interface Props {
-  finishedUpdateRequests: UpdateRequestDTO[];
+  finishedUpdateRequests: Array<PhraseUpdateRequestDTO | SubcategoryModificationRequestDTO>;
   fetchFinishedUpdateRequests: any;
   initializeFinishedUpdateRequests: any;
-  onPress: (
-    updateRequestId: string,
-    updateRequestType: UpdateRequestType,
-    phraseUpdateRequestType: PhraseUpdateRequestType
-  ) => void;
+  onPress: (updateRequestId: string, updateRequestType: UpdateRequestType) => void;
 }
 
 interface State {
@@ -91,9 +86,19 @@ class FinishedUpdateRequestItemList extends React.Component<Props, State> {
         style={styles.container}
         data={finishedUpdateRequests}
         keyExtractor={(updateRequest: UpdateRequestDTO) => updateRequest.id}
-        renderItem={({ item: requestingUpdateRequest }) => (
-          <PhraseUpdateRequestItem updateRequest={requestingUpdateRequest} onPress={onPress} />
-        )}
+        renderItem={({ item: updateRequest }) => {
+          if (updateRequest.type === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE) {
+            // TODO : サブカテゴリー修正申請用のコンポーネントを作成する。
+            return null;
+          } else {
+            return (
+              <PhraseUpdateRequestItem
+                phraseUpdateRequest={updateRequest as PhraseUpdateRequestDTO}
+                onPress={onPress}
+              />
+            );
+          }
+        }}
         onEndReached={() => this.fetchFinishedUpdateRequestsWithAwait()}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}
@@ -116,8 +121,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchFinishedUpdateRequests: UpdateRequestActions.fetchFinishedUpdateRequests,
-  initializeFinishedUpdateRequests: UpdateRequestActions.initializeFinishedUpdateRequests
+  fetchFinishedUpdateRequests: UpdateRequestListActions.fetchFinishedUpdateRequests,
+  initializeFinishedUpdateRequests: UpdateRequestListActions.initializeFinishedUpdateRequests
 };
 
 const enhancer = connect(

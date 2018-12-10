@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     borderColor: colors.grayLevel3,
     borderWidth: 1,
     fontSize: 14,
-    lineHeight: 21,
     borderRadius: 30,
     letterSpacing: 2,
     paddingHorizontal: 15,
@@ -108,8 +107,9 @@ const styles = StyleSheet.create({
   },
   textareaField: {
     height: 200,
-    paddingTop: 15,
-    paddingBottom: 15
+    paddingTop: 10,
+    paddingBottom: 10,
+    lineHeight: 21
   },
   isFocused: {
     borderColor: colors.clickable

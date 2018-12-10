@@ -8,9 +8,9 @@ import PhraseRegistrationRequestDTO, {
 import { apiPrivateClient, apiPublicClient } from "../../providers/apiClient";
 
 // Actions
-export const ADD_PHRASE_REGISTRATION_REQUEST = "ADD_PHRASE_REGISTRATION_REQUEST:registrationRequest";
-export const ADD_PHRASE_DECISION = "ADD_PHRASE_DECISION:registrationRequest";
-export const CHANGE_DECISION_RESULT = "CHANGE_DECISION_RESULT:registrationRequest";
+export const ADD_PHRASE_REGISTRATION_REQUEST = "ADD_PHRASE_REGISTRATION_REQUEST:phraseRegistrationRequest";
+export const ADD_PHRASE_DECISION = "ADD_PHRASE_DECISION:phraseRegistrationRequest";
+export const CHANGE_DECISION_RESULT = "CHANGE_DECISION_RESULT:phraseRegistrationRequest";
 
 interface AddPhraseRegistrationRequest {
   type: typeof ADD_PHRASE_REGISTRATION_REQUEST;
@@ -41,12 +41,15 @@ export function submitRegisterRequest(
 ) {
   return async () => {
     try {
-      const response: AxiosResponse = await apiPrivateClient.post("/phrase_update_request/register_request", {
-        categoryId,
-        subcategoryName,
-        phraseContent,
-        authorName
-      });
+      const response: AxiosResponse = await apiPrivateClient.post(
+        "/update_request/submit_phrase_registration_request",
+        {
+          categoryId,
+          subcategoryName,
+          phraseContent,
+          authorName
+        }
+      );
 
       if (response.status !== 200) {
         throw new Error("予期しないエラーが発生しました。お手数ですが、もう一度お試しください。");
@@ -62,7 +65,7 @@ export function submitRegisterRequest(
 export function fetchById(id: string) {
   return async (dispatch: Dispatch<Action>) => {
     const response: AxiosResponse<PhraseRegistrationRequestResponse> = await apiPublicClient.get(
-      `/phrase_update_request/${id}/registration_request`
+      `/update_request/${id}/phrase_registration_request`
     );
 
     const { phraseRegistrationRequest, phraseDecision } = response.data;

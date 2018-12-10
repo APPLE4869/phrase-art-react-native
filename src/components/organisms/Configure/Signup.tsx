@@ -15,7 +15,6 @@ interface Props {
 }
 
 interface State {
-  disabledButton: boolean;
   username: string;
   password: string;
 }
@@ -24,7 +23,7 @@ class Signup extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { disabledButton: true, username: "", password: "" };
+    this.state = { username: "", password: "" };
 
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -33,22 +32,19 @@ class Signup extends React.Component<Props, State> {
 
   onChangeUsername(text: string) {
     this.setState({ username: text });
-    this.updateDisabledButtonStatus();
   }
 
   onChangePassword(text: string) {
     this.setState({ password: text });
-    this.updateDisabledButtonStatus();
   }
 
-  updateDisabledButtonStatus() {
+  isDisabled(): boolean {
     const { username, password } = this.state;
 
     if (username && password) {
-      this.setState({ disabledButton: false });
-    } else {
-      this.setState({ disabledButton: true });
+      return false;
     }
+    return true;
   }
 
   async onSubmit() {
@@ -67,8 +63,6 @@ class Signup extends React.Component<Props, State> {
   }
 
   render() {
-    const { disabledButton } = this.state;
-
     return (
       <View style={formStyle.container}>
         <TextField
@@ -85,7 +79,7 @@ class Signup extends React.Component<Props, State> {
           secureTextEntry={true}
           marginBottom={40}
         />
-        <FormButton title="会員登録する" onPress={this.onSubmit} disabled={disabledButton} />
+        <FormButton title="アカウントを作成する" onPress={this.onSubmit} disabled={this.isDisabled()} />
       </View>
     );
   }

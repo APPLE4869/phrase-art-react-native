@@ -1,7 +1,7 @@
 import * as React from "react";
 import { View } from "react-native";
 import { NavigationParams } from "react-navigation";
-import { PhraseUpdateRequestType, UpdateRequestType } from "../../../models/dto/UpdateRequest/UpdateRequestDTO";
+import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import NavigationOptions from "../../../navigators/BottomTabContent/NavigationOptions";
 import { colors } from "../../../styles";
 import HeaderSegmentedControlIOS from "../../molecules/HeaderSegmentedControlIOS";
@@ -31,20 +31,16 @@ export default class ListScreen extends React.Component<Props, State> {
     this.onChangeSegmentedControl = this.onChangeSegmentedControl.bind(this);
   }
 
-  navigateUpdateRequest(
-    updateRequestId: string,
-    updateRequestType: UpdateRequestType,
-    phraseUpdateRequestType: PhraseUpdateRequestType
-  ) {
+  navigateUpdateRequest(updateRequestId: string, updateRequestType: UpdateRequestType) {
     const { navigation } = this.props;
 
-    if (updateRequestType === "SubcategoryModificationRequest") {
+    if (updateRequestType === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE) {
       // サブカテゴリー修正申請
       // TODO : Screenを差し替える。
-      navigation.navigate("PhraseUpdateRequest", { updateRequestId });
+      // navigation.navigate("PhraseUpdateRequest", { updateRequestId, updateRequestType });
     } else {
       // 名言更新申請
-      navigation.navigate("PhraseUpdateRequest", { updateRequestId, type: phraseUpdateRequestType });
+      navigation.navigate("PhraseUpdateRequestDetail", { updateRequestId, updateRequestType });
     }
   }
 

@@ -25,7 +25,6 @@ export default class RegistrationRequestScreen extends React.Component<Props> {
           navigateNextScreen={() => {
             this.props.navigation.navigate("PhraseList");
           }}
-          navigateBack={() => this.props.navigation.goBack()}
         />
       </DefaultTemplate>
     );

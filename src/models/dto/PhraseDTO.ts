@@ -1,6 +1,8 @@
 export default class PhraseDTO {
   readonly id: string;
+  readonly categoryId: string;
   readonly categoryName: string;
+  readonly subcategoryId?: string;
   readonly subcategoryName?: string;
   readonly content: string;
   readonly authorName: string;
@@ -10,7 +12,9 @@ export default class PhraseDTO {
 
   constructor({
     id,
+    categoryId,
     categoryName,
+    subcategoryId,
     subcategoryName,
     content,
     authorName,
@@ -19,7 +23,9 @@ export default class PhraseDTO {
     favoriteCount
   }: PhraseProperty) {
     this.id = id;
+    this.categoryId = categoryId;
     this.categoryName = categoryName;
+    this.subcategoryId = subcategoryId;
     this.subcategoryName = subcategoryName;
     this.content = content;
     this.authorName = authorName;
@@ -31,7 +37,9 @@ export default class PhraseDTO {
 
 interface PhraseProperty {
   id: string;
+  categoryId: string;
   categoryName: string;
+  subcategoryId?: string;
   subcategoryName?: string;
   content: string;
   authorName: string;
