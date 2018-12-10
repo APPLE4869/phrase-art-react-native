@@ -18,6 +18,17 @@ import {
 } from "react-native-gifted-chat";
 import { colors } from "../../styles";
 
+interface MessageWithUser {
+  _id: any;
+  text: string;
+  createdAt: Date;
+  user: {
+    _id: any;
+    name: string;
+    avatar: string;
+  };
+}
+
 interface Props {
   onSend: (messages: IMessage[]) => void;
   messages: IMessage[];
@@ -40,8 +51,8 @@ export default class Chat extends React.Component<Props> {
   renderBubble(props: BubbleProps) {
     return (
       <View>
-        {props.position === "left" ? (
-          <Text style={{ color: colors.grayLevel2 }}>{props.currentMessage.user.name}</Text>
+        {props.position === "left" && props.currentMessage ? (
+          <Text style={{ color: colors.grayLevel2 }}>{(props.currentMessage as MessageWithUser).user.name}</Text>
         ) : null}
         <Bubble
           {...props}
