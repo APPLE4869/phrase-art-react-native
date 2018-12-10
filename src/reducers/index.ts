@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import auth, { State as AuthState } from "./auth";
 import categories, { State as CategoriesState } from "./categories";
 import loading, { State as LoadingState } from "./loading";
+import phraseComment, { State as phraseCommentState } from "./phrase/phraseComment";
 import phrases, { State as PhrasesState } from "./phrases";
 import subcategories, { State as SubcategoriesState } from "./subcategories";
 import updateRequests, { State as UpdateRequestState } from "./updateRequest";
@@ -23,6 +24,7 @@ export interface State {
   phraseRegistrationRequest: PhraseRegistrationRequestState;
   phraseModificationRequest: PhraseModificationRequestState;
   phraseDeletionRequest: PhraseDeletionRequestState;
+  phraseComment: phraseCommentState;
 }
 
 export default combineReducers({
@@ -34,5 +36,6 @@ export default combineReducers({
   updateRequests,
   phraseRegistrationRequest,
   phraseModificationRequest,
-  phraseDeletionRequest
+  phraseDeletionRequest,
+  phraseComment
 });

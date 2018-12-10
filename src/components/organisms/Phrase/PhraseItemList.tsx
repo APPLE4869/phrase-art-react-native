@@ -1,12 +1,12 @@
 import * as React from "react";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import * as PhrasesAction from "../../actions/phrases";
-import PhraseDTO from "../../models/dto/PhraseDTO";
-import { State as RootState } from "../../reducers";
-import * as PhrasesReducers from "../../reducers/phrases";
-import { colors } from "../../styles";
-import PhraseItem from "../molecules/PhraseItem";
+import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import PhraseDTO from "../../../models/dto/PhraseDTO";
+import { State as RootState } from "../../../reducers";
+import * as PhrasesReducers from "../../../reducers/phrases";
+import { colors } from "../../../styles";
+import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
   navigateDetail: (phraseId: string) => void;

@@ -5,7 +5,7 @@ import {
   INITIALIZE_PHRASES,
   INITIALIZE_PHRASES_LIST_STATUS,
   SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID
-} from "../actions/phrases";
+} from "../actions/Phrase/phrases";
 import PhraseDTO from "../models/dto/PhraseDTO";
 
 export interface PhrasesListStatus {

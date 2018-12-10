@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
-import PhraseItemList from "../../organisms/PhraseItemList";
+import PhraseItemList from "../../organisms/Phrase/PhraseItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {

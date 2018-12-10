@@ -15,7 +15,8 @@ export const colors = {
     navigationBarBackground: "#F5F5F7",
     navigationBarBorder: "#DDDDDD",
     approve: "#00CED1",
-    reject: "#FF8C00"
+    reject: "#FF8C00",
+    skyblue: "#1BA9E1"
   }
 };
 
