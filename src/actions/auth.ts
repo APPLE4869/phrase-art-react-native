@@ -71,7 +71,7 @@ export function register(username: string, password: string) {
 
       const jwt: string = await loginRequest(username, password);
 
-      dispatch({ type: ADD_JWT, payload: jwt });
+      await dispatch({ type: ADD_JWT, payload: jwt });
 
       const currentUser: CurrentUserDTO = await fetchCurrentUser();
 
@@ -91,7 +91,7 @@ export function login(username: string, password: string) {
     try {
       const jwt: string = await loginRequest(username, password);
 
-      dispatch({ type: ADD_JWT, payload: jwt });
+      await dispatch({ type: ADD_JWT, payload: jwt });
 
       const currentUser: CurrentUserDTO = await fetchCurrentUser();
 

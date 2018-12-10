@@ -63,6 +63,8 @@ class PhraseDetailScreen extends React.Component<Props> {
   }
 
   async initializeComments(phraseId: string) {
+    this.props.initializePhraseComments();
+
     await this.props.fetchPreviousPhraseComments(phraseId);
 
     if (this.props.phraseComments.length > 0) {
