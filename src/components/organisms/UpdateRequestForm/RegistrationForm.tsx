@@ -3,6 +3,7 @@ import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
+import * as QuickbloxAction from "../../../actions/quickblox";
 import * as registrationRequestAction from "../../../actions/UpdateRequest/phraseRegistrationRequest";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
 import { State as RootState } from "../../../reducers";
@@ -19,6 +20,7 @@ interface Props {
   endLoading: any;
   submitRegisterRequest: any;
   initializeCategories: any;
+  addMessage: any;
 }
 
 interface State {
@@ -92,7 +94,7 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { startLoading, endLoading, navigateNextScreen, submitRegisterRequest } = this.props;
+    const { startLoading, endLoading, navigateNextScreen, submitRegisterRequest, addMessage } = this.props;
     const { categoryId, subcategoryName, content, author } = this.state;
     startLoading();
 
@@ -102,6 +104,7 @@ class RegistrationForm extends React.Component<Props, State> {
       endLoading();
     }
 
+    addMessage("名言の登録申請に成功しました。");
     navigateNextScreen();
   }
 
@@ -158,7 +161,8 @@ const mapDispatchToProps = {
   initializeCategories: CategoriesAction.initializeCategories,
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading,
-  submitRegisterRequest: registrationRequestAction.submitRegisterRequest
+  submitRegisterRequest: registrationRequestAction.submitRegisterRequest,
+  addMessage: QuickbloxAction.addMessage
 };
 
 const enhancer = connect(

@@ -14,7 +14,8 @@ const CategoryStack = createStackNavigator(
       headerStyle: {
         backgroundColor: colors.special.navigationBarBackground,
         elevation: 0,
-        borderBottomColor: colors.special.navigationBarBorder
+        borderBottomColor: colors.special.navigationBarBorder,
+        zIndex: 1
       }
     }
   }

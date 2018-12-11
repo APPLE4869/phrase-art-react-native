@@ -3,17 +3,14 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
 import * as loadingAction from "../../../actions/loading";
-import * as QuickbloxAction from "../../../actions/quickblox";
 import { formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
-import TextField from "../../molecules/FormGroup/TextField";
 
 interface Props {
   navigateConfigureIndex: () => void;
   register: any;
   startLoading: any;
   endLoading: any;
-  addMessage: any;
 }
 
 interface State {
@@ -21,7 +18,7 @@ interface State {
   password: string;
 }
 
-class Signup extends React.Component<Props, State> {
+class EditProfileImage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -50,7 +47,7 @@ class Signup extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { startLoading, endLoading, navigateConfigureIndex, addMessage } = this.props;
+    const { startLoading, endLoading, navigateConfigureIndex } = this.props;
     const { username, password } = this.state;
 
     startLoading();
@@ -61,28 +58,13 @@ class Signup extends React.Component<Props, State> {
       endLoading();
     }
 
-    addMessage("アカウントの作成に成功しました。");
     navigateConfigureIndex();
   }
 
   render() {
     return (
       <View style={formStyle.container}>
-        <TextField
-          marginTop={30}
-          label="ユーザー名"
-          placeholder="TaroYamada"
-          description="半角英数字で入力してください。"
-          onChangeText={this.onChangeUsername}
-        />
-        <TextField
-          label="パスワード"
-          onChangeText={this.onChangePassword}
-          description="8文字以上で入力してください。"
-          secureTextEntry={true}
-          marginBottom={40}
-        />
-        <FormButton title="アカウントを作成する" onPress={this.onSubmit} disabled={this.isDisabled()} />
+        <FormButton title="更新する" onPress={this.onSubmit} disabled={this.isDisabled()} />
       </View>
     );
   }
@@ -93,8 +75,7 @@ const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   register: authAction.register,
   startLoading: loadingAction.startLoading,
-  endLoading: loadingAction.endLoading,
-  addMessage: QuickbloxAction.addMessage
+  endLoading: loadingAction.endLoading
 };
 
 const enhancer = connect(
@@ -102,4 +83,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(Signup);
+export default enhancer(EditProfileImage);

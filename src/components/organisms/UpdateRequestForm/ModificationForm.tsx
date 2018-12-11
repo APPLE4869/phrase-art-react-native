@@ -3,6 +3,7 @@ import { ScrollView } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
+import * as QuickbloxAction from "../../../actions/quickblox";
 import * as phraseModificationRequestAction from "../../../actions/UpdateRequest/phraseModificationRequest";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
@@ -21,6 +22,7 @@ interface Props {
   endLoading: any;
   submitPhraseModificationRequest: any;
   initializeCategories: any;
+  addMessage: any;
 }
 
 interface State {
@@ -114,7 +116,14 @@ class ModificationForm extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { phrase, startLoading, endLoading, navigateNextScreen, submitPhraseModificationRequest } = this.props;
+    const {
+      phrase,
+      startLoading,
+      endLoading,
+      navigateNextScreen,
+      submitPhraseModificationRequest,
+      addMessage
+    } = this.props;
     const { categoryId, subcategoryName, content, author } = this.state;
     startLoading();
 
@@ -124,6 +133,7 @@ class ModificationForm extends React.Component<Props, State> {
       endLoading();
     }
 
+    addMessage("名言の修正申請に成功しました。");
     navigateNextScreen();
   }
 
@@ -180,7 +190,8 @@ const mapDispatchToProps = {
   initializeCategories: CategoriesAction.initializeCategories,
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading,
-  submitPhraseModificationRequest: phraseModificationRequestAction.submitPhraseModificationRequest
+  submitPhraseModificationRequest: phraseModificationRequestAction.submitPhraseModificationRequest,
+  addMessage: QuickbloxAction.addMessage
 };
 
 const enhancer = connect(
