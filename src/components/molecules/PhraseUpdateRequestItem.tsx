@@ -8,6 +8,7 @@ import IconImageWithLabel from "../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../atoms/InlineCategoryNames";
 import RemainingTime from "../atoms/RemainingTime";
 import StandardText from "../atoms/StandardText";
+import ReportIcon from "./ReportIcon";
 
 interface Props {
   phraseUpdateRequest: PhraseUpdateRequestDTO;
@@ -32,12 +33,13 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
         style={styles.container}
       >
         <View style={styles.itemTop}>
-          <InlineCategoryNames
-            categoryName={phraseUpdateRequest.categoryName}
-            subcategoryName={phraseUpdateRequest.subcategoryName}
-          />
           <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+          <ReportIcon reportSymbol="UpdateRequest" reportId={phraseUpdateRequest.id} />
         </View>
+        <InlineCategoryNames
+          categoryName={phraseUpdateRequest.categoryName}
+          subcategoryName={phraseUpdateRequest.subcategoryName}
+        />
         <StandardText
           text={this.itemTextView(phraseUpdateRequest.phraseContent)}
           fontSize={14}
@@ -68,6 +70,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   itemTop: {
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"

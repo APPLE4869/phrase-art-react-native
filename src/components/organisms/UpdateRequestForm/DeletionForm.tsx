@@ -2,6 +2,7 @@ import * as React from "react";
 import { Alert, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import * as loadingAction from "../../../actions/loading";
+import * as QuickbloxAction from "../../../actions/quickblox";
 import * as phraseDeletionRequestAction from "../../../actions/UpdateRequest/phraseDeletionRequest";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { formStyle } from "../../../styles";
@@ -14,6 +15,7 @@ interface Props {
   startLoading: any;
   endLoading: any;
   submitPhraseDeletionRequest: any;
+  addMessage: any;
 }
 
 class DeletionForm extends React.Component<Props> {
@@ -31,7 +33,14 @@ class DeletionForm extends React.Component<Props> {
   }
 
   async onSubmit() {
-    const { startLoading, endLoading, navigateNextScreen, submitPhraseDeletionRequest, phrase } = this.props;
+    const {
+      startLoading,
+      endLoading,
+      navigateNextScreen,
+      submitPhraseDeletionRequest,
+      phrase,
+      addMessage
+    } = this.props;
     startLoading();
 
     try {
@@ -40,6 +49,7 @@ class DeletionForm extends React.Component<Props> {
       endLoading();
     }
 
+    addMessage("名言の削除申請に成功しました。");
     navigateNextScreen();
   }
 
@@ -63,7 +73,8 @@ const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading,
-  submitPhraseDeletionRequest: phraseDeletionRequestAction.submitPhraseDeletionRequest
+  submitPhraseDeletionRequest: phraseDeletionRequestAction.submitPhraseDeletionRequest,
+  addMessage: QuickbloxAction.addMessage
 };
 
 const enhancer = connect(

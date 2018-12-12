@@ -5,19 +5,19 @@ import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
 import { colors } from "../../styles";
 
 interface Props {
-  category: CategoryDTO | SubcategoryDTO;
-  onPress: (categoryId: string) => void;
-  currentCategoryId?: string | undefined;
+  onPress: () => void;
+  checked: boolean;
+  text: string;
 }
 
-export default class CategoryItem extends React.Component<Props> {
+export default class CategoryItemForAll extends React.Component<Props> {
   render() {
-    const { category, currentCategoryId, onPress } = this.props;
+    const { onPress, checked, text } = this.props;
 
     return (
-      <TouchableOpacity activeOpacity={1} onPress={() => onPress(category.id)} style={styles.item}>
-        <Text style={styles.itemText}>{category.name}</Text>
-        {currentCategoryId && currentCategoryId === category.id ? (
+      <TouchableOpacity activeOpacity={1} onPress={() => onPress()} style={styles.item}>
+        <Text style={styles.itemText}>{text}</Text>
+        {checked ? (
           <Image
             style={{ width: 20, height: 20, bottom: 3 }}
             source={require("../../../assets/images/icon/clickable-check.png")}

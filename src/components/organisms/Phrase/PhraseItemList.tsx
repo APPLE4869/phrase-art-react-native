@@ -42,10 +42,9 @@ class PhraseItemList extends React.Component<Props, State> {
       return;
     }
 
-    const { phrases } = this.props;
-
     this.setState({ loading: true });
 
+    const { phrases } = this.props;
     const offset: number = phrases.length;
     await this.fetchPhrases(offset);
 
@@ -93,7 +92,7 @@ class PhraseItemList extends React.Component<Props, State> {
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
-        onEndReached={() => this.fetchPhraseWithAwait()}
+        onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}
         refreshControl={

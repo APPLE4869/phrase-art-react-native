@@ -7,6 +7,7 @@ import { State as RootState } from "../../reducers";
 import CategoryItem from "../molecules/CategoryItem";
 
 interface Props {
+  subcategory: SubcategoryDTO | undefined;
   categoryId: string;
   subcategories: SubcategoryDTO[];
   fetchSubcategoriesByCategoryId: any;
@@ -20,6 +21,8 @@ interface State {
 }
 
 class SubcategoryItemList extends React.Component<Props, State> {
+  private currentSubcategoryId: string | undefined;
+
   constructor(props: Props) {
     super(props);
 
@@ -28,6 +31,11 @@ class SubcategoryItemList extends React.Component<Props, State> {
     const { categoryId, fetchSubcategoriesByCategoryId } = this.props;
     // 初期表示用のサブカテゴリーを取得
     fetchSubcategoriesByCategoryId(categoryId);
+
+    const { subcategory } = this.props;
+    if (subcategory) {
+      this.currentSubcategoryId = subcategory.id;
+    }
   }
 
   async fetchSubcategoriesWithAwait() {
@@ -68,7 +76,9 @@ class SubcategoryItemList extends React.Component<Props, State> {
         style={styles.container}
         data={subcategories}
         keyExtractor={(subcategory: SubcategoryDTO) => subcategory.id}
-        renderItem={({ item: subcategory }) => <CategoryItem category={subcategory} onPress={onPress} />}
+        renderItem={({ item: subcategory }) => (
+          <CategoryItem category={subcategory} onPress={onPress} currentCategoryId={this.currentSubcategoryId} />
+        )}
         onEndReached={() => this.fetchSubcategoriesWithAwait()}
         onEndReachedThreshold={3}
       />
@@ -83,7 +93,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  subcategories: state.subcategories.subcategories
+  subcategories: state.subcategories.subcategories,
+  subcategory: state.subcategories.subcategory
 });
 
 const mapDispatchToProps = {

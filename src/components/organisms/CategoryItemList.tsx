@@ -1,16 +1,20 @@
 import * as React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../actions/categories";
 import CategoryDTO from "../../models/dto/CategoryDTO";
+import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
 import { State as RootState } from "../../reducers";
 import CategoryItem from "../molecules/CategoryItem";
+import CategoryItemForAll from "../molecules/CategoryItemForAll";
 
 interface Props {
+  subcategory: SubcategoryDTO | undefined;
   categories: CategoryDTO[];
   fetchCategories: any;
   initializeCategories: any;
   onPress: (categoryId: string) => void;
+  onPressForAll?: () => void;
 }
 
 interface State {
@@ -19,16 +23,22 @@ interface State {
 }
 
 class CategoryItemList extends React.Component<Props, State> {
+  private currentCategoryId: string | undefined;
+
   constructor(props: Props) {
     super(props);
 
     this.state = { loading: false, stopFetching: false };
 
-    const { categories, fetchCategories } = this.props;
+    const { categories, subcategory, fetchCategories } = this.props;
 
     if (categories.length === 0) {
       // 初期表示用のカテゴリーを取得
       fetchCategories();
+    }
+
+    if (subcategory) {
+      this.currentCategoryId = subcategory.categoryId;
     }
   }
 
@@ -39,15 +49,20 @@ class CategoryItemList extends React.Component<Props, State> {
   }
 
   render() {
-    const { categories, onPress } = this.props;
+    const { categories, onPress, onPressForAll } = this.props;
 
     return (
-      <FlatList
-        style={styles.container}
-        data={categories}
-        keyExtractor={(category: CategoryDTO) => category.id}
-        renderItem={({ item: category }) => <CategoryItem category={category} onPress={onPress} />}
-      />
+      <View style={{flex: 1, width: "100%"}}>
+        { onPressForAll ? <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" /> : null}
+        <FlatList
+          style={styles.container}
+          data={categories}
+          keyExtractor={(category: CategoryDTO) => category.id}
+          renderItem={({ item: category }) => (
+            <CategoryItem category={category} currentCategoryId={this.currentCategoryId} onPress={onPress} />
+          )}
+        />
+      </View>
     );
   }
 }
@@ -59,7 +74,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  categories: state.categories.categories
+  categories: state.categories.categories,
+  subcategory: state.subcategories.subcategory
 });
 
 const mapDispatchToProps = {

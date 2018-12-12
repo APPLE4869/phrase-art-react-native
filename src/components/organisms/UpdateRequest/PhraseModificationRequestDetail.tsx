@@ -15,6 +15,7 @@ import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import RemainingTime from "../../atoms/RemainingTime";
 import StandardText from "../../atoms/StandardText";
+import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
   updateRequestId: string;
@@ -119,9 +120,10 @@ class ModificationRequestDetail extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.itemTop}>
-          <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
           <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
+        <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
         <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
         <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
@@ -146,9 +148,10 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingHorizontal: 15,
-    paddingTop: 30
+    paddingTop: 15
   },
   itemTop: {
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
