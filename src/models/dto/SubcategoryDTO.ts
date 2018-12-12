@@ -1,15 +1,17 @@
 export default class SubcategoryDTO {
   readonly id: string;
   readonly name: string;
+  readonly categoryId: string;
 
-  constructor({ id, name }: SubcategoryProperty) {
+  constructor({ id, categoryId, name }: SubcategoryProperty) {
     this.id = id;
-    this.name = name;
+    (this.categoryId = categoryId), (this.name = name);
   }
 }
 
 interface SubcategoryProperty {
   id: string;
+  categoryId: string;
   name: string;
 }
 

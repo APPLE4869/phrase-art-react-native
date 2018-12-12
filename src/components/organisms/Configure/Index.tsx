@@ -24,6 +24,7 @@ class Index extends React.Component<Props, State> {
     this.navigateEditProfileImage = this.navigateEditProfileImage.bind(this);
     this.navigateLogin = this.navigateLogin.bind(this);
     this.navigateSignup = this.navigateSignup.bind(this);
+    this.navigateTermsOfService = this.navigateTermsOfService.bind(this);
   }
 
   handleLogoutDialog() {
@@ -75,6 +76,10 @@ class Index extends React.Component<Props, State> {
     this.props.navigation.navigate("ConfigureSignup");
   }
 
+  navigateTermsOfService() {
+    this.props.navigation.navigate("ConfigureTermsOfService");
+  }
+
   render() {
     const { auth } = this.props;
 
@@ -83,6 +88,7 @@ class Index extends React.Component<Props, State> {
       return (
         <View style={styles.container}>
           {/* <ConfigureIndexItem title="プロフィール画像" onPress={this.navigateEditProfileImage} /> */}
+          <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
           <ConfigureIndexItem title="ログアウト" onPress={this.handleLogoutDialog} hiddenRightArrow={true} />
         </View>
       );
@@ -93,6 +99,7 @@ class Index extends React.Component<Props, State> {
       <View style={styles.container}>
         <ConfigureIndexItem title="ログイン" onPress={this.navigateLogin} />
         <ConfigureIndexItem title="アカウント作成" onPress={this.navigateSignup} />
+        <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
       </View>
     );
   }
