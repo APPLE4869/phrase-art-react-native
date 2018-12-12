@@ -7,6 +7,7 @@ import { apiPublicClient } from "../providers/apiClient";
 export const ADD_SUBCATEGORIES = "ADD_SUBCATEGORIES:categories";
 export const ADD_SUBCATEGORY = "ADD_SUBCATEGORY:categories";
 export const INITIALIZE_SUBCATEGORIES = "INITIALIZE_SUBCATEGORIES:categories";
+export const INITIALIZE_SUBCATEGORY = "INITIALIZE_SUBCATEGORY:categories";
 
 interface AddSubcategories {
   type: typeof ADD_SUBCATEGORIES;
@@ -22,8 +23,12 @@ interface InitializeSubcategories {
   type: typeof INITIALIZE_SUBCATEGORIES;
 }
 
+interface InitializeSubcategory {
+  type: typeof INITIALIZE_SUBCATEGORY;
+}
+
 // Reducer用に利用するActionの型を定義
-export type Action = AddSubcategories | AddSubcategory | InitializeSubcategories;
+export type Action = AddSubcategories | AddSubcategory | InitializeSubcategories | InitializeSubcategory;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -55,4 +60,9 @@ export function fetchSubcategoryById(id: string) {
 // 取得したカテゴリー(Category)を初期化
 export function initializeSubcategories(): InitializeSubcategories {
   return { type: INITIALIZE_SUBCATEGORIES };
+}
+
+// 取得したカテゴリー(Category)を初期化
+export function initializeSubcategory(): InitializeSubcategory {
+  return { type: INITIALIZE_SUBCATEGORY };
 }
