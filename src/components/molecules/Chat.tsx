@@ -224,7 +224,7 @@ class Chat extends React.Component<Props> {
     if (Platform.OS === "ios") {
       ActionSheetIOS.showActionSheetWithOptions(
         {
-          options: ["キャンセル", "不正な申請として報告する"],
+          options: ["キャンセル", "不正ユーザーとして報告する"],
           cancelButtonIndex: 0
         },
         buttonIndex => {
@@ -235,7 +235,7 @@ class Chat extends React.Component<Props> {
       );
     } else {
       Alert.alert(
-        "不正な申請として報告する",
+        "不正ユーザーとして報告する",
         "",
         [
           { text: "いいえ", style: "cancel" },
