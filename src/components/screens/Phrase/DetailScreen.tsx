@@ -19,7 +19,9 @@ import PhraseCommentDTO from "../../../models/dto/Phrase/PhraseCommentDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
+import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import Chat from "../../molecules/Chat";
+import ReportIcon from "../../molecules/ReportIcon";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
@@ -184,17 +186,18 @@ class PhraseDetailScreen extends React.Component<Props> {
         <View style={styles.container}>
           <View style={styles.item}>
             <View style={styles.itemCategoryArea}>
-              <Text style={styles.itemCategoryAreaMain}>{phrase.categoryName}</Text>
-              <Image
-                style={{ width: 8, height: 8 }}
-                source={require("../../../../assets/images/icon/angle-right-gray2.png")}
-              />
-              <Text style={styles.itemCategoryAreaSub}>{phrase.subcategoryName}</Text>
+              <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
+              <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
             </View>
             <Text style={styles.itemPhraseContent}>{phrase.content}</Text>
             <Text style={styles.itemAuthorName}>{phrase.authorName}</Text>
           </View>
-          <Chat onSend={this.onSend} messages={this.messages()} userId={currentUser ? currentUser.id : undefined} />
+          <Chat
+            onSend={this.onSend}
+            messages={this.messages()}
+            userId={currentUser ? currentUser.id : undefined}
+            reportSymbol="PhraseComment"
+          />
         </View>
       </DefaultTemplate>
     );
@@ -214,7 +217,8 @@ const styles = StyleSheet.create({
   },
   itemCategoryArea: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   itemCategoryAreaMain: {
     color: colors.grayLevel2,

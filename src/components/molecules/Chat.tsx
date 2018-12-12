@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ActionSheetIOS, Alert, Clipboard, Platform, StyleSheet, Text, View } from "react-native";
 import {
   Bubble,
   BubbleProps,
@@ -14,8 +14,13 @@ import {
   MessageText,
   MessageTextProps,
   Send,
-  SendProps
+  SendProps,
+  User
 } from "react-native-gifted-chat";
+import { connect } from "react-redux";
+import * as loadingAction from "../../actions/loading";
+import * as QuickbloxAction from "../../actions/quickblox";
+import * as ReportsAction from "../../actions/reports";
 import { colors } from "../../styles";
 
 interface MessageWithUser {
@@ -32,10 +37,15 @@ interface MessageWithUser {
 interface Props {
   onSend: (messages: IMessage[]) => void;
   messages: IMessage[];
-  userId: string;
+  reportSymbol: string;
+  userId: undefined | string;
+  startLoading: any;
+  endLoading: any;
+  addMessage: any;
+  reportInjustice: any;
 }
 
-export default class Chat extends React.Component<Props> {
+class Chat extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
@@ -45,6 +55,9 @@ export default class Chat extends React.Component<Props> {
     this.renderComposer = this.renderComposer.bind(this);
     this.renderMessage = this.renderMessage.bind(this);
     this.renderMessageText = this.renderMessageText.bind(this);
+    this.onLongPress = this.onLongPress.bind(this);
+    this.postReport = this.postReport.bind(this);
+    this.onPressAvatar = this.onPressAvatar.bind(this);
   }
 
   // 吹き出し
@@ -182,6 +195,80 @@ export default class Chat extends React.Component<Props> {
     );
   }
 
+  onLongPress(context: any, message: IMessage) {
+    const { reportSymbol } = this.props;
+
+    if (message.text) {
+      const options = ["コピー", "不正なコメントとして報告する", "キャンセル"];
+      const cancelButtonIndex = options.length - 1;
+      context.actionSheet().showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex
+        },
+        (buttonIndex: number) => {
+          switch (buttonIndex) {
+            case 0:
+              Clipboard.setString(message.text);
+              break;
+            case 1:
+              this.postReport(reportSymbol, message._id, "不正なコメントとして報告しました。");
+              break;
+          }
+        }
+      );
+    }
+  }
+
+  onPressAvatar(user: User) {
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["キャンセル", "不正な申請として報告する"],
+          cancelButtonIndex: 0
+        },
+        buttonIndex => {
+          if (buttonIndex === 1) {
+            this.postReport("User", user._id, "不正なユーザーとして報告しました。");
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        "不正な申請として報告する",
+        "",
+        [
+          { text: "いいえ", style: "cancel" },
+          {
+            text: "はい",
+            onPress: () => {
+              this.postReport("User", user._id, "不正なユーザーとして報告しました。");
+            }
+          }
+        ],
+        { cancelable: true }
+      );
+    }
+  }
+
+  async postReport(symbol: string, reportId: string, finishedMessage: string) {
+    const { startLoading, endLoading, addMessage, reportInjustice, userId } = this.props;
+
+    // 通知処理
+    startLoading();
+
+    try {
+      await reportInjustice(userId || "", reportId, symbol);
+    } catch (e) {
+      endLoading();
+      Alert.alert("通信に失敗しました。もう一度お試しください。");
+      throw e;
+    }
+
+    endLoading();
+    addMessage(finishedMessage);
+  }
+
   render() {
     return (
       <View style={styles.chatContainer}>
@@ -202,6 +289,8 @@ export default class Chat extends React.Component<Props> {
           timeFormat="HH:mm"
           dateFormat="YYYY年MM月DD日"
           maxInputLength={500}
+          onLongPress={this.onLongPress}
+          onPressAvatar={this.onPressAvatar}
         />
       </View>
     );
@@ -221,3 +310,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grayLevel5
   }
 });
+
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  addMessage: QuickbloxAction.addMessage,
+  reportInjustice: ReportsAction.reportInjustice,
+  startLoading: loadingAction.startLoading,
+  endLoading: loadingAction.endLoading
+};
+
+const enhancer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+);
+
+export default enhancer(Chat);

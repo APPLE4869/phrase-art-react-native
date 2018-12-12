@@ -41,12 +41,12 @@ class Quickblox extends React.Component<Props, State> {
   }
 
   show() {
-    let toValue = this.showPosition;
+    const toValue = this.showPosition;
     this.animate(toValue);
   }
 
   hide() {
-    let toValue = this.finalPosition;
+    const toValue = this.finalPosition;
     this.animate(toValue);
   }
 
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 10,
+    lineHeight: 21,
     color: colors.white,
     letterSpacing: 2,
     fontWeight: "bold"
