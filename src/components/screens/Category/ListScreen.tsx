@@ -1,12 +1,12 @@
 import * as React from "react";
 import { Button } from "react-native";
 import { NavigationParams } from "react-navigation";
+import { connect } from "react-redux";
+import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import * as SubcategoriesAction from "../../../actions/subcategories";
 import { colors } from "../../../styles";
 import CategoryItemList from "../../organisms/CategoryItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
-import * as PhrasesAction from "../../../actions/Phrase/phrases";
-import * as SubcategoriesAction from "../../../actions/subcategories";
-import { connect } from "react-redux";
 
 interface Props {
   navigation: NavigationParams;

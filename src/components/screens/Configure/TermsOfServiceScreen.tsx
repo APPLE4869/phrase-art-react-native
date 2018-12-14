@@ -1,7 +1,6 @@
 import * as React from "react";
+import { WebView } from "react-native";
 import { NavigationParams } from "react-navigation";
-import DefaultTemplate from "../../templates/DefaultTemplate";
-import { WebView, View } from "react-native";
 
 interface Props {
   navigation: NavigationParams;
@@ -13,10 +12,6 @@ export default class TermsOfServiceScreen extends React.Component<Props> {
   }
 
   render() {
-    return (
-      <WebView
-        source={{uri: 'https://phrase-art.herokuapp.com/policy'}}
-      />
-    );
+    return <WebView source={{ uri: "https://phrase-art.herokuapp.com/policy" }} />;
   }
 }

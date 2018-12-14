@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 10,
+    fontSize: 15,
     lineHeight: 21,
     color: colors.white,
     letterSpacing: 2,

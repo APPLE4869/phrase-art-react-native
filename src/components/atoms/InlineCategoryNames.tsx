@@ -40,12 +40,12 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     color: colors.grayLevel2,
-    fontSize: 12,
+    fontSize: 13,
     marginRight: 7
   },
   subcategoryName: {
     color: colors.grayLevel2,
-    fontSize: 12,
+    fontSize: 13,
     marginLeft: 12
   }
 });

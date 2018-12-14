@@ -4,7 +4,7 @@ import CategoryNavigator from "./CategoryNavigator";
 
 const RootNavigator = createStackNavigator(
   {
-    PhrBottomTab: BottomTabNavigator,
+    BottomTab: BottomTabNavigator,
     CategoryModal: CategoryNavigator
   },
   {

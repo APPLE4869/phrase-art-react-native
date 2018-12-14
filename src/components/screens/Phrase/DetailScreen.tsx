@@ -220,25 +220,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between"
   },
-  itemCategoryAreaMain: {
-    color: colors.grayLevel2,
-    fontSize: 13,
-    marginRight: 7
-  },
-  itemCategoryAreaSub: {
-    color: colors.grayLevel2,
-    fontSize: 13,
-    marginLeft: 12
-  },
   itemPhraseContent: {
-    fontSize: 15,
-    lineHeight: 24,
-    letterSpacing: 0.8,
+    fontSize: 16,
+    lineHeight: 25,
+    letterSpacing: 1,
     marginVertical: 13,
     color: colors.baseBlack
   },
   itemAuthorName: {
-    fontSize: 13,
+    fontSize: 14,
     letterSpacing: 1,
     color: colors.baseBlack
   }

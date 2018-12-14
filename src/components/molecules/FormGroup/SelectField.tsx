@@ -42,14 +42,15 @@ const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     height: 45,
     paddingHorizontal: 15,
-    fontSize: 14,
+    fontSize: 15,
     letterSpacing: 2,
     borderWidth: 1,
     borderRadius: 30,
     borderColor: colors.grayLevel3
   },
   inputAndroid: {
-    height: 45
+    height: 45,
+    fontSize: 15
   },
   pickerAndroid: {
     height: 45,
@@ -65,7 +66,7 @@ const pickerSelectStyles = StyleSheet.create({
     top: 22
   },
   done: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "normal",
     paddingTop: 14
   },
@@ -80,12 +81,12 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     color: colors.grayLevel2,
-    fontSize: 12,
+    fontSize: 13,
     letterSpacing: 1.5,
-    marginBottom: 4
+    marginBottom: 5
   },
   formDescription: {
-    fontSize: 11,
+    fontSize: 12,
     color: colors.grayLevel3
   }
 });

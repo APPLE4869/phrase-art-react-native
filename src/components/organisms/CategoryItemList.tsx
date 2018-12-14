@@ -52,8 +52,10 @@ class CategoryItemList extends React.Component<Props, State> {
     const { categories, onPress, onPressForAll } = this.props;
 
     return (
-      <View style={{flex: 1, width: "100%"}}>
-        { onPressForAll ? <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" /> : null}
+      <View style={{ flex: 1, width: "100%" }}>
+        {onPressForAll ? (
+          <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" />
+        ) : null}
         <FlatList
           style={styles.container}
           data={categories}

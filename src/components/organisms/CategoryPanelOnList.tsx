@@ -46,10 +46,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grayLevel5
   },
   subcategoryName: {
-    fontSize: 18,
+    fontSize: 20,
     paddingVertical: 15,
     paddingHorizontal: 15,
-    color: colors.grayLevel2
+    color: colors.grayLevel1
   }
 });
 

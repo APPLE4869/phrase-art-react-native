@@ -1,4 +1,10 @@
-import { Action, ADD_SUBCATEGORIES, ADD_SUBCATEGORY, INITIALIZE_SUBCATEGORIES, INITIALIZE_SUBCATEGORY } from "../actions/subcategories";
+import {
+  Action,
+  ADD_SUBCATEGORIES,
+  ADD_SUBCATEGORY,
+  INITIALIZE_SUBCATEGORIES,
+  INITIALIZE_SUBCATEGORY
+} from "../actions/subcategories";
 import SubcategoryDTO from "../models/dto/SubcategoryDTO";
 
 // Stateの型定義

@@ -89,14 +89,14 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     color: colors.grayLevel2,
-    fontSize: 12,
+    fontSize: 13,
     letterSpacing: 1.5,
-    marginBottom: 4
+    marginBottom: 5
   },
   formField: {
     borderColor: colors.grayLevel3,
     borderWidth: 1,
-    fontSize: 14,
+    fontSize: 15,
     borderRadius: 30,
     letterSpacing: 2,
     paddingHorizontal: 15,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     borderColor: colors.clickable
   },
   formDescription: {
-    fontSize: 11,
+    fontSize: 12,
     color: colors.grayLevel3
   }
 });

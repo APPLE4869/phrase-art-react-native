@@ -124,8 +124,8 @@ class DeletionRequestDetail extends React.Component<Props, State> {
           <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
         <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-        <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
-        <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
+        <StandardText text={request.phraseContent} fontSize={14} textStyle={{ marginVertical: 10 }} />
+        <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_DELETION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />

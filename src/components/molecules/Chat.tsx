@@ -124,7 +124,18 @@ class Chat extends React.Component<Props> {
               alignItems: "center"
             }}
           >
-            <Text style={{ color: colors.white, paddingHorizontal: 18, lineHeight: 32, fontWeight: "bold" }}>送信</Text>
+            <Text
+              style={{
+                color: colors.white,
+                paddingHorizontal: 18,
+                fontSize: 15,
+                paddingVertical: 9,
+                letterSpacing: 0.5,
+                fontWeight: "bold"
+              }}
+            >
+              送信
+            </Text>
           </View>
         </Send>
       );
@@ -140,7 +151,18 @@ class Chat extends React.Component<Props> {
           alignItems: "center"
         }}
       >
-        <Text style={{ color: colors.white, paddingHorizontal: 18, lineHeight: 32, fontWeight: "bold" }}>送信</Text>
+        <Text
+          style={{
+            color: colors.white,
+            paddingHorizontal: 18,
+            fontSize: 15,
+            paddingVertical: 9,
+            letterSpacing: 0.5,
+            fontWeight: "bold"
+          }}
+        >
+          送信
+        </Text>
       </View>
     );
   }
@@ -161,11 +183,11 @@ class Chat extends React.Component<Props> {
           borderColor: colors.grayLevel4,
           borderWidth: 1,
           borderRadius: 15,
-          paddingVertical: 10,
+          paddingVertical: 5,
           paddingHorizontal: 15,
           marginRight: 13,
-          fontSize: 12,
-          lineHeight: 15
+          fontSize: 13,
+          lineHeight: 16
         }}
       />
     );
@@ -188,8 +210,8 @@ class Chat extends React.Component<Props> {
       <MessageText
         {...props}
         textStyle={{
-          left: { fontSize: 12, lineHeight: 18, letterSpacing: 0.8 },
-          right: { fontSize: 12, lineHeight: 18, letterSpacing: 0.8 }
+          left: { fontSize: 13, lineHeight: 18, letterSpacing: 0.8 },
+          right: { fontSize: 13, lineHeight: 18, letterSpacing: 0.8 }
         }}
       />
     );

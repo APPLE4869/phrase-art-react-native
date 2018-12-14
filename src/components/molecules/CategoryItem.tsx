@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   itemText: {
-    fontSize: 14,
+    fontSize: 15,
     letterSpacing: 1,
     color: colors.baseBlack
   }

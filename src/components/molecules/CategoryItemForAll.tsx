@@ -1,7 +1,5 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import CategoryDTO from "../../models/dto/CategoryDTO";
-import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
 import { colors } from "../../styles";
 
 interface Props {
@@ -39,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   itemText: {
-    fontSize: 14,
+    fontSize: 15,
     letterSpacing: 1,
     color: colors.baseBlack
   }

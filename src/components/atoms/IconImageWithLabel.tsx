@@ -43,8 +43,8 @@ export default class RemainingTime extends React.Component<Props> {
 
     return (
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Image style={{ width: 25, height: 25 }} source={imageIcon} />
-        <StandardText text={label} fontSize={12} textStyle={{ marginLeft: 8 }} />
+        <Image style={{ width: 28, height: 28 }} source={imageIcon} />
+        <StandardText text={label} fontSize={13} textStyle={{ marginLeft: 8 }} />
       </View>
     );
   }
