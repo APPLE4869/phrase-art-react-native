@@ -1,30 +1,15 @@
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
-import * as SubcategoriesAction from "../../actions/subcategories";
 import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
-import { State as RootState } from "../../reducers";
-import * as PhrasesReducers from "../../reducers/phrases";
 import { colors } from "../../styles";
 
 interface Props {
   subcategory: SubcategoryDTO | undefined;
-  fetchSubcategoryById: any;
-  phrasesListStatus: PhrasesReducers.PhrasesListStatus;
 }
 
 interface State {}
 
-class CategoryPanelOnList extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    const subcategoryId = this.props.phrasesListStatus.subcategoryId;
-    if (subcategoryId) {
-      this.props.fetchSubcategoryById(subcategoryId);
-    }
-  }
-
+export default class CategoryPanelOnList extends React.Component<Props, State> {
   render() {
     const { subcategory } = this.props;
 
@@ -52,19 +37,3 @@ const styles = StyleSheet.create({
     color: colors.grayLevel1
   }
 });
-
-const mapStateToProps = (state: RootState) => ({
-  subcategory: state.subcategories.subcategory,
-  phrasesListStatus: state.phrases.phrasesListStatus
-});
-
-const mapDispatchToProps = {
-  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById
-};
-
-const enhancer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-);
-
-export default enhancer(CategoryPanelOnList);

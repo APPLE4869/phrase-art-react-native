@@ -2,7 +2,9 @@ import {
   Action,
   ADD_PHRASE_DECISION,
   ADD_PHRASE_MODIFICATION_REQUEST,
-  CHANGE_DECISION_RESULT
+  CHANGE_DECISION_RESULT,
+  INITIALIZE_DECISION,
+  INITIALIZE_PHRASE_MODIFICATION_REQUEST
 } from "../../actions/UpdateRequest/phraseModificationRequest";
 import PhraseDecisionDTO from "../../models/dto/UpdateRequest/PhraseDecisionDTO";
 import PhraseModificationRequestDTO from "../../models/dto/UpdateRequest/PhraseModificationRequestDTO";
@@ -30,6 +32,12 @@ export default (state: State = initialState, action: Action) => {
     }
     case CHANGE_DECISION_RESULT: {
       return { ...state, phraseDecision: { ...state.phraseDecision, result: action.payload } };
+    }
+    case INITIALIZE_PHRASE_MODIFICATION_REQUEST: {
+      return { ...state, phraseModificationRequest: undefined };
+    }
+    case INITIALIZE_DECISION: {
+      return { ...state, phraseDecision: undefined };
     }
     default: {
       return state;

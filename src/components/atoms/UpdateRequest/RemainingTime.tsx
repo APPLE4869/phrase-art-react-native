@@ -1,8 +1,8 @@
 import moment from "moment";
 import * as React from "react";
 import { View } from "react-native";
-import { colors } from "../../styles";
-import StandardText from "../atoms/StandardText";
+import { colors } from "../../../styles";
+import StandardText from "../StandardText";
 
 interface Props {
   decisionExpiresAt: string;

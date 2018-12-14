@@ -13,8 +13,8 @@ import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
-import RemainingTime from "../../atoms/RemainingTime";
 import StandardText from "../../atoms/StandardText";
+import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
 import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
@@ -25,6 +25,8 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseDeletionRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
@@ -44,7 +46,10 @@ class DeletionRequestDetail extends React.Component<Props, State> {
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseDeletionRequest, initializeDecision } = this.props;
+
+    initializePhraseDeletionRequest();
+    initializeDecision();
 
     await fetchById(updateRequestId);
 
@@ -124,7 +129,7 @@ class DeletionRequestDetail extends React.Component<Props, State> {
           <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
         <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-        <StandardText text={request.phraseContent} fontSize={14} textStyle={{ marginVertical: 10 }} />
+        <StandardText text={request.phraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
         <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_DELETION_REQUEST_TYPE} />
@@ -172,6 +177,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseDeletionRequestAction.fetchById,
+  initializePhraseDeletionRequest: PhraseDeletionRequestAction.initializePhraseDeletionRequest,
+  initializeDecision: PhraseDeletionRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };

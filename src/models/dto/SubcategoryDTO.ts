@@ -5,7 +5,8 @@ export default class SubcategoryDTO {
 
   constructor({ id, categoryId, name }: SubcategoryProperty) {
     this.id = id;
-    (this.categoryId = categoryId), (this.name = name);
+    this.categoryId = categoryId;
+    this.name = name;
   }
 }
 

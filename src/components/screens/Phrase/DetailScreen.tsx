@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  ActionSheetIOS,
-  Alert,
-  Image,
-  Keyboard,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ActionSheetIOS, Alert, Image, Keyboard, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { IMessage } from "react-native-gifted-chat";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
@@ -18,8 +8,9 @@ import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseCommentDTO from "../../../models/dto/Phrase/PhraseCommentDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
-import { colors } from "../../../styles";
+import { replaceDateStringForIOS } from "../../../support/replace";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import StandardText from "../../atoms/StandardText";
 import Chat from "../../molecules/Chat";
 import ReportIcon from "../../molecules/ReportIcon";
 import DefaultTemplate from "../../templates/DefaultTemplate";
@@ -34,6 +25,7 @@ interface Props {
   fetchPreviousPhraseComments: any;
   fetchFollowingPhraseComments: any;
   initializePhraseComments: any;
+  initializePhrase: any;
 }
 
 // TODO : Screenで全てやってしまっているので、Organismsに切り出す。
@@ -54,6 +46,7 @@ class PhraseDetailScreen extends React.Component<Props> {
 
     const phraseId = this.props.navigation.getParam("phraseId");
 
+    this.props.initializePhrase();
     this.props.fetchPhraseById(phraseId);
 
     this.handleEditDialog = this.handleEditDialog.bind(this);
@@ -161,16 +154,20 @@ class PhraseDetailScreen extends React.Component<Props> {
   }
 
   messages() {
-    return this.props.phraseComments.map(comment => ({
-      _id: comment.id,
-      text: comment.content,
-      createdAt: new Date(comment.createdAt),
-      user: {
-        _id: comment.userId,
-        name: comment.username,
-        avatar: comment.userImageUrl || "https://kotobank.jp/image/dictionary/daijisen/media/104886.jpg"
-      }
-    }));
+    return this.props.phraseComments.map(comment => {
+      const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
+
+      return {
+        _id: comment.id,
+        text: comment.content,
+        createdAt: new Date(createdAt),
+        user: {
+          _id: comment.userId,
+          name: comment.username,
+          avatar: comment.userImageUrl || "https://kotobank.jp/image/dictionary/daijisen/media/104886.jpg"
+        }
+      };
+    });
   }
 
   render() {
@@ -189,8 +186,8 @@ class PhraseDetailScreen extends React.Component<Props> {
               <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
               <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
             </View>
-            <Text style={styles.itemPhraseContent}>{phrase.content}</Text>
-            <Text style={styles.itemAuthorName}>{phrase.authorName}</Text>
+            <StandardText text={phrase.content} fontSize={16} textStyle={{ marginVertical: 13 }} />
+            <StandardText text={phrase.authorName} fontSize={14} />
           </View>
           <Chat
             onSend={this.onSend}
@@ -219,18 +216,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
-  },
-  itemPhraseContent: {
-    fontSize: 16,
-    lineHeight: 25,
-    letterSpacing: 1,
-    marginVertical: 13,
-    color: colors.baseBlack
-  },
-  itemAuthorName: {
-    fontSize: 14,
-    letterSpacing: 1,
-    color: colors.baseBlack
   }
 });
 
@@ -245,7 +230,8 @@ const mapDispatchToProps = {
   submitComment: PhraseCommentAction.submitComment,
   fetchPreviousPhraseComments: PhraseCommentAction.fetchPreviousPhraseComments,
   fetchFollowingPhraseComments: PhraseCommentAction.fetchFollowingPhraseComments,
-  initializePhraseComments: PhraseCommentAction.initializePhraseComments
+  initializePhraseComments: PhraseCommentAction.initializePhraseComments,
+  initializePhrase: PhrasesAction.initializePhrase
 };
 
 const enhancer = connect(

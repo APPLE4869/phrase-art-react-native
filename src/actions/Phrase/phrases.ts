@@ -9,6 +9,7 @@ export const ADD_PHRASES = "ADD_PHRASES:phrases";
 export const ADD_PHRASES_NARROWED_DOWN_BY_CATEGORY_ID = "ADD_PHRASES_NARROWED_DOWN_BY_CATEGORY_ID:phrases";
 export const ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID = "ADD_PHRASES_NARROWED_DOWN_BY_SUBCATEGORY_ID:phrases";
 export const SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID = "SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID:phrases";
+export const INITIALIZE_PHRASE = "INITIALIZE_PHRASE:phrases";
 export const INITIALIZE_PHRASES = "INITIALIZE_PHRASES:phrases";
 export const INITIALIZE_PHRASES_LIST_STATUS = "INITIALIZE_PHRASES_LIST_STATUS:phrases";
 
@@ -37,6 +38,10 @@ interface SetPhrasesStatusAbountSubcategoryId {
   payload: string;
 }
 
+interface InitializePhrase {
+  type: typeof INITIALIZE_PHRASE;
+}
+
 interface InitializePhrases {
   type: typeof INITIALIZE_PHRASES;
 }
@@ -52,6 +57,7 @@ export type Action =
   | AddPhrasesByCategoryId
   | AddPhrasesBySubcategoryId
   | SetPhrasesStatusAbountSubcategoryId
+  | InitializePhrase
   | InitializePhrases
   | InitializePhrasesListStatus;
 
@@ -106,6 +112,11 @@ export function fetchPhraseById(id: string) {
 
 export function setPhrasesStatusAbountSubcategoryId(subcategoryId: string): SetPhrasesStatusAbountSubcategoryId {
   return { type: SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID, payload: subcategoryId };
+}
+
+// 取得した名言(Phrase)を初期化
+export function initializePhrase(): InitializePhrase {
+  return { type: INITIALIZE_PHRASE };
 }
 
 // 取得した名言(Phrases)を初期化

@@ -4,7 +4,7 @@ import ConfigureIndexScreen from "../../components/screens/Configure/IndexScreen
 import ConfigureLoginScreen from "../../components/screens/Configure/LoginScreen";
 import ConfigureSignupScreen from "../../components/screens/Configure/SignupScreen";
 import ConfigureTermsOfServiceScreen from "../../components/screens/Configure/TermsOfServiceScreen";
-import NavigationOptions from "./NavigationOptions";
+import NavigationOptions from "../NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {

@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 import UpdateRequestListScreen from "../../components/screens/UpdateRequest/ListScreen";
 import PhraseUpdateRequestDetailScreen from "../../components/screens/UpdateRequest/PhraseUpdateRequestDetail";
-import NavigationOptions from "./NavigationOptions";
+import NavigationOptions from "../NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {

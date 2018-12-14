@@ -11,6 +11,9 @@ import { apiPrivateClient, apiPublicClient } from "../../providers/apiClient";
 export const ADD_PHRASE_REGISTRATION_REQUEST = "ADD_PHRASE_REGISTRATION_REQUEST:phraseRegistrationRequest";
 export const ADD_PHRASE_DECISION = "ADD_PHRASE_DECISION:phraseRegistrationRequest";
 export const CHANGE_DECISION_RESULT = "CHANGE_DECISION_RESULT:phraseRegistrationRequest";
+export const INITIALIZE_PHRASE_REGISTRATION_REQUEST =
+  "INITIALIZE_PHRASE_REGISTRATION_REQUEST:phraseRegistrationRequest";
+export const INITIALIZE_DECISION = "INITIALIZE_DECISION:phraseRegistrationRequest";
 
 interface AddPhraseRegistrationRequest {
   type: typeof ADD_PHRASE_REGISTRATION_REQUEST;
@@ -27,8 +30,21 @@ interface ChangeDecisionResult {
   payload: ResultType;
 }
 
+interface InitializePhraseRegistrationRequest {
+  type: typeof INITIALIZE_PHRASE_REGISTRATION_REQUEST;
+}
+
+interface InitializeDecision {
+  type: typeof INITIALIZE_DECISION;
+}
+
 // Reducer用に利用するActionの型を定義
-export type Action = AddPhraseRegistrationRequest | AddPhraseDecision | ChangeDecisionResult;
+export type Action =
+  | AddPhraseRegistrationRequest
+  | AddPhraseDecision
+  | ChangeDecisionResult
+  | InitializePhraseRegistrationRequest
+  | InitializeDecision;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -79,4 +95,12 @@ export function fetchById(id: string) {
 
 export function changeDecisionResult(result: ResultType) {
   return { type: CHANGE_DECISION_RESULT, payload: result };
+}
+
+export function initializePhraseRegistrationRequest(): InitializePhraseRegistrationRequest {
+  return { type: INITIALIZE_PHRASE_REGISTRATION_REQUEST };
+}
+
+export function initializeDecision(): InitializeDecision {
+  return { type: INITIALIZE_DECISION };
 }

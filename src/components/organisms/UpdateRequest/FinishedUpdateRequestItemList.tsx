@@ -86,7 +86,7 @@ class FinishedUpdateRequestItemList extends React.Component<Props, State> {
         style={styles.container}
         data={finishedUpdateRequests}
         keyExtractor={(updateRequest: UpdateRequestDTO) => updateRequest.id}
-        renderItem={({ item: updateRequest }) => {
+        renderItem={({ item: updateRequest, index }) => {
           if (updateRequest.type === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE) {
             // TODO : サブカテゴリー修正申請用のコンポーネントを作成する。
             return null;
@@ -95,6 +95,8 @@ class FinishedUpdateRequestItemList extends React.Component<Props, State> {
               <PhraseUpdateRequestItem
                 phraseUpdateRequest={updateRequest as PhraseUpdateRequestDTO}
                 onPress={onPress}
+                isFirst={index === 0}
+                status="finished"
               />
             );
           }

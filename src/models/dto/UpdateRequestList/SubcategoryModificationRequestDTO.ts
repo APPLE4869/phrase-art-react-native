@@ -13,6 +13,7 @@ export default class SubcategoryModificationRequestDTO extends UpdateRequestDTO 
     type,
     finished,
     decisionExpiresAt,
+    finalDecisionResult,
     categoryId,
     categoryName,
     subcategoryId,
@@ -21,7 +22,7 @@ export default class SubcategoryModificationRequestDTO extends UpdateRequestDTO 
     approvedCount,
     rejectedCount
   }: SubcategoryModificationRequestProperty) {
-    super({ id, userId, type, finished, decisionExpiresAt, approvedCount, rejectedCount });
+    super({ id, userId, type, finished, decisionExpiresAt, finalDecisionResult, approvedCount, rejectedCount });
     this.categoryId = categoryId;
     this.categoryName = categoryName;
     this.subcategoryName = subcategoryName;

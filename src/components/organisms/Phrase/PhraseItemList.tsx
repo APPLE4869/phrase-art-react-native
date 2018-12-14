@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
-import * as PhrasesReducers from "../../../reducers/phrases";
+import * as PhrasesReducers from "../../../reducers/phrase/phrases";
 import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 
@@ -91,7 +91,9 @@ class PhraseItemList extends React.Component<Props, State> {
         style={styles.container}
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
-        renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
+        renderItem={({ item: phrase, index }) => (
+          <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
+        )}
         onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}

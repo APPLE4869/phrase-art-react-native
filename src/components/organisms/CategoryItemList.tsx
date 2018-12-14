@@ -14,7 +14,7 @@ interface Props {
   fetchCategories: any;
   initializeCategories: any;
   onPress: (categoryId: string) => void;
-  onPressForAll?: () => void;
+  onPressForAll: () => void;
 }
 
 interface State {
@@ -53,13 +53,13 @@ class CategoryItemList extends React.Component<Props, State> {
 
     return (
       <View style={{ flex: 1, width: "100%" }}>
-        {onPressForAll ? (
-          <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" />
-        ) : null}
         <FlatList
           style={styles.container}
           data={categories}
           keyExtractor={(category: CategoryDTO) => category.id}
+          ListHeaderComponent={
+            <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" />
+          }
           renderItem={({ item: category }) => (
             <CategoryItem category={category} currentCategoryId={this.currentCategoryId} onPress={onPress} />
           )}
