@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Button } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as SubcategoriesAction from "../../../actions/subcategories";
-import { colors } from "../../../styles";
+import HeaderMenuButton from "../../atoms/HeaderMenuButton";
 import CategoryItemList from "../../organisms/CategoryItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
@@ -19,9 +18,7 @@ interface Props {
 class CategoryListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerRight: (
-        <Button onPress={() => navigation.navigate("PhraseList")} title="キャンセル" color={colors.clickable} />
-      )
+      headerRight: <HeaderMenuButton onPress={() => navigation.navigate("PhraseList")} title="キャンセル" />
     };
   };
 

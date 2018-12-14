@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 import CategoryListScreen from "../components/screens/Category/ListScreen";
 import SubcategoryListScreen from "../components/screens/Subcategory/ListScreen";
-import { colors } from "../styles";
+import NavigationOptions from "./NavigationOptions";
 
 const CategoryStack = createStackNavigator(
   {
@@ -10,14 +10,7 @@ const CategoryStack = createStackNavigator(
   },
   {
     initialRouteName: "CategoryList",
-    navigationOptions: {
-      headerStyle: {
-        backgroundColor: colors.special.navigationBarBackground,
-        elevation: 0,
-        borderBottomColor: colors.special.navigationBarBorder,
-        zIndex: 1
-      }
-    }
+    navigationOptions: NavigationOptions
   }
 );
 

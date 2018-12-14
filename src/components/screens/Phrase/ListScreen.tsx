@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Alert, Button, Image, TouchableOpacity, View } from "react-native";
+import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import { State as RootState } from "../../../reducers";
-import { colors } from "../../../styles";
+import HeaderMenuButton from "../../atoms/HeaderMenuButton";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 import PhraseItemList from "../../organisms/Phrase/PhraseItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
@@ -16,9 +16,7 @@ interface Props {
 class PhraseListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerLeft: (
-        <Button onPress={() => navigation.navigate("CategoryModal")} title="カテゴリー" color={colors.clickable} />
-      ),
+      headerLeft: <HeaderMenuButton onPress={() => navigation.navigate("CategoryModal")} title="カテゴリー" />,
       headerRight: (
         <TouchableOpacity activeOpacity={1} onPress={navigation.getParam("navigateRegistrationRequest")}>
           <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/plus.png")} />
