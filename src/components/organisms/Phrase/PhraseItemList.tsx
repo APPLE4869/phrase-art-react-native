@@ -91,7 +91,9 @@ class PhraseItemList extends React.Component<Props, State> {
         style={styles.container}
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
-        renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
+        renderItem={({ item: phrase, index }) => (
+          <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
+        )}
         onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}

@@ -9,14 +9,30 @@ import ReportIcon from "./ReportIcon";
 interface Props {
   phrase: PhraseDTO;
   navigateDetail: (phraseId: string) => void;
+  isFirst?: boolean;
 }
 
 export default class PhraseItem extends React.Component<Props> {
-  render() {
+  constructor(props: Props) {
+    super(props);
+
+    this.navigatePhraseDetail = this.navigatePhraseDetail.bind(this);
+  }
+
+  navigatePhraseDetail() {
     const { navigateDetail, phrase } = this.props;
+    navigateDetail(phrase.id);
+  }
+
+  render() {
+    const { phrase, isFirst } = this.props;
 
     return (
-      <TouchableOpacity onPress={() => navigateDetail(phrase.id)} activeOpacity={1} style={styles.container}>
+      <TouchableOpacity
+        onPress={this.navigatePhraseDetail}
+        activeOpacity={1}
+        style={[styles.container, !!isFirst ? styles.firstContainer : {}]}
+      >
         <View style={styles.itemTop}>
           <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
           <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
@@ -34,6 +50,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 15,
     borderBottomColor: colors.grayLevel4
+  },
+  firstContainer: {
+    borderTopWidth: 1,
+    borderTopColor: colors.grayLevel4
   },
   itemTop: {
     flexDirection: "row",
