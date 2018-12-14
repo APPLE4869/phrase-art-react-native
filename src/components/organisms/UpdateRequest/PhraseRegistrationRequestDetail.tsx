@@ -13,8 +13,8 @@ import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
-import RemainingTime from "../../atoms/RemainingTime";
 import StandardText from "../../atoms/StandardText";
+import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
 import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {

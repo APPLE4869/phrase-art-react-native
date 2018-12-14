@@ -6,14 +6,16 @@ import { colors } from "../../styles";
 import DecisionCounts from "../atoms/DecisionCounts";
 import IconImageWithLabel from "../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../atoms/InlineCategoryNames";
-import RemainingTime from "../atoms/RemainingTime";
 import StandardText from "../atoms/StandardText";
+import FinalResult from "../atoms/UpdateRequest/FinalResult";
+import RemainingTime from "../atoms/UpdateRequest/RemainingTime";
 import ReportIcon from "./ReportIcon";
 
 interface Props {
   phraseUpdateRequest: PhraseUpdateRequestDTO;
   onPress: (updateRequestId: string, updateRequestType: UpdateRequestType) => void;
   isFirst?: boolean;
+  status: "requesting" | "finished";
 }
 
 const MAX_ITEM_TEXT: number = 35;
@@ -36,7 +38,7 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
   }
 
   render() {
-    const { phraseUpdateRequest, isFirst } = this.props;
+    const { phraseUpdateRequest, isFirst, status } = this.props;
 
     return (
       <TouchableOpacity
@@ -45,7 +47,14 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
         style={[styles.container, !!isFirst ? styles.firstContainer : {}]}
       >
         <View style={styles.itemTop}>
-          <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+          {status === "requesting" ? (
+            <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+          ) : (
+            <FinalResult
+              decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt}
+              finalDecisionResult={phraseUpdateRequest.finalDecisionResult}
+            />
+          )}
           <ReportIcon reportSymbol="UpdateRequest" reportId={phraseUpdateRequest.id} />
         </View>
         <InlineCategoryNames
