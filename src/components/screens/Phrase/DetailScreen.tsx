@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  ActionSheetIOS,
-  Alert,
-  Image,
-  Keyboard,
-  Platform,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { ActionSheetIOS, Alert, Image, Keyboard, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
 import { IMessage } from "react-native-gifted-chat";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
@@ -18,11 +8,11 @@ import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseCommentDTO from "../../../models/dto/Phrase/PhraseCommentDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
-import { colors } from "../../../styles";
+import { replaceDateStringForIOS } from "../../../support/replace";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import StandardText from "../../atoms/StandardText";
 import Chat from "../../molecules/Chat";
 import ReportIcon from "../../molecules/ReportIcon";
-import StandardText from "../../atoms/StandardText";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
@@ -162,16 +152,20 @@ class PhraseDetailScreen extends React.Component<Props> {
   }
 
   messages() {
-    return this.props.phraseComments.map(comment => ({
-      _id: comment.id,
-      text: comment.content,
-      createdAt: new Date(comment.createdAt),
-      user: {
-        _id: comment.userId,
-        name: comment.username,
-        avatar: comment.userImageUrl || "https://kotobank.jp/image/dictionary/daijisen/media/104886.jpg"
-      }
-    }));
+    return this.props.phraseComments.map(comment => {
+      const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
+
+      return {
+        _id: comment.id,
+        text: comment.content,
+        createdAt: new Date(createdAt),
+        user: {
+          _id: comment.userId,
+          name: comment.username,
+          avatar: comment.userImageUrl || "https://kotobank.jp/image/dictionary/daijisen/media/104886.jpg"
+        }
+      };
+    });
   }
 
   render() {
