@@ -22,6 +22,7 @@ import { colors } from "../../../styles";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import Chat from "../../molecules/Chat";
 import ReportIcon from "../../molecules/ReportIcon";
+import StandardText from "../../atoms/StandardText";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
@@ -189,8 +190,8 @@ class PhraseDetailScreen extends React.Component<Props> {
               <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
               <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
             </View>
-            <Text style={styles.itemPhraseContent}>{phrase.content}</Text>
-            <Text style={styles.itemAuthorName}>{phrase.authorName}</Text>
+            <StandardText text={phrase.content} fontSize={16} textStyle={{ marginVertical: 13 }} />
+            <StandardText text={phrase.authorName} fontSize={14} />
           </View>
           <Chat
             onSend={this.onSend}
@@ -219,18 +220,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
-  },
-  itemPhraseContent: {
-    fontSize: 16,
-    lineHeight: 25,
-    letterSpacing: 1,
-    marginVertical: 13,
-    color: colors.baseBlack
-  },
-  itemAuthorName: {
-    fontSize: 14,
-    letterSpacing: 1,
-    color: colors.baseBlack
   }
 });
 
