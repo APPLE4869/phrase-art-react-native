@@ -25,6 +25,7 @@ interface Props {
   fetchPreviousPhraseComments: any;
   fetchFollowingPhraseComments: any;
   initializePhraseComments: any;
+  initializePhrase: any;
 }
 
 // TODO : Screenで全てやってしまっているので、Organismsに切り出す。
@@ -45,6 +46,7 @@ class PhraseDetailScreen extends React.Component<Props> {
 
     const phraseId = this.props.navigation.getParam("phraseId");
 
+    this.props.initializePhrase();
     this.props.fetchPhraseById(phraseId);
 
     this.handleEditDialog = this.handleEditDialog.bind(this);
@@ -228,7 +230,8 @@ const mapDispatchToProps = {
   submitComment: PhraseCommentAction.submitComment,
   fetchPreviousPhraseComments: PhraseCommentAction.fetchPreviousPhraseComments,
   fetchFollowingPhraseComments: PhraseCommentAction.fetchFollowingPhraseComments,
-  initializePhraseComments: PhraseCommentAction.initializePhraseComments
+  initializePhraseComments: PhraseCommentAction.initializePhraseComments,
+  initializePhrase: PhrasesAction.initializePhrase
 };
 
 const enhancer = connect(

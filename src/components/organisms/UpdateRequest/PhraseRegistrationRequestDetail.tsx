@@ -25,6 +25,8 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseRegistrationRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
@@ -44,8 +46,10 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseRegistrationRequest, initializeDecision } = this.props;
 
+    initializePhraseRegistrationRequest();
+    initializeDecision();
     await fetchById(updateRequestId);
 
     const { phraseDecision } = this.props;
@@ -172,6 +176,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseRegistrationRequestAction.fetchById,
+  initializePhraseRegistrationRequest: PhraseRegistrationRequestAction.initializePhraseRegistrationRequest,
+  initializeDecision: PhraseRegistrationRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };

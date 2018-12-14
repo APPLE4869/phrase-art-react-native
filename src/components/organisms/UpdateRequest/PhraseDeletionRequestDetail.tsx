@@ -25,6 +25,8 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseDeletionRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
@@ -44,7 +46,10 @@ class DeletionRequestDetail extends React.Component<Props, State> {
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseDeletionRequest, initializeDecision } = this.props;
+
+    initializePhraseDeletionRequest();
+    initializeDecision();
 
     await fetchById(updateRequestId);
 
@@ -172,6 +177,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseDeletionRequestAction.fetchById,
+  initializePhraseDeletionRequest: PhraseDeletionRequestAction.initializePhraseDeletionRequest,
+  initializeDecision: PhraseDeletionRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };

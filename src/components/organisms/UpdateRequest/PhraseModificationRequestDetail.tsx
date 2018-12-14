@@ -25,6 +25,8 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseModificationRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
@@ -44,8 +46,10 @@ class ModificationRequestDetail extends React.Component<Props, State> {
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseModificationRequest, initializeDecision } = this.props;
 
+    initializePhraseModificationRequest();
+    initializeDecision();
     await fetchById(updateRequestId);
 
     const { phraseDecision } = this.props;
@@ -172,6 +176,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseModificationRequestAction.fetchById,
+  initializePhraseModificationRequest: PhraseModificationRequestAction.initializePhraseModificationRequest,
+  initializeDecision: PhraseModificationRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };

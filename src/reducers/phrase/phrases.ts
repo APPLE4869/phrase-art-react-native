@@ -2,11 +2,12 @@ import {
   Action,
   ADD_PHRASE,
   ADD_PHRASES,
+  INITIALIZE_PHRASE,
   INITIALIZE_PHRASES,
   INITIALIZE_PHRASES_LIST_STATUS,
   SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID
-} from "../actions/Phrase/phrases";
-import PhraseDTO from "../models/dto/PhraseDTO";
+} from "../../actions/Phrase/phrases";
+import PhraseDTO from "../../models/dto/PhraseDTO";
 
 export interface PhrasesListStatus {
   subcategoryId: string | undefined;
@@ -37,6 +38,9 @@ export default (state: State = initialState, action: Action) => {
     }
     case SET_PHRASES_STATUS_ABOUNT_SUBCATEGORY_ID: {
       return { ...state, phrasesListStatus: { subcategoryId: action.payload } };
+    }
+    case INITIALIZE_PHRASE: {
+      return { ...state, phrase: undefined };
     }
     case INITIALIZE_PHRASES: {
       return { ...state, phrases: [] };

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
-import * as PhrasesReducers from "../../../reducers/phrases";
+import * as PhrasesReducers from "../../../reducers/phrase/phrases";
 import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 

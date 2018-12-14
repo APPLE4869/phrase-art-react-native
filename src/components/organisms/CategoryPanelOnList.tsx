@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as SubcategoriesAction from "../../actions/subcategories";
 import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
 import { State as RootState } from "../../reducers";
-import * as PhrasesReducers from "../../reducers/phrases";
+import * as PhrasesReducers from "../../reducers/phrase/phrases";
 import { colors } from "../../styles";
 
 interface Props {
