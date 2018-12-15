@@ -1,19 +1,19 @@
 import * as React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
-import * as CategoriesAction from "../../actions/categories";
-import CategoryDTO from "../../models/dto/CategoryDTO";
-import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
-import { State as RootState } from "../../reducers";
-import CategoryItem from "../molecules/CategoryItem";
-import CategoryItemForAll from "../molecules/CategoryItemForAll";
+import * as CategoriesAction from "../../../actions/categories";
+import CategoryDTO from "../../../models/dto/CategoryDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
+import { State as RootState } from "../../../reducers";
+import CategoryItem from "../../molecules/Category/CategoryItem";
+import CategoryItemForAll from "../../molecules/Category/CategoryItemForAll";
 
 interface Props {
-  subcategory: SubcategoryDTO | undefined;
+  phrasesListStatus: PhrasesListStatus | undefined;
   categories: CategoryDTO[];
   fetchCategories: any;
   initializeCategories: any;
-  onPress: (categoryId: string) => void;
+  onPress: (category: CategoryDTO) => void;
   onPressForAll: () => void;
 }
 
@@ -30,15 +30,15 @@ class CategoryItemList extends React.Component<Props, State> {
 
     this.state = { loading: false, stopFetching: false };
 
-    const { categories, subcategory, fetchCategories } = this.props;
+    const { categories, phrasesListStatus, fetchCategories } = this.props;
 
     if (categories.length === 0) {
       // 初期表示用のカテゴリーを取得
       fetchCategories();
     }
 
-    if (subcategory) {
-      this.currentCategoryId = subcategory.categoryId;
+    if (phrasesListStatus) {
+      this.currentCategoryId = phrasesListStatus.categoryId;
     }
   }
 
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootState) => ({
   categories: state.categories.categories,
-  subcategory: state.subcategories.subcategory
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {

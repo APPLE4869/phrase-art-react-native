@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { colors } from "../../styles";
+import { colors } from "../../../styles";
 
 interface Props {
   onPress: () => void;
@@ -18,7 +18,7 @@ export default class CategoryItemForAll extends React.Component<Props> {
         {checked ? (
           <Image
             style={{ width: 20, height: 20, bottom: 3 }}
-            source={require("../../../assets/images/icon/clickable-check.png")}
+            source={require("../../../../assets/images/icon/clickable-check.png")}
           />
         ) : null}
       </TouchableOpacity>

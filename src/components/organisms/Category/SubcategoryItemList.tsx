@@ -1,18 +1,21 @@
 import * as React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import * as SubcategoriesAction from "../../actions/subcategories";
-import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
-import { State as RootState } from "../../reducers";
-import CategoryItem from "../molecules/CategoryItem";
+import * as SubcategoriesAction from "../../../actions/subcategories";
+import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
+import { State as RootState } from "../../../reducers";
+import CategoryItemForAll from "../../molecules/Category/CategoryItemForAll";
+import SubcategoryItem from "../../molecules/Category/SubcategoryItem";
 
 interface Props {
-  subcategory: SubcategoryDTO | undefined;
+  phrasesListStatus: PhrasesListStatus | undefined;
   categoryId: string;
   subcategories: SubcategoryDTO[];
   fetchSubcategoriesByCategoryId: any;
   initializeSubcategories: any;
-  onPress: (subcategoryId: string) => void;
+  onPress: (category: SubcategoryDTO) => void;
+  onPressForAll: () => void;
 }
 
 interface State {
@@ -21,6 +24,7 @@ interface State {
 }
 
 class SubcategoryItemList extends React.Component<Props, State> {
+  private currentCategoryId: string | undefined;
   private currentSubcategoryId: string | undefined;
 
   constructor(props: Props) {
@@ -28,13 +32,19 @@ class SubcategoryItemList extends React.Component<Props, State> {
 
     this.state = { loading: false, stopFetching: false };
 
-    const { categoryId, fetchSubcategoriesByCategoryId } = this.props;
+    this.initialize();
+  }
+
+  initialize() {
+    const { categoryId, initializeSubcategories, fetchSubcategoriesByCategoryId, phrasesListStatus } = this.props;
+    initializeSubcategories();
+
     // 初期表示用のサブカテゴリーを取得
     fetchSubcategoriesByCategoryId(categoryId);
 
-    const { subcategory } = this.props;
-    if (subcategory) {
-      this.currentSubcategoryId = subcategory.id;
+    if (phrasesListStatus) {
+      this.currentCategoryId = phrasesListStatus.categoryId;
+      this.currentSubcategoryId = phrasesListStatus.subcategoryId;
     }
   }
 
@@ -58,26 +68,38 @@ class SubcategoryItemList extends React.Component<Props, State> {
     this.setState({ loading: false });
   }
 
-  componentWillUnmount() {
-    this.props.initializeSubcategories();
-  }
-
   isUnableToFetch(): boolean {
     const { loading, stopFetching } = this.state;
 
     return loading || stopFetching;
   }
 
+  checkedAllSubcategories() {
+    const { categoryId } = this.props;
+    return this.currentCategoryId === categoryId && !this.currentSubcategoryId;
+  }
+
   render() {
-    const { subcategories, onPress } = this.props;
+    const { subcategories, onPress, onPressForAll } = this.props;
 
     return (
       <FlatList
         style={styles.container}
         data={subcategories}
         keyExtractor={(subcategory: SubcategoryDTO) => subcategory.id}
+        ListHeaderComponent={
+          <CategoryItemForAll
+            onPress={onPressForAll}
+            checked={this.checkedAllSubcategories()}
+            text="すべてのサブカテゴリー"
+          />
+        }
         renderItem={({ item: subcategory }) => (
-          <CategoryItem category={subcategory} onPress={onPress} currentCategoryId={this.currentSubcategoryId} />
+          <SubcategoryItem
+            subcategory={subcategory}
+            onPress={onPress}
+            currentSubcategoryId={this.currentSubcategoryId}
+          />
         )}
         onEndReached={() => this.fetchSubcategoriesWithAwait()}
         onEndReachedThreshold={3}
@@ -94,7 +116,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootState) => ({
   subcategories: state.subcategories.subcategories,
-  subcategory: state.subcategories.subcategory
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {
