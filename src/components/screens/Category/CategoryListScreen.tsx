@@ -2,9 +2,11 @@ import * as React from "react";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import * as SubcategoriesAction from "../../../actions/subcategories";
+import CategoryDTO from "../../../models/dto/CategoryDTO";
 import HeaderMenuButton from "../../atoms/HeaderMenuButton";
-import CategoryItemList from "../../organisms/CategoryItemList";
+import CategoryItemList from "../../organisms/Category/CategoryItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
@@ -13,6 +15,7 @@ interface Props {
   initializePhrases: any;
   fetchPhrases: any;
   initializePhrasesListStatus: any;
+  initializeSubcategories: any;
 }
 
 class CategoryListScreen extends React.Component<Props> {
@@ -29,8 +32,9 @@ class CategoryListScreen extends React.Component<Props> {
     this.navigatePhraseList = this.navigatePhraseList.bind(this);
   }
 
-  navigateSubcategoryList(categoryId: string) {
-    this.props.navigation.navigate("SubcategoryList", { categoryId });
+  navigateSubcategoryList(category: CategoryDTO) {
+    this.props.initializeSubcategories();
+    this.props.navigation.navigate("SubcategoryList", { categoryId: category.id });
   }
 
   navigatePhraseList() {
@@ -72,7 +76,8 @@ const mapDispatchToProps = {
   initializeSubcategory: SubcategoriesAction.initializeSubcategory,
   initializePhrases: PhrasesAction.initializePhrases,
   fetchPhrases: PhrasesAction.fetchPhrases,
-  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus
+  initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus,
+  initializeSubcategories: SubcategoriesAction.initializeSubcategories
 };
 
 const enhancer = connect(

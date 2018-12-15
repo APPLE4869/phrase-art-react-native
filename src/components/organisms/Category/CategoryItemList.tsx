@@ -1,19 +1,19 @@
 import * as React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
-import * as CategoriesAction from "../../actions/categories";
-import CategoryDTO from "../../models/dto/CategoryDTO";
-import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
-import { State as RootState } from "../../reducers";
-import CategoryItem from "../molecules/CategoryItem";
-import CategoryItemForAll from "../molecules/CategoryItemForAll";
+import * as CategoriesAction from "../../../actions/categories";
+import CategoryDTO from "../../../models/dto/CategoryDTO";
+import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
+import { State as RootState } from "../../../reducers";
+import CategoryItem from "../../molecules/Category/CategoryItem";
+import CategoryItemForAll from "../../molecules/Category/CategoryItemForAll";
 
 interface Props {
   subcategory: SubcategoryDTO | undefined;
   categories: CategoryDTO[];
   fetchCategories: any;
   initializeCategories: any;
-  onPress: (categoryId: string) => void;
+  onPress: (category: CategoryDTO) => void;
   onPressForAll: () => void;
 }
 

@@ -4,6 +4,7 @@ import categories, { State as CategoriesState } from "./categories";
 import loading, { State as LoadingState } from "./loading";
 import phraseComment, { State as phraseCommentState } from "./phrase/phraseComment";
 import phrases, { State as PhrasesState } from "./phrase/phrases";
+import phrasesListStatus, { State as PhrasesListStatusState } from "./phrase/PhrasesListStatus";
 import quickblox, { State as QuickbloxState } from "./Quickblox";
 import subcategories, { State as SubcategoriesState } from "./subcategories";
 import updateRequests, { State as UpdateRequestState } from "./updateRequest";
@@ -27,6 +28,7 @@ export interface State {
   phraseDeletionRequest: PhraseDeletionRequestState;
   phraseComment: phraseCommentState;
   quickblox: QuickbloxState;
+  phrasesListStatus: PhrasesListStatusState;
 }
 
 export default combineReducers({
@@ -40,5 +42,6 @@ export default combineReducers({
   phraseModificationRequest,
   phraseDeletionRequest,
   phraseComment,
-  quickblox
+  quickblox,
+  phrasesListStatus
 });

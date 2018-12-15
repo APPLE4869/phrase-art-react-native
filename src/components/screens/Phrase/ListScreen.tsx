@@ -4,8 +4,8 @@ import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as SubcategoriesAction from "../../../actions/subcategories";
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
-import * as PhrasesReducers from "../../../reducers/phrase/phrases";
 import HeaderMenuButton from "../../atoms/HeaderMenuButton";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 import PhraseItemList from "../../organisms/Phrase/PhraseItemList";
@@ -15,7 +15,7 @@ interface Props {
   navigation: NavigationParams;
   auth: any;
   subcategory: SubcategoryDTO | undefined;
-  phrasesListStatus: PhrasesReducers.PhrasesListStatus;
+  phrasesListStatus: PhrasesListStatus;
   fetchSubcategoryById: any;
 }
 
@@ -51,9 +51,9 @@ class PhraseListScreen extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { navigation, phrasesListStatus } = this.props;
+    const { navigation } = this.props;
     navigation.setParams({ onPressForRight: this.navigateRegistrationRequest });
-    this.setHeaderLeftMenu(phrasesListStatus.subcategoryId);
+    this.setHeaderLeftMenu();
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -61,14 +61,14 @@ class PhraseListScreen extends React.Component<Props> {
     const { phrasesListStatus: currentPhrasesListStatus } = this.props;
 
     if (prevPhrasesListStatus.subcategoryId !== currentPhrasesListStatus.subcategoryId) {
-      this.setHeaderLeftMenu(currentPhrasesListStatus.subcategoryId);
+      this.setHeaderLeftMenu();
     }
   }
 
-  setHeaderLeftMenu(subcategoryId?: string) {
-    const { navigation } = this.props;
+  setHeaderLeftMenu() {
+    const { navigation, phrasesListStatus } = this.props;
 
-    if (subcategoryId) {
+    if (phrasesListStatus.subcategoryId) {
       navigation.setParams({ onPressForLeft: this.navigateSubcategoryList });
       navigation.setParams({ categoryListTitle: "サブカテゴリー" });
     } else {
@@ -123,7 +123,7 @@ class PhraseListScreen extends React.Component<Props> {
 const mapStateToProps = (state: RootState) => ({
   auth: state.auth,
   subcategory: state.subcategories.subcategory,
-  phrasesListStatus: state.phrases.phrasesListStatus
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {

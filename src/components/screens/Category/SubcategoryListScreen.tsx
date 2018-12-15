@@ -2,15 +2,20 @@ import * as React from "react";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import * as SubcategoriesAction from "../../../actions/subcategories";
+import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
+import { State as RootState } from "../../../reducers";
 import HeaderMenuButton from "../../atoms/HeaderMenuButton";
-import SubcategoryItemList from "../../organisms/SubcategoryItemList";
+import SubcategoryItemList from "../../organisms/Category/SubcategoryItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
   navigation: NavigationParams;
+  phrasesListStatus: PhrasesListStatus;
+  setPhrasesListStatus: any;
   fetchSubcategoryById: any;
-  setPhrasesStatusAbountSubcategoryId: any;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
 }
@@ -24,15 +29,14 @@ class CategoryListScreen extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props);
-
     this.navigateSubcategoryPhraseList = this.navigateSubcategoryPhraseList.bind(this);
   }
 
-  navigateSubcategoryPhraseList(subcategoryId: string) {
+  navigateSubcategoryPhraseList(subcategory: SubcategoryDTO) {
     const {
       initializePhrases,
       fetchPhrasesBySubcategoryId,
-      setPhrasesStatusAbountSubcategoryId,
+      setPhrasesListStatus,
       navigation,
       fetchSubcategoryById
     } = this.props;
@@ -41,32 +45,37 @@ class CategoryListScreen extends React.Component<Props> {
     initializePhrases();
 
     // SubcategoryIdを設定
-    setPhrasesStatusAbountSubcategoryId(subcategoryId);
+    setPhrasesListStatus("subcategory", subcategory.categoryId, subcategory.id);
 
     // サブカテゴリーを取得
-    fetchSubcategoryById(subcategoryId);
+    fetchSubcategoryById(subcategory.id);
 
     // サブカテゴリーに属する名言を取得
-    fetchPhrasesBySubcategoryId(subcategoryId);
+    fetchPhrasesBySubcategoryId(subcategory.id);
 
-    navigation.navigate("PhraseList", { subcategoryId });
+    navigation.navigate("PhraseList", { subcategoryId: subcategory.id });
+  }
+
+  categoryId(): string {
+    const { navigation, phrasesListStatus } = this.props;
+    return navigation.getParam("categoryId") || phrasesListStatus.categoryId;
   }
 
   render() {
-    const categoryId: string = this.props.navigation.getParam("categoryId");
-
     return (
       <DefaultTemplate>
-        <SubcategoryItemList categoryId={categoryId} onPress={this.navigateSubcategoryPhraseList} />
+        <SubcategoryItemList categoryId={this.categoryId()} onPress={this.navigateSubcategoryPhraseList} />
       </DefaultTemplate>
     );
   }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state: RootState) => ({
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
+});
 
 const mapDispatchToProps = {
-  setPhrasesStatusAbountSubcategoryId: PhrasesAction.setPhrasesStatusAbountSubcategoryId,
+  setPhrasesListStatus: PhrasesListStatusAction.setPhrasesListStatus,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
   fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById,
   initializePhrases: PhrasesAction.initializePhrases

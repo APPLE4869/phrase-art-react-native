@@ -10,7 +10,6 @@ import {
   InputToolbar,
   InputToolbarProps,
   Message,
-  MessageProps,
   MessageText,
   MessageTextProps,
   Send,
@@ -193,7 +192,7 @@ class Chat extends React.Component<Props> {
     );
   }
 
-  renderMessage(props: MessageProps) {
+  renderMessage(props: any) {
     return (
       <Message
         {...props}

@@ -2,16 +2,17 @@ import * as React from "react";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
-import * as PhrasesReducers from "../../../reducers/phrase/phrases";
 import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
-  phrasesListStatus: PhrasesReducers.PhrasesListStatus;
+  phrasesListStatus: PhrasesListStatus;
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
@@ -114,14 +115,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootState) => ({
   phrases: state.phrases.phrases,
-  phrasesListStatus: state.phrases.phrasesListStatus
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
   initializePhrases: PhrasesAction.initializePhrases,
-  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus
+  initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus
 };
 
 const enhancer = connect(
