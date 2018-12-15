@@ -15,6 +15,7 @@ import DefaultModal from "../../atoms/DefaultModal";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import StandardText from "../../atoms/StandardText";
+import FinalResult from "../../atoms/UpdateRequest/FinalResult";
 import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
 import ReportIcon from "../../molecules/ReportIcon";
 
@@ -136,7 +137,14 @@ class ModificationRequestDetail extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.itemTop}>
-          <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          {request.finalDecisionResult ? (
+            <FinalResult
+              decisionExpiresAt={request.decisionExpiresAt}
+              finalDecisionResult={request.finalDecisionResult}
+            />
+          ) : (
+            <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          )}
           <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
         <InlineCategoryNames

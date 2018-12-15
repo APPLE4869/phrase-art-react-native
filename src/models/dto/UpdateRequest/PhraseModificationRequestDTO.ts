@@ -1,9 +1,11 @@
+import { FinalDecisionResultType } from "../UpdateRequestList/UpdateRequestDTO";
 import { PhraseDecisionProperty } from "./PhraseDecisionDTO";
 
 export default class PhraseModificationRequestDTO {
   readonly id: string;
   readonly finished: boolean;
   readonly decisionExpiresAt: string;
+  readonly finalDecisionResult?: FinalDecisionResultType;
   readonly requestedCategoryId: string;
   readonly requestedCategoryName: string;
   readonly requestedSubcategoryId?: string;
@@ -23,6 +25,7 @@ export default class PhraseModificationRequestDTO {
     id,
     finished,
     decisionExpiresAt,
+    finalDecisionResult,
     requestedCategoryId,
     requestedCategoryName,
     requestedSubcategoryId,
@@ -41,6 +44,7 @@ export default class PhraseModificationRequestDTO {
     this.id = id;
     this.finished = finished;
     this.decisionExpiresAt = decisionExpiresAt;
+    this.finalDecisionResult = finalDecisionResult;
     this.requestedCategoryId = requestedCategoryId;
     this.requestedCategoryName = requestedCategoryName;
     this.requestedSubcategoryId = requestedSubcategoryId;
@@ -62,6 +66,7 @@ interface PhraseModificationRequestProperty {
   id: string;
   finished: boolean;
   decisionExpiresAt: string;
+  finalDecisionResult?: FinalDecisionResultType;
   requestedCategoryId: string;
   requestedCategoryName: string;
   requestedSubcategoryId?: string;
