@@ -9,7 +9,7 @@ export default class UpdateRequestDTO {
   readonly type: UpdateRequestType;
   readonly finished: boolean;
   readonly decisionExpiresAt: string;
-  readonly finalDecisionResult: string;
+  readonly finalDecisionResult?: FinalDecisionResultType;
   readonly approvedCount: number;
   readonly rejectedCount: number;
 
@@ -40,7 +40,7 @@ export interface UpdateRequestProperty {
   type: UpdateRequestType;
   finished: boolean;
   decisionExpiresAt: string;
-  finalDecisionResult: FinalDecisionResultType;
+  finalDecisionResult?: FinalDecisionResultType;
   approvedCount: number;
   rejectedCount: number;
 }
