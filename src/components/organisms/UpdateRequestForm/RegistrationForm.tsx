@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
@@ -117,7 +117,7 @@ class RegistrationForm extends React.Component<Props, State> {
     }
 
     return (
-      <ScrollView style={formStyle.container}>
+      <View style={formStyle.container}>
         <SelectField
           label="カテゴリー"
           marginTop={30}
@@ -147,7 +147,7 @@ class RegistrationForm extends React.Component<Props, State> {
           isTextarea={true}
         />
         <FormButton title="登録申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
-      </ScrollView>
+      </View>
     );
   }
 }
