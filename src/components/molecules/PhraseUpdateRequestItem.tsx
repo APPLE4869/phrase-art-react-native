@@ -15,7 +15,6 @@ interface Props {
   phraseUpdateRequest: PhraseUpdateRequestDTO;
   onPress: (updateRequestId: string, updateRequestType: UpdateRequestType) => void;
   isFirst?: boolean;
-  status: "requesting" | "finished";
 }
 
 const MAX_ITEM_TEXT: number = 35;
@@ -38,7 +37,7 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
   }
 
   render() {
-    const { phraseUpdateRequest, isFirst, status } = this.props;
+    const { phraseUpdateRequest, isFirst } = this.props;
 
     return (
       <TouchableOpacity
@@ -47,13 +46,13 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
         style={[styles.container, !!isFirst ? styles.firstContainer : {}]}
       >
         <View style={styles.itemTop}>
-          {status === "requesting" ? (
-            <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
-          ) : (
+          {phraseUpdateRequest.finalDecisionResult ? (
             <FinalResult
               decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt}
               finalDecisionResult={phraseUpdateRequest.finalDecisionResult}
             />
+          ) : (
+            <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
           )}
           <ReportIcon reportSymbol="UpdateRequest" reportId={phraseUpdateRequest.id} />
         </View>

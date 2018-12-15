@@ -1,7 +1,9 @@
 import * as React from "react";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 import { NavigationParams } from "react-navigation";
 import DeletionForm from "../../../organisms/UpdateRequestForm/DeletionForm";
 import DefaultTemplate from "../../../templates/DefaultTemplate";
+import { formStyle } from "../../../../styles";
 
 interface Props {
   navigation: NavigationParams;
@@ -11,23 +13,23 @@ export default class DeletionRequestScreen extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    this.navigateSubcategoryList = this.navigateSubcategoryList.bind(this);
+    this.navigateNextScreen = this.navigateNextScreen.bind(this);
   }
 
-  navigateSubcategoryList(categoryId: string) {
-    this.props.navigation.navigate("SubcategoryList", { categoryId });
+  navigateNextScreen() {
+    this.props.navigation.navigate("PhraseList");
   }
 
   render() {
     return (
-      <DefaultTemplate>
-        <DeletionForm
-          phrase={this.props.navigation.getParam("phrase")}
-          navigateNextScreen={() => {
-            this.props.navigation.navigate("PhraseList");
-          }}
-        />
-      </DefaultTemplate>
+      <ScrollView keyboardShouldPersistTaps="handled" style={formStyle.keyboardAvoidingView}>
+        <DefaultTemplate>
+          <DeletionForm
+            phrase={this.props.navigation.getParam("phrase")}
+            navigateNextScreen={this.navigateNextScreen}
+          />
+        </DefaultTemplate>
+      </ScrollView>
     );
   }
 }

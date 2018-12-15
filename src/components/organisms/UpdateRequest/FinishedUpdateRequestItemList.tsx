@@ -96,7 +96,6 @@ class FinishedUpdateRequestItemList extends React.Component<Props, State> {
                 phraseUpdateRequest={updateRequest as PhraseUpdateRequestDTO}
                 onPress={onPress}
                 isFirst={index === 0}
-                status="finished"
               />
             );
           }

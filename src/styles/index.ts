@@ -25,5 +25,10 @@ export const formStyle = {
   container: {
     width: "100%",
     paddingHorizontal: "10%"
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: colors.white
   }
 };
