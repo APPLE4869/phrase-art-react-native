@@ -13,6 +13,10 @@ interface CategoryProperty {
   name: string;
 }
 
+export interface CategoryResponse {
+  category: CategoryProperty;
+}
+
 export interface CategoriesResponse {
   categories: CategoryProperty[];
 }

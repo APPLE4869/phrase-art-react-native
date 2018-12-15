@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
+import * as CategoriesAction from "../../../actions/categories";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import * as SubcategoriesAction from "../../../actions/subcategories";
@@ -18,6 +19,10 @@ interface Props {
   fetchSubcategoryById: any;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
+  fetchPhrasesByCategoryId: any;
+  fetchCategoryById: any;
+  initializeSubcategory: any;
+  initializeCategory: any;
 }
 
 class CategoryListScreen extends React.Component<Props> {
@@ -30,10 +35,13 @@ class CategoryListScreen extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.navigateSubcategoryPhraseList = this.navigateSubcategoryPhraseList.bind(this);
+    this.navigateAllSubcategoryPhraseList = this.navigateAllSubcategoryPhraseList.bind(this);
   }
 
   navigateSubcategoryPhraseList(subcategory: SubcategoryDTO) {
     const {
+      initializeSubcategory,
+      initializeCategory,
       initializePhrases,
       fetchPhrasesBySubcategoryId,
       setPhrasesListStatus,
@@ -48,12 +56,42 @@ class CategoryListScreen extends React.Component<Props> {
     setPhrasesListStatus("subcategory", subcategory.categoryId, subcategory.id);
 
     // サブカテゴリーを取得
+    initializeSubcategory();
+    initializeCategory();
     fetchSubcategoryById(subcategory.id);
 
     // サブカテゴリーに属する名言を取得
     fetchPhrasesBySubcategoryId(subcategory.id);
 
-    navigation.navigate("PhraseList", { subcategoryId: subcategory.id });
+    navigation.navigate("PhraseList");
+  }
+
+  navigateAllSubcategoryPhraseList() {
+    const {
+      initializeSubcategory,
+      initializeCategory,
+      initializePhrases,
+      fetchCategoryById,
+      setPhrasesListStatus,
+      navigation,
+      fetchPhrasesByCategoryId
+    } = this.props;
+
+    // 取得済みの名言を初期化
+    initializePhrases();
+
+    // SubcategoryIdを設定
+    setPhrasesListStatus("category", this.categoryId());
+
+    // カテゴリーを取得
+    initializeSubcategory();
+    initializeCategory();
+    fetchCategoryById(this.categoryId());
+
+    // サブカテゴリーを取得
+    fetchPhrasesByCategoryId(this.categoryId());
+
+    navigation.navigate("PhraseList");
   }
 
   categoryId(): string {
@@ -64,7 +102,11 @@ class CategoryListScreen extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <SubcategoryItemList categoryId={this.categoryId()} onPress={this.navigateSubcategoryPhraseList} />
+        <SubcategoryItemList
+          categoryId={this.categoryId()}
+          onPress={this.navigateSubcategoryPhraseList}
+          onPressForAll={this.navigateAllSubcategoryPhraseList}
+        />
       </DefaultTemplate>
     );
   }
@@ -76,7 +118,11 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   setPhrasesListStatus: PhrasesListStatusAction.setPhrasesListStatus,
+  initializeSubcategory: SubcategoriesAction.initializeSubcategory,
+  initializeCategory: CategoriesAction.initializeCategory,
+  fetchCategoryById: CategoriesAction.fetchCategoryById,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
+  fetchPhrasesByCategoryId: PhrasesAction.fetchPhrasesByCategoryId,
   fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById,
   initializePhrases: PhrasesAction.initializePhrases
 };

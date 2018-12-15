@@ -2,8 +2,6 @@ import * as React from "react";
 import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
-import * as SubcategoriesAction from "../../../actions/subcategories";
-import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
 import HeaderMenuButton from "../../atoms/HeaderMenuButton";
@@ -14,9 +12,7 @@ import DefaultTemplate from "../../templates/DefaultTemplate";
 interface Props {
   navigation: NavigationParams;
   auth: any;
-  subcategory: SubcategoryDTO | undefined;
   phrasesListStatus: PhrasesListStatus;
-  fetchSubcategoryById: any;
 }
 
 class PhraseListScreen extends React.Component<Props> {
@@ -42,12 +38,6 @@ class PhraseListScreen extends React.Component<Props> {
     this.navigateCategoryList = this.navigateCategoryList.bind(this);
     this.navigateSubcategoryList = this.navigateSubcategoryList.bind(this);
     this.navigateRegistrationRequest = this.navigateRegistrationRequest.bind(this);
-
-    const { phrasesListStatus, fetchSubcategoryById } = this.props;
-    const subcategoryId = phrasesListStatus.subcategoryId;
-    if (subcategoryId) {
-      fetchSubcategoryById(subcategoryId);
-    }
   }
 
   componentDidMount() {
@@ -57,10 +47,10 @@ class PhraseListScreen extends React.Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { phrasesListStatus: prevPhrasesListStatus } = prevProps;
-    const { phrasesListStatus: currentPhrasesListStatus } = this.props;
+    const { categoryId: prevCategoryId, subcategoryId: prevSubcategoryId } = prevProps.phrasesListStatus;
+    const { categoryId: currentCategoryId, subcategoryId: currentSubcategoryId } = this.props.phrasesListStatus;
 
-    if (prevPhrasesListStatus.subcategoryId !== currentPhrasesListStatus.subcategoryId) {
+    if (prevCategoryId !== currentCategoryId || prevSubcategoryId !== currentSubcategoryId) {
       this.setHeaderLeftMenu();
     }
   }
@@ -68,7 +58,7 @@ class PhraseListScreen extends React.Component<Props> {
   setHeaderLeftMenu() {
     const { navigation, phrasesListStatus } = this.props;
 
-    if (phrasesListStatus.subcategoryId) {
+    if (phrasesListStatus.categoryId || phrasesListStatus.subcategoryId) {
       navigation.setParams({ onPressForLeft: this.navigateSubcategoryList });
       navigation.setParams({ categoryListTitle: "サブカテゴリー" });
     } else {
@@ -107,12 +97,10 @@ class PhraseListScreen extends React.Component<Props> {
   }
 
   render() {
-    const { subcategory } = this.props;
-
     return (
       <DefaultTemplate>
         <View style={{ width: "100%", flex: 1 }}>
-          <CategoryPanelOnList subcategory={subcategory} />
+          <CategoryPanelOnList />
           <PhraseItemList navigateDetail={this.navigateDetail} />
         </View>
       </DefaultTemplate>
@@ -122,13 +110,10 @@ class PhraseListScreen extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState) => ({
   auth: state.auth,
-  subcategory: state.subcategories.subcategory,
   phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
-const mapDispatchToProps = {
-  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById
-};
+const mapDispatchToProps = {};
 
 const enhancer = connect(
   mapStateToProps,

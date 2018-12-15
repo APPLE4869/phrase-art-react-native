@@ -14,6 +14,7 @@ interface Props {
   phrases: PhraseDTO[];
   phrasesListStatus: PhrasesListStatus;
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
+  fetchPhrasesByCategoryId: any;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
   initializePhrasesListStatus: any;
@@ -57,13 +58,24 @@ class PhraseItemList extends React.Component<Props, State> {
     this.setState({ loading: false });
   }
 
-  async fetchPhrases(offset: number = 0) {
-    const { fetchPhrases, phrasesListStatus, fetchPhrasesBySubcategoryId } = this.props;
+  componentDidUpdate(prevProps: Props) {
+    const { categoryId: prevCategoryId, subcategoryId: prevSubcategoryId } = prevProps.phrasesListStatus;
+    const { categoryId: currentCategoryId, subcategoryId: currentSubcategoryId } = this.props.phrasesListStatus;
 
-    const subcategoryId = phrasesListStatus.subcategoryId;
+    if (prevCategoryId !== currentCategoryId || prevSubcategoryId !== currentSubcategoryId) {
+      this.setState({ stopFetching: false });
+    }
+  }
+
+  async fetchPhrases(offset: number = 0) {
+    const { fetchPhrases, phrasesListStatus, fetchPhrasesByCategoryId, fetchPhrasesBySubcategoryId } = this.props;
+
+    const { categoryId, subcategoryId } = phrasesListStatus;
 
     if (subcategoryId) {
       await fetchPhrasesBySubcategoryId(subcategoryId, offset);
+    } else if (categoryId) {
+      await fetchPhrasesByCategoryId(categoryId, offset);
     } else {
       await fetchPhrases(offset);
     }
@@ -80,7 +92,6 @@ class PhraseItemList extends React.Component<Props, State> {
 
   isUnableToFetch(): boolean {
     const { loading, stopFetching, refreshLoading } = this.state;
-
     return loading || stopFetching || refreshLoading;
   }
 
@@ -120,6 +131,7 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
+  fetchPhrasesByCategoryId: PhrasesAction.fetchPhrasesByCategoryId,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
   initializePhrases: PhrasesAction.initializePhrases,
   initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus

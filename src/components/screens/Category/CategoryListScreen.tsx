@@ -1,6 +1,7 @@
 import * as React from "react";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
+import * as CategoriesAction from "../../../actions/categories";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import * as SubcategoriesAction from "../../../actions/subcategories";
@@ -11,6 +12,7 @@ import DefaultTemplate from "../../templates/DefaultTemplate";
 
 interface Props {
   navigation: NavigationParams;
+  initializeCategory: any;
   initializeSubcategory: any;
   initializePhrases: any;
   fetchPhrases: any;
@@ -39,6 +41,7 @@ class CategoryListScreen extends React.Component<Props> {
 
   navigatePhraseList() {
     const {
+      initializeCategory,
       initializeSubcategory,
       initializePhrases,
       fetchPhrases,
@@ -49,7 +52,8 @@ class CategoryListScreen extends React.Component<Props> {
     // 取得済みの名言を初期化
     initializePhrases();
 
-    // SubcategoryIdを設定
+    // Categoryを設定
+    initializeCategory();
     initializeSubcategory();
 
     // 一覧のステータスを初期化
@@ -73,6 +77,7 @@ class CategoryListScreen extends React.Component<Props> {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
+  initializeCategory: CategoriesAction.initializeCategory,
   initializeSubcategory: SubcategoriesAction.initializeSubcategory,
   initializePhrases: PhrasesAction.initializePhrases,
   fetchPhrases: PhrasesAction.fetchPhrases,
