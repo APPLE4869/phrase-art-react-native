@@ -44,7 +44,6 @@ export default class CategoryInlineTitles extends React.Component<Props> {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     flexDirection: "row",
     alignItems: "center"
   },

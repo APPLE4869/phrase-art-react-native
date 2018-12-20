@@ -95,7 +95,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     if (!auth || !auth.jwt) {
       Alert.alert(
         "ログインする必要があります",
-        "承認または否認をするには、ログインする必要があります。\n設定からアカウントを作成してください。"
+        "承認または否認をするには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）"
       );
       return false;
     }

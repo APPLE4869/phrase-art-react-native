@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import Quickblox from "./components/organisms/Quickblox";
 import Loading from "./components/organisms/Support/Loading";
 import RootNavigator from "./navigators/RootNavigator";
+import checkNewVersion from "./providers/AppStoreVersionChecker";
 import { persistor, store } from "./stores";
 import { colors } from "./styles";
 
@@ -19,6 +20,10 @@ window.store = store;
 
 interface Props {}
 export default class App extends React.Component<Props> {
+  componentDidMount() {
+    checkNewVersion();
+  }
+
   render() {
     return (
       <Provider store={store}>

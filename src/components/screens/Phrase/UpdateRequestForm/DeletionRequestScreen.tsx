@@ -1,9 +1,9 @@
 import * as React from "react";
-import { KeyboardAvoidingView, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { NavigationParams } from "react-navigation";
+import { formStyle } from "../../../../styles";
 import DeletionForm from "../../../organisms/UpdateRequestForm/DeletionForm";
 import DefaultTemplate from "../../../templates/DefaultTemplate";
-import { formStyle } from "../../../../styles";
 
 interface Props {
   navigation: NavigationParams;

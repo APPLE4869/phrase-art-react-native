@@ -38,6 +38,7 @@ class PhraseListScreen extends React.Component<Props> {
     this.navigateCategoryList = this.navigateCategoryList.bind(this);
     this.navigateSubcategoryList = this.navigateSubcategoryList.bind(this);
     this.navigateRegistrationRequest = this.navigateRegistrationRequest.bind(this);
+    this.navigateSubcategoryDetail = this.navigateSubcategoryDetail.bind(this);
   }
 
   componentDidMount() {
@@ -77,13 +78,18 @@ class PhraseListScreen extends React.Component<Props> {
     navigation.navigate("SubcategoryList");
   }
 
+  navigateSubcategoryDetail(subcategoryId: string) {
+    const { navigation } = this.props;
+    navigation.navigate("SubcategoryDetail", { subcategoryId });
+  }
+
   navigateRegistrationRequest() {
     const { auth } = this.props;
 
     if (!auth || !auth.jwt) {
       Alert.alert(
         "ログインする必要があります",
-        "名言の登録を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。",
+        "名言の登録を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）",
         [{ text: "OK" }]
       );
       return;
@@ -100,7 +106,7 @@ class PhraseListScreen extends React.Component<Props> {
     return (
       <DefaultTemplate>
         <View style={{ width: "100%", flex: 1 }}>
-          <CategoryPanelOnList />
+          <CategoryPanelOnList navigateSubcategoryDetail={this.navigateSubcategoryDetail} />
           <PhraseItemList navigateDetail={this.navigateDetail} />
         </View>
       </DefaultTemplate>
