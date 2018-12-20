@@ -11,6 +11,8 @@ import { apiPrivateClient, apiPublicClient } from "../../providers/apiClient";
 export const ADD_PHRASE_DELETION_REQUEST = "ADD_PHRASE_DELETION_REQUEST:phraseDeletionRequest";
 export const ADD_PHRASE_DECISION = "ADD_PHRASE_DECISION:phraseDeletionRequest";
 export const CHANGE_DECISION_RESULT = "CHANGE_DECISION_RESULT:phraseDeletionRequest";
+export const INITIALIZE_PHRASE_DELETION_REQUEST = "INITIALIZE_PHRASE_DELETION_REQUEST:phraseDeletionRequest";
+export const INITIALIZE_DECISION = "INITIALIZE_DECISION:phraseDeletionRequest";
 
 interface AddPhraseDeletionRequest {
   type: typeof ADD_PHRASE_DELETION_REQUEST;
@@ -27,8 +29,21 @@ interface ChangeDecisionResult {
   payload: ResultType;
 }
 
+interface InitializePhraseDeletionRequest {
+  type: typeof INITIALIZE_PHRASE_DELETION_REQUEST;
+}
+
+interface InitializeDecision {
+  type: typeof INITIALIZE_DECISION;
+}
+
 // Reducer用に利用するActionの型を定義
-export type Action = AddPhraseDeletionRequest | AddPhraseDecision | ChangeDecisionResult;
+export type Action =
+  | AddPhraseDeletionRequest
+  | AddPhraseDecision
+  | ChangeDecisionResult
+  | InitializePhraseDeletionRequest
+  | InitializeDecision;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -67,4 +82,12 @@ export function fetchById(id: string) {
 
 export function changeDecisionResult(result: ResultType) {
   return { type: CHANGE_DECISION_RESULT, payload: result };
+}
+
+export function initializePhraseDeletionRequest(): InitializePhraseDeletionRequest {
+  return { type: INITIALIZE_PHRASE_DELETION_REQUEST };
+}
+
+export function initializeDecision(): InitializeDecision {
+  return { type: INITIALIZE_DECISION };
 }

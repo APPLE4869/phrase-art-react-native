@@ -1,9 +1,11 @@
+import { FinalDecisionResultType } from "../UpdateRequestList/UpdateRequestDTO";
 import { PhraseDecisionProperty } from "./PhraseDecisionDTO";
 
 export default class PhraseDeletionRequestDTO {
   readonly id: string;
   readonly finished: boolean;
   readonly decisionExpiresAt: string;
+  readonly finalDecisionResult?: FinalDecisionResultType;
   readonly categoryId: string;
   readonly categoryName: string;
   readonly subcategoryId?: string;
@@ -17,6 +19,7 @@ export default class PhraseDeletionRequestDTO {
     id,
     finished,
     decisionExpiresAt,
+    finalDecisionResult,
     categoryId,
     categoryName,
     subcategoryId,
@@ -29,6 +32,7 @@ export default class PhraseDeletionRequestDTO {
     this.id = id;
     this.finished = finished;
     this.decisionExpiresAt = decisionExpiresAt;
+    this.finalDecisionResult = finalDecisionResult;
     this.categoryId = categoryId;
     this.categoryName = categoryName;
     this.subcategoryId = subcategoryId;
@@ -44,6 +48,7 @@ interface PhraseDeletionRequestProperty {
   id: string;
   finished: boolean;
   decisionExpiresAt: string;
+  finalDecisionResult?: FinalDecisionResultType;
   categoryId: string;
   categoryName: string;
   subcategoryId?: string;

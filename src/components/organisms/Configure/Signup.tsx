@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
 import * as loadingAction from "../../../actions/loading";
+import * as QuickbloxAction from "../../../actions/quickblox";
 import { formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
 import TextField from "../../molecules/FormGroup/TextField";
@@ -12,6 +13,7 @@ interface Props {
   register: any;
   startLoading: any;
   endLoading: any;
+  addMessage: any;
 }
 
 interface State {
@@ -48,7 +50,7 @@ class Signup extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { startLoading, endLoading, navigateConfigureIndex } = this.props;
+    const { startLoading, endLoading, navigateConfigureIndex, addMessage } = this.props;
     const { username, password } = this.state;
 
     startLoading();
@@ -59,6 +61,7 @@ class Signup extends React.Component<Props, State> {
       endLoading();
     }
 
+    addMessage("アカウントの作成に成功しました。");
     navigateConfigureIndex();
   }
 
@@ -90,7 +93,8 @@ const mapStateToProps = () => ({});
 const mapDispatchToProps = {
   register: authAction.register,
   startLoading: loadingAction.startLoading,
-  endLoading: loadingAction.endLoading
+  endLoading: loadingAction.endLoading,
+  addMessage: QuickbloxAction.addMessage
 };
 
 const enhancer = connect(

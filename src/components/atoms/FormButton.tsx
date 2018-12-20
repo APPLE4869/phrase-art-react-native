@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Keyboard, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { colors } from "../../styles";
 
 interface Props {
@@ -22,6 +22,8 @@ export default class FormButton extends React.Component<Props> {
     if (disabled) {
       return;
     }
+
+    Keyboard.dismiss();
 
     onPress();
   }
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grayLevel3
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 15,
     color: colors.white,
     letterSpacing: 2,
     fontWeight: "bold"

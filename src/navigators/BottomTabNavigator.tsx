@@ -28,9 +28,9 @@ const navigationOptionsConfigure = (title: string, iconType: TabIconType) => ({
   title,
   tabBarIcon: ({ focused }: { focused: boolean }) => {
     return focused ? (
-      <Image style={{ marginTop: 3 }} source={tabIconPaths[iconType].active} />
+      <Image style={{ marginTop: 2 }} source={tabIconPaths[iconType].active} />
     ) : (
-      <Image style={{ marginTop: 3 }} source={tabIconPaths[iconType].inactive} />
+      <Image style={{ marginTop: 2 }} source={tabIconPaths[iconType].inactive} />
     );
   }
 });
@@ -61,14 +61,14 @@ export default createBottomTabNavigator(
       inactiveTintColor: colors.grayLevel2,
       style: {
         backgroundColor: colors.special.navigationBarBackground,
-        height: 60
+        height: 58
       },
       tabStyle: {
         marginTop: 2,
         borderRadius: 7
       },
       labelStyle: {
-        marginTop: 3,
+        marginTop: 2,
         marginBottom: 3,
         fontSize: 10,
         fontWeight: "bold"

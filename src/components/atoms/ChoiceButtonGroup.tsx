@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 15,
     color: colors.white,
     letterSpacing: 2,
     fontWeight: "bold"

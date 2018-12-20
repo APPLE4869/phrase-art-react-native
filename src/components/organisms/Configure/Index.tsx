@@ -3,6 +3,7 @@ import { ActionSheetIOS, Alert, Platform, StyleSheet, View } from "react-native"
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
+import * as QuickbloxAction from "../../../actions/quickblox";
 import { State as RootState } from "../../../reducers";
 import ConfigureIndexItem from "../../molecules/ConfigureIndexItem";
 
@@ -10,6 +11,7 @@ interface Props {
   navigation: NavigationParams;
   auth: any;
   logout: any;
+  addMessage: any;
 }
 
 interface State {}
@@ -19,10 +21,14 @@ class Index extends React.Component<Props, State> {
     super(props);
 
     this.handleLogoutDialog = this.handleLogoutDialog.bind(this);
+    this.navigateEditProfileImage = this.navigateEditProfileImage.bind(this);
+    this.navigateLogin = this.navigateLogin.bind(this);
+    this.navigateSignup = this.navigateSignup.bind(this);
+    this.navigateTermsOfService = this.navigateTermsOfService.bind(this);
   }
 
   handleLogoutDialog() {
-    const { logout } = this.props;
+    const { logout, addMessage } = this.props;
 
     if (Platform.OS === "ios") {
       ActionSheetIOS.showActionSheetWithOptions(
@@ -35,6 +41,7 @@ class Index extends React.Component<Props, State> {
         buttonIndex => {
           if (buttonIndex === 1) {
             logout();
+            addMessage("ログアウトに成功しました。");
           }
         }
       );
@@ -42,21 +49,47 @@ class Index extends React.Component<Props, State> {
       Alert.alert(
         "ログアウトしますか？",
         "",
-        [{ text: "キャンセル", style: "cancel" }, { text: "ログアウト", onPress: () => logout() }],
+        [
+          { text: "キャンセル", style: "cancel" },
+          {
+            text: "ログアウト",
+            onPress: () => {
+              logout();
+              addMessage("ログアウトに成功しました。");
+            }
+          }
+        ],
         { cancelable: true }
       );
     }
   }
 
+  navigateEditProfileImage() {
+    this.props.navigation.navigate("EditProfileImage");
+  }
+
+  navigateLogin() {
+    this.props.navigation.navigate("ConfigureLogin");
+  }
+
+  navigateSignup() {
+    this.props.navigation.navigate("ConfigureSignup");
+  }
+
+  navigateTermsOfService() {
+    this.props.navigation.navigate("ConfigureTermsOfService");
+  }
+
   render() {
-    const { navigation, auth } = this.props;
+    const { auth } = this.props;
 
     // ログイン中
     if (auth && auth.jwt) {
-      // TODO : ログアウトはConfirmをつける予定
       return (
         <View style={styles.container}>
-          <ConfigureIndexItem title="ログアウト" onPress={() => this.handleLogoutDialog()} hiddenRightArrow={true} />
+          {/* <ConfigureIndexItem title="プロフィール画像" onPress={this.navigateEditProfileImage} /> */}
+          <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
+          <ConfigureIndexItem title="ログアウト" onPress={this.handleLogoutDialog} hiddenRightArrow={true} />
         </View>
       );
     }
@@ -64,8 +97,9 @@ class Index extends React.Component<Props, State> {
     // 未ログイン
     return (
       <View style={styles.container}>
-        <ConfigureIndexItem title="ログイン" onPress={() => navigation.navigate("ConfigureLogin")} />
-        <ConfigureIndexItem title="アカウント作成" onPress={() => navigation.navigate("ConfigureSignup")} />
+        <ConfigureIndexItem title="ログイン" onPress={this.navigateLogin} />
+        <ConfigureIndexItem title="アカウント作成" onPress={this.navigateSignup} />
+        <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
       </View>
     );
   }
@@ -82,7 +116,8 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  logout: authAction.logout
+  logout: authAction.logout,
+  addMessage: QuickbloxAction.addMessage
 };
 
 const enhancer = connect(

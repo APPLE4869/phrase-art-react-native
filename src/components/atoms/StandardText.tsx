@@ -4,7 +4,7 @@ import { colors } from "../../styles";
 
 interface Props {
   text: string;
-  fontSize: 10 | 11 | 12 | 13 | 14 | 15 | 16;
+  fontSize: 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
   textStyle?: object;
 }
 

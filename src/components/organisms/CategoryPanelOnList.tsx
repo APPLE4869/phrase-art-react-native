@@ -1,16 +1,22 @@
 import * as React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
+import * as CategoriesAction from "../../actions/categories";
 import * as SubcategoriesAction from "../../actions/subcategories";
+import CategoryDTO from "../../models/dto/CategoryDTO";
 import SubcategoryDTO from "../../models/dto/SubcategoryDTO";
+import PhrasesListStatus from "../../models/PhrasesListStatus";
 import { State as RootState } from "../../reducers";
-import * as PhrasesReducers from "../../reducers/phrases";
 import { colors } from "../../styles";
 
 interface Props {
+  phrasesListStatus: PhrasesListStatus;
+  category: CategoryDTO | undefined;
   subcategory: SubcategoryDTO | undefined;
+  initializeSubcategory: any;
   fetchSubcategoryById: any;
-  phrasesListStatus: PhrasesReducers.PhrasesListStatus;
+  initializeCategory: any;
+  fetchCategoryById: any;
 }
 
 interface State {}
@@ -19,24 +25,44 @@ class CategoryPanelOnList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const subcategoryId = this.props.phrasesListStatus.subcategoryId;
+    const {
+      phrasesListStatus,
+      initializeSubcategory,
+      fetchSubcategoryById,
+      initializeCategory,
+      fetchCategoryById
+    } = this.props;
+
+    const { categoryId, subcategoryId } = phrasesListStatus;
+
+    initializeSubcategory();
+    initializeCategory();
+
     if (subcategoryId) {
-      this.props.fetchSubcategoryById(subcategoryId);
+      fetchSubcategoryById(subcategoryId);
+    } else if (categoryId) {
+      fetchCategoryById(categoryId);
     }
   }
 
   render() {
-    const { subcategory } = this.props;
+    const { category, subcategory } = this.props;
 
-    if (!subcategory) {
-      return null;
+    if (subcategory) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.subcategoryName}>{subcategory.name}</Text>
+        </View>
+      );
+    } else if (category) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.subcategoryName}>{category.name}</Text>
+        </View>
+      );
     }
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.subcategoryName}>{subcategory.name}</Text>
-      </View>
-    );
+    return null;
   }
 }
 
@@ -46,20 +72,24 @@ const styles = StyleSheet.create({
     backgroundColor: colors.grayLevel5
   },
   subcategoryName: {
-    fontSize: 18,
+    fontSize: 20,
     paddingVertical: 15,
     paddingHorizontal: 15,
-    color: colors.grayLevel2
+    color: colors.grayLevel1
   }
 });
 
 const mapStateToProps = (state: RootState) => ({
+  category: state.categories.category,
   subcategory: state.subcategories.subcategory,
-  phrasesListStatus: state.phrases.phrasesListStatus
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {
-  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById
+  initializeSubcategory: SubcategoriesAction.initializeSubcategory,
+  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById,
+  initializeCategory: CategoriesAction.initializeCategory,
+  fetchCategoryById: CategoriesAction.fetchCategoryById
 };
 
 const enhancer = connect(

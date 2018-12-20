@@ -18,10 +18,10 @@ export default class DecisionCounts extends React.Component<Props> {
 
     return (
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <StandardText text="承認数" fontSize={10} textStyle={{ color: colors.grayLevel1 }} />
-        <StandardText text={String(approvedCount)} fontSize={16} textStyle={{ marginLeft: 25 }} />
-        <StandardText text="否認数" fontSize={10} textStyle={{ color: colors.grayLevel1, marginLeft: 35 }} />
-        <StandardText text={String(rejectedCount)} fontSize={16} textStyle={{ marginLeft: 25 }} />
+        <StandardText text="承認数" fontSize={11} textStyle={{ color: colors.grayLevel1 }} />
+        <StandardText text={String(approvedCount)} fontSize={18} textStyle={{ marginLeft: 25 }} />
+        <StandardText text="否認数" fontSize={11} textStyle={{ color: colors.grayLevel1, marginLeft: 35 }} />
+        <StandardText text={String(rejectedCount)} fontSize={18} textStyle={{ marginLeft: 25 }} />
       </View>
     );
   }

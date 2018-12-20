@@ -13,8 +13,10 @@ import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
-import RemainingTime from "../../atoms/RemainingTime";
 import StandardText from "../../atoms/StandardText";
+import FinalResult from "../../atoms/UpdateRequest/FinalResult";
+import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
+import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
   updateRequestId: string;
@@ -24,6 +26,8 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseDeletionRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
@@ -43,7 +47,10 @@ class DeletionRequestDetail extends React.Component<Props, State> {
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseDeletionRequest, initializeDecision } = this.props;
+
+    initializePhraseDeletionRequest();
+    initializeDecision();
 
     await fetchById(updateRequestId);
 
@@ -119,11 +126,19 @@ class DeletionRequestDetail extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.itemTop}>
-          <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-          <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          {request.finalDecisionResult ? (
+            <FinalResult
+              decisionExpiresAt={request.decisionExpiresAt}
+              finalDecisionResult={request.finalDecisionResult}
+            />
+          ) : (
+            <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          )}
+          <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
-        <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
-        <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
+        <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
+        <StandardText text={request.phraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
+        <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_DELETION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
@@ -146,9 +161,10 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingHorizontal: 15,
-    paddingTop: 30
+    paddingTop: 15
   },
   itemTop: {
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
@@ -169,6 +185,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseDeletionRequestAction.fetchById,
+  initializePhraseDeletionRequest: PhraseDeletionRequestAction.initializePhraseDeletionRequest,
+  initializeDecision: PhraseDeletionRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };

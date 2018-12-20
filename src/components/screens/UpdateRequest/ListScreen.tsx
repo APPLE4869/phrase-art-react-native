@@ -2,7 +2,7 @@ import * as React from "react";
 import { View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
-import NavigationOptions from "../../../navigators/BottomTabContent/NavigationOptions";
+import NavigationOptions from "../../../navigators/NavigationOptions";
 import { colors } from "../../../styles";
 import HeaderSegmentedControlIOS from "../../molecules/HeaderSegmentedControlIOS";
 import FinishedUpdateRequestItemList from "../../organisms/UpdateRequest/FinishedUpdateRequestItemList";

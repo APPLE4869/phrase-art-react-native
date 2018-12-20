@@ -6,38 +6,60 @@ import { colors } from "../../styles";
 import DecisionCounts from "../atoms/DecisionCounts";
 import IconImageWithLabel from "../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../atoms/InlineCategoryNames";
-import RemainingTime from "../atoms/RemainingTime";
 import StandardText from "../atoms/StandardText";
+import FinalResult from "../atoms/UpdateRequest/FinalResult";
+import RemainingTime from "../atoms/UpdateRequest/RemainingTime";
+import ReportIcon from "./ReportIcon";
 
 interface Props {
   phraseUpdateRequest: PhraseUpdateRequestDTO;
   onPress: (updateRequestId: string, updateRequestType: UpdateRequestType) => void;
+  isFirst?: boolean;
 }
 
 const MAX_ITEM_TEXT: number = 35;
 
 export default class PhraseUpdateRequestItem extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    this.onPressAction = this.onPressAction.bind(this);
+  }
+
   itemTextView(text: string) {
     const textLine = text.replace(/\n/g, "");
     return textLine.length > MAX_ITEM_TEXT ? `${textLine.substr(0, MAX_ITEM_TEXT)}...` : textLine;
   }
 
-  render() {
+  onPressAction() {
     const { phraseUpdateRequest, onPress } = this.props;
+    onPress(phraseUpdateRequest.id, phraseUpdateRequest.type);
+  }
+
+  render() {
+    const { phraseUpdateRequest, isFirst } = this.props;
 
     return (
       <TouchableOpacity
-        onPress={() => onPress(phraseUpdateRequest.id, phraseUpdateRequest.type)}
+        onPress={this.onPressAction}
         activeOpacity={1}
-        style={styles.container}
+        style={[styles.container, !!isFirst ? styles.firstContainer : {}]}
       >
         <View style={styles.itemTop}>
-          <InlineCategoryNames
-            categoryName={phraseUpdateRequest.categoryName}
-            subcategoryName={phraseUpdateRequest.subcategoryName}
-          />
-          <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+          {phraseUpdateRequest.finalDecisionResult ? (
+            <FinalResult
+              decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt}
+              finalDecisionResult={phraseUpdateRequest.finalDecisionResult}
+            />
+          ) : (
+            <RemainingTime decisionExpiresAt={phraseUpdateRequest.decisionExpiresAt} />
+          )}
+          <ReportIcon reportSymbol="UpdateRequest" reportId={phraseUpdateRequest.id} />
         </View>
+        <InlineCategoryNames
+          categoryName={phraseUpdateRequest.categoryName}
+          subcategoryName={phraseUpdateRequest.subcategoryName}
+        />
         <StandardText
           text={this.itemTextView(phraseUpdateRequest.phraseContent)}
           fontSize={14}
@@ -67,7 +89,12 @@ const styles = StyleSheet.create({
     paddingVertical: 23,
     paddingHorizontal: 15
   },
+  firstContainer: {
+    borderTopWidth: 1,
+    borderTopColor: colors.grayLevel4
+  },
   itemTop: {
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"

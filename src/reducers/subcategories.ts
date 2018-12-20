@@ -1,4 +1,10 @@
-import { Action, ADD_SUBCATEGORIES, ADD_SUBCATEGORY, INITIALIZE_SUBCATEGORIES } from "../actions/subcategories";
+import {
+  Action,
+  ADD_SUBCATEGORIES,
+  ADD_SUBCATEGORY,
+  INITIALIZE_SUBCATEGORIES,
+  INITIALIZE_SUBCATEGORY
+} from "../actions/subcategories";
 import SubcategoryDTO from "../models/dto/SubcategoryDTO";
 
 // Stateの型定義
@@ -24,6 +30,9 @@ export default (state: State = initialState, action: Action) => {
     }
     case ADD_SUBCATEGORY: {
       return { ...state, subcategory: action.payload };
+    }
+    case INITIALIZE_SUBCATEGORY: {
+      return { ...state, subcategory: undefined };
     }
     default: {
       return state;

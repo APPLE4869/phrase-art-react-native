@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Alert, Button, Image, TouchableOpacity, View } from "react-native";
+import { Alert, Image, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
-import { colors } from "../../../styles";
+import HeaderMenuButton from "../../atoms/HeaderMenuButton";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 import PhraseItemList from "../../organisms/Phrase/PhraseItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
@@ -11,16 +12,19 @@ import DefaultTemplate from "../../templates/DefaultTemplate";
 interface Props {
   navigation: NavigationParams;
   auth: any;
+  phrasesListStatus: PhrasesListStatus;
 }
 
 class PhraseListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
+    const onPressForLeft = navigation.getParam("onPressForLeft");
+    const titleForLeft = navigation.getParam("categoryListTitle");
+    const onPressForRight = navigation.getParam("onPressForRight");
+
     return {
-      headerLeft: (
-        <Button onPress={() => navigation.navigate("CategoryModal")} title="カテゴリー" color={colors.clickable} />
-      ),
+      headerLeft: <HeaderMenuButton onPress={onPressForLeft} title={titleForLeft} />,
       headerRight: (
-        <TouchableOpacity activeOpacity={1} onPress={navigation.getParam("navigateRegistrationRequest")}>
+        <TouchableOpacity activeOpacity={1} onPress={onPressForRight}>
           <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/plus.png")} />
         </TouchableOpacity>
       )
@@ -31,11 +35,46 @@ class PhraseListScreen extends React.Component<Props> {
     super(props);
 
     this.navigateDetail = this.navigateDetail.bind(this);
+    this.navigateCategoryList = this.navigateCategoryList.bind(this);
+    this.navigateSubcategoryList = this.navigateSubcategoryList.bind(this);
     this.navigateRegistrationRequest = this.navigateRegistrationRequest.bind(this);
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ navigateRegistrationRequest: this.navigateRegistrationRequest });
+    const { navigation } = this.props;
+    navigation.setParams({ onPressForRight: this.navigateRegistrationRequest });
+    this.setHeaderLeftMenu();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { categoryId: prevCategoryId, subcategoryId: prevSubcategoryId } = prevProps.phrasesListStatus;
+    const { categoryId: currentCategoryId, subcategoryId: currentSubcategoryId } = this.props.phrasesListStatus;
+
+    if (prevCategoryId !== currentCategoryId || prevSubcategoryId !== currentSubcategoryId) {
+      this.setHeaderLeftMenu();
+    }
+  }
+
+  setHeaderLeftMenu() {
+    const { navigation, phrasesListStatus } = this.props;
+
+    if (phrasesListStatus.categoryId || phrasesListStatus.subcategoryId) {
+      navigation.setParams({ onPressForLeft: this.navigateSubcategoryList });
+      navigation.setParams({ categoryListTitle: "サブカテゴリー" });
+    } else {
+      navigation.setParams({ onPressForLeft: this.navigateCategoryList });
+      navigation.setParams({ categoryListTitle: "カテゴリー" });
+    }
+  }
+
+  navigateCategoryList() {
+    const { navigation } = this.props;
+    navigation.navigate("CategoryModal");
+  }
+
+  navigateSubcategoryList() {
+    const { navigation } = this.props;
+    navigation.navigate("SubcategoryList");
   }
 
   navigateRegistrationRequest() {
@@ -70,7 +109,8 @@ class PhraseListScreen extends React.Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth
+  auth: state.auth,
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {};

@@ -16,7 +16,8 @@ export const colors = {
     navigationBarBorder: "#DDDDDD",
     approve: "#00CED1",
     reject: "#FF8C00",
-    skyblue: "#1BA9E1"
+    skyblue: "#1BA9E1",
+    successGreen: "#3cb371"
   }
 };
 
@@ -24,5 +25,10 @@ export const formStyle = {
   container: {
     width: "100%",
     paddingHorizontal: "10%"
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: colors.white
   }
 };

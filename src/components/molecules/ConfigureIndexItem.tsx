@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   itemText: {
-    fontSize: 14,
+    fontSize: 15,
     letterSpacing: 1.5,
     color: colors.baseBlack
   }

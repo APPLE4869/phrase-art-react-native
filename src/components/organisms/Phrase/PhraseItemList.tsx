@@ -2,17 +2,19 @@ import * as React from "react";
 import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
+import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
+import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
-import * as PhrasesReducers from "../../../reducers/phrases";
 import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
-  phrasesListStatus: PhrasesReducers.PhrasesListStatus;
+  phrasesListStatus: PhrasesListStatus;
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
+  fetchPhrasesByCategoryId: any;
   fetchPhrasesBySubcategoryId: any;
   initializePhrases: any;
   initializePhrasesListStatus: any;
@@ -42,10 +44,9 @@ class PhraseItemList extends React.Component<Props, State> {
       return;
     }
 
-    const { phrases } = this.props;
-
     this.setState({ loading: true });
 
+    const { phrases } = this.props;
     const offset: number = phrases.length;
     await this.fetchPhrases(offset);
 
@@ -57,13 +58,24 @@ class PhraseItemList extends React.Component<Props, State> {
     this.setState({ loading: false });
   }
 
-  async fetchPhrases(offset: number = 0) {
-    const { fetchPhrases, phrasesListStatus, fetchPhrasesBySubcategoryId } = this.props;
+  componentDidUpdate(prevProps: Props) {
+    const { categoryId: prevCategoryId, subcategoryId: prevSubcategoryId } = prevProps.phrasesListStatus;
+    const { categoryId: currentCategoryId, subcategoryId: currentSubcategoryId } = this.props.phrasesListStatus;
 
-    const subcategoryId = phrasesListStatus.subcategoryId;
+    if (prevCategoryId !== currentCategoryId || prevSubcategoryId !== currentSubcategoryId) {
+      this.setState({ stopFetching: false });
+    }
+  }
+
+  async fetchPhrases(offset: number = 0) {
+    const { fetchPhrases, phrasesListStatus, fetchPhrasesByCategoryId, fetchPhrasesBySubcategoryId } = this.props;
+
+    const { categoryId, subcategoryId } = phrasesListStatus;
 
     if (subcategoryId) {
       await fetchPhrasesBySubcategoryId(subcategoryId, offset);
+    } else if (categoryId) {
+      await fetchPhrasesByCategoryId(categoryId, offset);
     } else {
       await fetchPhrases(offset);
     }
@@ -80,7 +92,6 @@ class PhraseItemList extends React.Component<Props, State> {
 
   isUnableToFetch(): boolean {
     const { loading, stopFetching, refreshLoading } = this.state;
-
     return loading || stopFetching || refreshLoading;
   }
 
@@ -92,8 +103,10 @@ class PhraseItemList extends React.Component<Props, State> {
         style={styles.container}
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
-        renderItem={({ item: phrase }) => <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} />}
-        onEndReached={() => this.fetchPhraseWithAwait()}
+        renderItem={({ item: phrase, index }) => (
+          <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
+        )}
+        onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}
         refreshControl={
@@ -113,14 +126,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootState) => ({
   phrases: state.phrases.phrases,
-  phrasesListStatus: state.phrases.phrasesListStatus
+  phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
+  fetchPhrasesByCategoryId: PhrasesAction.fetchPhrasesByCategoryId,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
   initializePhrases: PhrasesAction.initializePhrases,
-  initializePhrasesListStatus: PhrasesAction.initializePhrasesListStatus
+  initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus
 };
 
 const enhancer = connect(

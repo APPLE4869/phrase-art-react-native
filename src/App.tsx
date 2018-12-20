@@ -3,6 +3,7 @@ import { StatusBar, View } from "react-native";
 import { Provider } from "react-redux";
 import { Store } from "redux";
 import { PersistGate } from "redux-persist/integration/react";
+import Quickblox from "./components/organisms/Quickblox";
 import Loading from "./components/organisms/Support/Loading";
 import RootNavigator from "./navigators/RootNavigator";
 import { persistor, store } from "./stores";
@@ -23,6 +24,7 @@ export default class App extends React.Component<Props> {
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <View style={{ flex: 1, backgroundColor: colors.white }}>
+            <Quickblox />
             <Loading />
             <StatusBar backgroundColor={colors.special.navigationBarBackground} barStyle="default" />
             <RootNavigator />

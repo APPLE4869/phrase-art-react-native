@@ -4,7 +4,7 @@ import PhraseListScreenScreen from "../../components/screens/Phrase/ListScreen";
 import UpdateRequestFormDeletionRequestScreen from "../../components/screens/Phrase/UpdateRequestForm/DeletionRequestScreen";
 import UpdateRequestFormModificationRequestScreen from "../../components/screens/Phrase/UpdateRequestForm/ModificationRequestScreen";
 import UpdateRequestFormRegistrationRequestScreen from "../../components/screens/Phrase/UpdateRequestForm/RegistrationRequestScreen";
-import NavigationOptions from "./NavigationOptions";
+import NavigationOptions from "../NavigationOptions";
 
 const PhraseStack = createStackNavigator(
   {

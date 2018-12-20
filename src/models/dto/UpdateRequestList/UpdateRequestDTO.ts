@@ -9,15 +9,26 @@ export default class UpdateRequestDTO {
   readonly type: UpdateRequestType;
   readonly finished: boolean;
   readonly decisionExpiresAt: string;
+  readonly finalDecisionResult?: FinalDecisionResultType;
   readonly approvedCount: number;
   readonly rejectedCount: number;
 
-  constructor({ id, userId, type, finished, decisionExpiresAt, approvedCount, rejectedCount }: UpdateRequestProperty) {
+  constructor({
+    id,
+    userId,
+    type,
+    finished,
+    decisionExpiresAt,
+    finalDecisionResult,
+    approvedCount,
+    rejectedCount
+  }: UpdateRequestProperty) {
     this.id = id;
     this.userId = userId;
     this.type = type;
     this.finished = finished;
     this.decisionExpiresAt = decisionExpiresAt;
+    this.finalDecisionResult = finalDecisionResult;
     this.approvedCount = approvedCount;
     this.rejectedCount = rejectedCount;
   }
@@ -29,9 +40,12 @@ export interface UpdateRequestProperty {
   type: UpdateRequestType;
   finished: boolean;
   decisionExpiresAt: string;
+  finalDecisionResult?: FinalDecisionResultType;
   approvedCount: number;
   rejectedCount: number;
 }
+
+export type FinalDecisionResultType = "approve" | "reject";
 
 export type UpdateRequestType =
   | typeof UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE

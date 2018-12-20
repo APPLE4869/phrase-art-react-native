@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as PhraseModificationRequestAction from "../../../actions/UpdateRequest/phraseModificationRequest";
@@ -11,10 +11,13 @@ import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
+import DefaultModal from "../../atoms/DefaultModal";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
-import RemainingTime from "../../atoms/RemainingTime";
 import StandardText from "../../atoms/StandardText";
+import FinalResult from "../../atoms/UpdateRequest/FinalResult";
+import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
+import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
   updateRequestId: string;
@@ -24,27 +27,34 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  initializePhraseModificationRequest: any;
+  initializeDecision: any;
 }
 
 interface State {
   choiceButtonGroupActiveIndex?: 0 | 1;
+  isVisibleModal: boolean;
 }
 
 class ModificationRequestDetail extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { choiceButtonGroupActiveIndex: undefined };
+    this.state = { choiceButtonGroupActiveIndex: undefined, isVisibleModal: false };
 
     this.onPressForPositive = this.onPressForPositive.bind(this);
     this.onPressForNegative = this.onPressForNegative.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
 
     this.initialize();
   }
 
   async initialize() {
-    const { updateRequestId, fetchById } = this.props;
+    const { updateRequestId, fetchById, initializePhraseModificationRequest, initializeDecision } = this.props;
 
+    initializePhraseModificationRequest();
+    initializeDecision();
     await fetchById(updateRequestId);
 
     const { phraseDecision } = this.props;
@@ -108,9 +118,17 @@ class ModificationRequestDetail extends React.Component<Props, State> {
     return decisionExpiresAtMoment.diff(currentMoment, "minutes") < 0;
   }
 
+  openModal() {
+    this.setState({ isVisibleModal: true });
+  }
+
+  closeModal() {
+    this.setState({ isVisibleModal: false });
+  }
+
   render() {
     const { phraseModificationRequest: request } = this.props;
-    const { choiceButtonGroupActiveIndex } = this.state;
+    const { choiceButtonGroupActiveIndex, isVisibleModal } = this.state;
 
     if (!request) {
       return null;
@@ -119,24 +137,71 @@ class ModificationRequestDetail extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.itemTop}>
-          <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-          <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          {request.finalDecisionResult ? (
+            <FinalResult
+              decisionExpiresAt={request.decisionExpiresAt}
+              finalDecisionResult={request.finalDecisionResult}
+            />
+          ) : (
+            <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+          )}
+          <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
-        <StandardText text={request.phraseContent} fontSize={13} textStyle={{ marginVertical: 10 }} />
-        <StandardText text={request.phraseAuthorName} fontSize={12} textStyle={{ color: colors.grayLevel1 }} />
+        <InlineCategoryNames
+          categoryName={request.requestedCategoryName}
+          subcategoryName={request.requestedSubcategoryName}
+        />
+        <StandardText text={request.requestedPhraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
+        <StandardText text={request.requestedPhraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
         </View>
+        <TouchableOpacity onPress={this.openModal} style={{ marginTop: 5, alignSelf: "flex-start" }}>
+          <StandardText text="修正内容を確認する" fontSize={12} textStyle={{ color: colors.clickable }} />
+        </TouchableOpacity>
         <ChoiceButtonGroup
           positiveTitle="承認する"
           negativeTitle="否認する"
           onPressForPositive={this.onPressForPositive}
           onPressForNegative={this.onPressForNegative}
           activeIndex={choiceButtonGroupActiveIndex}
-          marginTop={20}
+          marginTop={25}
           isDisabled={this.isExpired()}
         />
+
+        <DefaultModal isVisible={isVisibleModal} height={450} closeAction={this.closeModal}>
+          <View style={{ width: "100%", flex: 1 }}>
+            <StandardText text="修正前" fontSize={15} textStyle={{ fontWeight: "bold", marginBottom: 10 }} />
+            <InlineCategoryNames
+              categoryName={request.currentCategoryName}
+              subcategoryName={request.currentSubcategoryName}
+              isSmallFontSize={true}
+            />
+            <StandardText text={request.currentPhraseContent} fontSize={13} textStyle={{ marginVertical: 5 }} />
+            <StandardText
+              text={request.currentPhraseAuthorName}
+              fontSize={12}
+              textStyle={{ color: colors.grayLevel1 }}
+            />
+            <StandardText
+              text="修正後"
+              fontSize={15}
+              textStyle={{ fontWeight: "bold", marginTop: 30, marginBottom: 10 }}
+            />
+            <InlineCategoryNames
+              categoryName={request.requestedCategoryName}
+              subcategoryName={request.requestedSubcategoryName}
+              isSmallFontSize={true}
+            />
+            <StandardText text={request.requestedPhraseContent} fontSize={13} textStyle={{ marginVertical: 5 }} />
+            <StandardText
+              text={request.requestedPhraseAuthorName}
+              fontSize={12}
+              textStyle={{ color: colors.grayLevel1 }}
+            />
+          </View>
+        </DefaultModal>
       </View>
     );
   }
@@ -146,9 +211,10 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     paddingHorizontal: 15,
-    paddingTop: 30
+    paddingTop: 15
   },
   itemTop: {
+    marginBottom: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
@@ -169,6 +235,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   fetchById: PhraseModificationRequestAction.fetchById,
+  initializePhraseModificationRequest: PhraseModificationRequestAction.initializePhraseModificationRequest,
+  initializeDecision: PhraseModificationRequestAction.initializeDecision,
   approve: DecisionAction.approve,
   reject: DecisionAction.reject
 };
