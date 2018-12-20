@@ -2,6 +2,7 @@ export default class SubcategoryDTO {
   readonly id: string;
   readonly categoryId: string;
   readonly categoryName: string;
+  readonly videoOnDemandAssociated: boolean;
   readonly name: string;
   readonly imageUrl?: string;
   readonly introduction?: string;
@@ -11,6 +12,7 @@ export default class SubcategoryDTO {
     id,
     categoryId,
     categoryName,
+    videoOnDemandAssociated,
     name,
     imageUrl,
     introduction,
@@ -19,6 +21,7 @@ export default class SubcategoryDTO {
     this.id = id;
     this.categoryId = categoryId;
     this.categoryName = categoryName;
+    this.videoOnDemandAssociated = videoOnDemandAssociated;
     this.name = name;
     this.imageUrl = imageUrl;
     this.introduction = introduction;
@@ -30,6 +33,7 @@ interface SubcategoryProperty {
   id: string;
   categoryId: string;
   categoryName: string;
+  videoOnDemandAssociated: boolean;
   name: string;
   imageUrl?: string;
   introduction?: string;

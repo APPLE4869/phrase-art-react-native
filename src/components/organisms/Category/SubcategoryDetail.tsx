@@ -67,12 +67,14 @@ class SubcategoryDetail extends React.Component<Props> {
           <StandardText text={subcategory.categoryName} fontSize={14} textStyle={styles.label} />
           <StandardText text={subcategory.name} fontSize={16} />
         </View>
-        <View style={styles.itemMarginBottom}>
-          <StandardText text="この作品が観れる動画配信サービス" fontSize={14} textStyle={styles.label} />
-          <View style={styles.videoOnDemandContainer}>
-            {videoOnDemands.map(videoOnDemand => this.videoOnDemandBlock(videoOnDemand))}
+        {subcategory.videoOnDemandAssociated ? (
+          <View style={styles.itemMarginBottom}>
+            <StandardText text="この作品が観れる動画配信サービス" fontSize={14} textStyle={styles.label} />
+            <View style={styles.videoOnDemandContainer}>
+              {videoOnDemands.map(videoOnDemand => this.videoOnDemandBlock(videoOnDemand))}
+            </View>
           </View>
-        </View>
+        ) : null}
         <View>
           <StandardText text="紹介文" fontSize={14} textStyle={styles.label} />
           <StandardText text={subcategory.introduction || "未登録"} fontSize={16} />

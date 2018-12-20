@@ -140,12 +140,14 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
           defaultValue={subcategoryName}
           marginTop={30}
         />
-        <VideoOnDemandsField
-          label="この作品が観れる動画配信サービス"
-          onChangeVideoOnDemandNameKeys={this.onChangeVideoOnDemandNameKeys}
-          values={videoOnDemandNameKeys}
-          videoOnDemands={videoOnDemands}
-        />
+        {subcategory.videoOnDemandAssociated ? (
+          <VideoOnDemandsField
+            label="この作品が観れる動画配信サービス"
+            onChangeVideoOnDemandNameKeys={this.onChangeVideoOnDemandNameKeys}
+            values={videoOnDemandNameKeys}
+            videoOnDemands={videoOnDemands}
+          />
+        ) : null}
         <TextField
           label="紹介文"
           placeholder="組織の経営について責任を持つ者のことを経営者と呼ぶ。"

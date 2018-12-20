@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as SubcategoryModificationRequestAction from "../../../actions/UpdateRequest/subcategoryModificationRequest";
@@ -8,10 +8,10 @@ import SubcategoryModificationRequestDTO from "../../../models/dto/UpdateRequest
 import UpdateRequestDecisionDTO from "../../../models/dto/UpdateRequest/UpdateRequestDecisionDTO";
 import UpdateRequestDTO from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
+import { colors } from "../../../styles";
 import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
-import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import StandardText from "../../atoms/StandardText";
 import FinalResult from "../../atoms/UpdateRequest/FinalResult";
 import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
@@ -134,15 +134,16 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
           )}
           <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
-        <InlineCategoryNames
-          categoryName={request.currentCategoryName}
-          subcategoryName={request.requestedSubcategoryName}
-        />
-        <StandardText
-          text={request.requestedSubcategoryIntroduction || "未登録"}
-          fontSize={15}
-          textStyle={{ marginTop: 10 }}
-        />
+        <ScrollView style={{ maxHeight: 160, marginBottom: 12 }}>
+          <StandardText text="カテゴリー" fontSize={13} textStyle={{ color: colors.grayLevel2, marginTop: 5 }} />
+          <StandardText text={request.currentCategoryName} fontSize={14} textStyle={{ marginTop: 15 }} />
+
+          <StandardText text="サブカテゴリー" fontSize={13} textStyle={{ color: colors.grayLevel2, marginTop: 5 }} />
+          <StandardText text={request.requestedSubcategoryName} fontSize={15} textStyle={{ marginTop: 15 }} />
+
+          <StandardText text="紹介文" fontSize={13} textStyle={{ color: colors.grayLevel2, marginTop: 5 }} />
+          <StandardText text={request.requestedSubcategoryIntroduction || "未登録"} fontSize={15} />
+        </ScrollView>
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE} />
           <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
