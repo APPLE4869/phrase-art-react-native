@@ -1,4 +1,6 @@
 import { createStackNavigator } from "react-navigation";
+import SubcategoryDetailScreen from "../../components/screens/Phrase/Category/SubcategoryDetailScreen";
+import SubcategoryModificationRequestScreen from "../../components/screens/Phrase/Category/SubcategoryModificationRequestScreen";
 import PhraseDetailScreen from "../../components/screens/Phrase/DetailScreen";
 import PhraseListScreenScreen from "../../components/screens/Phrase/ListScreen";
 import UpdateRequestFormDeletionRequestScreen from "../../components/screens/Phrase/UpdateRequestForm/DeletionRequestScreen";
@@ -21,6 +23,14 @@ const PhraseStack = createStackNavigator(
     UpdateRequestFormDeletionRequest: {
       screen: UpdateRequestFormDeletionRequestScreen,
       navigationOptions: { title: "名言削除申請" }
+    },
+    SubcategoryDetail: {
+      screen: SubcategoryDetailScreen,
+      navigationOptions: { title: "サブカテゴリー詳細" }
+    },
+    SubcategoryModificationRequest: {
+      screen: SubcategoryModificationRequestScreen,
+      navigationOptions: { title: "サブカテゴリー修正申請" }
     }
   },
   {

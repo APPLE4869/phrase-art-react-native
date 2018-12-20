@@ -77,7 +77,7 @@ class PhraseDetailScreen extends React.Component<Props> {
     if (!auth || !auth.jwt) {
       Alert.alert(
         "ログインする必要があります",
-        "名言の修正・削除を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。",
+        "名言の修正・削除を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）",
         [{ text: "OK" }]
       );
       return;
@@ -129,7 +129,7 @@ class PhraseDetailScreen extends React.Component<Props> {
     if (!auth || !auth.jwt) {
       Alert.alert(
         "ログインする必要があります",
-        "コメントをするには、ログインする必要があります。\n設定からアカウントを作成してください。",
+        "コメントをするには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）",
         [{ text: "OK" }]
       );
       return;
@@ -209,8 +209,7 @@ const styles = StyleSheet.create({
   item: {
     paddingTop: 20,
     paddingBottom: 30,
-    paddingHorizontal: 15,
-    width: "100%"
+    paddingHorizontal: 15
   },
   itemCategoryArea: {
     flexDirection: "row",

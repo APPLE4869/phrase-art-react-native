@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../actions/categories";
 import * as SubcategoriesAction from "../../actions/subcategories";
@@ -10,6 +10,7 @@ import { State as RootState } from "../../reducers";
 import { colors } from "../../styles";
 
 interface Props {
+  navigateSubcategoryDetail: (subcategoryId: string) => void;
   phrasesListStatus: PhrasesListStatus;
   category: CategoryDTO | undefined;
   subcategory: SubcategoryDTO | undefined;
@@ -25,15 +26,22 @@ class CategoryPanelOnList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const {
-      phrasesListStatus,
-      initializeSubcategory,
-      fetchSubcategoryById,
-      initializeCategory,
-      fetchCategoryById
-    } = this.props;
+    this.navigateSubcategoryDetail = this.navigateSubcategoryDetail.bind(this);
 
-    const { categoryId, subcategoryId } = phrasesListStatus;
+    const { categoryId, subcategoryId } = this.props.phrasesListStatus;
+    this.initializeCategory(categoryId, subcategoryId);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { categoryId: prevCategoryId, subcategoryId: prevSubcategoryId } = prevProps.phrasesListStatus;
+    const { categoryId: currentCategoryId, subcategoryId: currentSubcategoryId } = this.props.phrasesListStatus;
+    if (prevCategoryId !== currentCategoryId || prevSubcategoryId !== currentSubcategoryId) {
+      this.initializeCategory(currentCategoryId, currentSubcategoryId);
+    }
+  }
+
+  initializeCategory(categoryId?: string, subcategoryId?: string) {
+    const { initializeSubcategory, fetchSubcategoryById, initializeCategory, fetchCategoryById } = this.props;
 
     initializeSubcategory();
     initializeCategory();
@@ -45,19 +53,33 @@ class CategoryPanelOnList extends React.Component<Props, State> {
     }
   }
 
+  navigateSubcategoryDetail() {
+    const { subcategoryId } = this.props.phrasesListStatus;
+    if (subcategoryId) {
+      this.props.navigateSubcategoryDetail(subcategoryId);
+    }
+  }
+
   render() {
     const { category, subcategory } = this.props;
 
     if (subcategory) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.subcategoryName}>{subcategory.name}</Text>
-        </View>
+        <TouchableOpacity onPress={this.navigateSubcategoryDetail} activeOpacity={0.8} style={styles.container}>
+          <View style={styles.subcategoryItem}>
+            <Text style={styles.subcategoryItemCategoryName}>{subcategory.categoryName}</Text>
+            <Text style={styles.subcategoryItemSubcategoryName}>{subcategory.name}</Text>
+          </View>
+          <Image
+            style={{ height: 21, width: 13 }}
+            source={require("../../../assets/images/icon/angle-down-base.png")}
+          />
+        </TouchableOpacity>
       );
     } else if (category) {
       return (
         <View style={styles.container}>
-          <Text style={styles.subcategoryName}>{category.name}</Text>
+          <Text style={styles.categoryName}>{category.name}</Text>
         </View>
       );
     }
@@ -68,14 +90,27 @@ class CategoryPanelOnList extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    backgroundColor: colors.grayLevel5
-  },
-  subcategoryName: {
-    fontSize: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 15,
     paddingHorizontal: 15,
-    color: colors.grayLevel1
+    backgroundColor: colors.grayLevel5
+  },
+  subcategoryItem: {},
+  subcategoryItemCategoryName: {
+    fontSize: 13,
+    color: colors.baseBlack,
+    marginBottom: 5
+  },
+  subcategoryItemSubcategoryName: {
+    fontSize: 16,
+    color: colors.baseBlack,
+    fontWeight: "bold"
+  },
+  categoryName: {
+    fontSize: 20,
+    color: colors.baseBlack
   }
 });
 

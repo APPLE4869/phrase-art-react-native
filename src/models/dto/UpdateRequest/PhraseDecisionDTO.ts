@@ -1,3 +1,4 @@
+// APIのレスポンスのキーがphraseDecisionになっているので、サーバー側と一緒に修正する。
 export default class PhraseDecisionDTO {
   readonly result: ResultType;
 

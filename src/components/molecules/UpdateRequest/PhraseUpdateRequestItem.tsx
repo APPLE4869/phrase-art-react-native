@@ -1,15 +1,15 @@
 import * as React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import PhraseUpdateRequestDTO from "../../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
-import { UpdateRequestType } from "../../models/dto/UpdateRequestList/UpdateRequestDTO";
-import { colors } from "../../styles";
-import DecisionCounts from "../atoms/DecisionCounts";
-import IconImageWithLabel from "../atoms/IconImageWithLabel";
-import InlineCategoryNames from "../atoms/InlineCategoryNames";
-import StandardText from "../atoms/StandardText";
-import FinalResult from "../atoms/UpdateRequest/FinalResult";
-import RemainingTime from "../atoms/UpdateRequest/RemainingTime";
-import ReportIcon from "./ReportIcon";
+import PhraseUpdateRequestDTO from "../../../models/dto/UpdateRequestList/PhraseUpdateRequestDTO";
+import { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
+import { colors } from "../../../styles";
+import DecisionCounts from "../../atoms/DecisionCounts";
+import IconImageWithLabel from "../../atoms/IconImageWithLabel";
+import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import StandardText from "../../atoms/StandardText";
+import FinalResult from "../../atoms/UpdateRequest/FinalResult";
+import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
+import ReportIcon from "../ReportIcon";
 
 interface Props {
   phraseUpdateRequest: PhraseUpdateRequestDTO;
