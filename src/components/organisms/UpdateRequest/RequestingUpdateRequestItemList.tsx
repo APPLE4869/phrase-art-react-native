@@ -7,7 +7,8 @@ import SubcategoryModificationRequestDTO from "../../../models/dto/UpdateRequest
 import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
-import PhraseUpdateRequestItem from "../../molecules/PhraseUpdateRequestItem";
+import PhraseUpdateRequestItem from "../../molecules/UpdateRequest/PhraseUpdateRequestItem";
+import SubcategoryModificationRequestItem from "../../molecules/UpdateRequest/SubcategoryModificationRequestItem";
 
 interface Props {
   requestingUpdateRequests: Array<PhraseUpdateRequestDTO | SubcategoryModificationRequestDTO>;
@@ -86,20 +87,21 @@ class RequestingUpdateRequestItemList extends React.Component<Props, State> {
         style={styles.container}
         data={requestingUpdateRequests}
         keyExtractor={(updateRequest: UpdateRequestDTO) => updateRequest.id}
-        renderItem={({ item: updateRequest, index }) => {
-          if (updateRequest.type === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE) {
-            // TODO : サブカテゴリー修正申請用のコンポーネントを作成する。
-            return null;
-          } else {
-            return (
-              <PhraseUpdateRequestItem
-                phraseUpdateRequest={updateRequest as PhraseUpdateRequestDTO}
-                onPress={onPress}
-                isFirst={index === 0}
-              />
-            );
-          }
-        }}
+        renderItem={({ item: updateRequest, index }) =>
+          updateRequest.type === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE ? (
+            <SubcategoryModificationRequestItem
+              subcategoryModificationRequest={updateRequest as SubcategoryModificationRequestDTO}
+              onPress={onPress}
+              isFirst={index === 0}
+            />
+          ) : (
+            <PhraseUpdateRequestItem
+              phraseUpdateRequest={updateRequest as PhraseUpdateRequestDTO}
+              onPress={onPress}
+              isFirst={index === 0}
+            />
+          )
+        }
         onEndReached={() => this.fetchRequestingUpdateRequestsWithAwait()}
         onEndReachedThreshold={3}
         refreshing={refreshLoading}

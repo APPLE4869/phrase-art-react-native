@@ -36,8 +36,7 @@ export default class ListScreen extends React.Component<Props, State> {
 
     if (updateRequestType === UpdateRequestDTO.SUBCATEGORY_MODIFICATION_REQUEST_TYPE) {
       // サブカテゴリー修正申請
-      // TODO : Screenを差し替える。
-      // navigation.navigate("PhraseUpdateRequest", { updateRequestId, updateRequestType });
+      navigation.navigate("SubcategoryModificationRequestDetail", { updateRequestId });
     } else {
       // 名言更新申請
       navigation.navigate("PhraseUpdateRequestDetail", { updateRequestId, updateRequestType });

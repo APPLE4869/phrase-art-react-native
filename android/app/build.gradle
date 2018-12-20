@@ -145,10 +145,6 @@ dependencies {
     // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.4"
-
-    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
-        transitive = true
-    }
 }
 
 // Run this once to be able to run the application with BUCK
@@ -159,4 +155,3 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply plugin: 'com.google.gms.google-services'
-apply plugin: "io.fabric"

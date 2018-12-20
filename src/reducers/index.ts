@@ -15,6 +15,10 @@ import phraseModificationRequest, {
 import phraseRegistrationRequest, {
   State as PhraseRegistrationRequestState
 } from "./updateRequest/phraseRegistrationRequest";
+import subcategoryModificationRequest, {
+  State as SubcategoryModificationRequestState
+} from "./updateRequest/subcategoryModificationRequest";
+import videoOnDemands, { State as VideoOnDemandsState } from "./videoOnDemands";
 
 export interface State {
   phrases: PhrasesState;
@@ -26,9 +30,11 @@ export interface State {
   phraseRegistrationRequest: PhraseRegistrationRequestState;
   phraseModificationRequest: PhraseModificationRequestState;
   phraseDeletionRequest: PhraseDeletionRequestState;
+  subcategoryModificationRequest: SubcategoryModificationRequestState;
   phraseComment: phraseCommentState;
   quickblox: QuickbloxState;
   phrasesListStatus: PhrasesListStatusState;
+  videoOnDemands: VideoOnDemandsState;
 }
 
 export default combineReducers({
@@ -41,7 +47,9 @@ export default combineReducers({
   phraseRegistrationRequest,
   phraseModificationRequest,
   phraseDeletionRequest,
+  subcategoryModificationRequest,
   phraseComment,
   quickblox,
-  phrasesListStatus
+  phrasesListStatus,
+  videoOnDemands
 });
