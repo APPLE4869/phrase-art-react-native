@@ -14,15 +14,11 @@ interface Props {
 }
 
 interface State {
-  username: string;
-  password: string;
 }
 
 class EditProfileImage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
-    this.state = { username: "", password: "" };
 
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
@@ -38,23 +34,17 @@ class EditProfileImage extends React.Component<Props, State> {
   }
 
   isDisabled(): boolean {
-    const { username, password } = this.state;
-
-    if (username && password) {
-      return false;
-    }
     return true;
   }
 
   async onSubmit() {
     const { startLoading, endLoading, navigateConfigureIndex } = this.props;
-    const { username, password } = this.state;
 
     startLoading();
 
     try {
-      await this.props.register(username, password);
-    } finally {
+      // 画像アップロード処理
+  } finally {
       endLoading();
     }
 
@@ -73,7 +63,6 @@ class EditProfileImage extends React.Component<Props, State> {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
-  register: authAction.register,
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading
 };

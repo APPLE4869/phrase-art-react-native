@@ -87,7 +87,7 @@ class Index extends React.Component<Props, State> {
     if (auth && auth.jwt) {
       return (
         <View style={styles.container}>
-          {/* <ConfigureIndexItem title="プロフィール画像" onPress={this.navigateEditProfileImage} /> */}
+          <ConfigureIndexItem title="プロフィール画像" onPress={this.navigateEditProfileImage} />
           <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
           <ConfigureIndexItem title="ログアウト" onPress={this.handleLogoutDialog} hiddenRightArrow={true} />
         </View>
