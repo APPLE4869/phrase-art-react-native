@@ -164,7 +164,7 @@ class PhraseDetailScreen extends React.Component<Props> {
         user: {
           _id: comment.userId,
           name: comment.username,
-          avatar: comment.userImageUrl || "https://kotobank.jp/image/dictionary/daijisen/media/104886.jpg"
+          avatar: comment.userImageUrl || require("../../../../assets/images/no-avatar.png")
         }
       };
     });

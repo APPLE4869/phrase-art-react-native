@@ -197,8 +197,8 @@ class Chat extends React.Component<Props> {
       <Message
         {...props}
         containerStyle={{
-          left: { marginBottom: 25, alignItems: "flex-start" },
-          right: { marginBottom: 25, alignItems: "flex-start" }
+          left: { marginBottom: 5, alignItems: "flex-start" },
+          right: { marginBottom: 5, alignItems: "flex-start" }
         }}
       />
     );

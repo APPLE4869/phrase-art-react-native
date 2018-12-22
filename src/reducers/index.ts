@@ -19,6 +19,7 @@ import subcategoryModificationRequest, {
   State as SubcategoryModificationRequestState
 } from "./updateRequest/subcategoryModificationRequest";
 import videoOnDemands, { State as VideoOnDemandsState } from "./videoOnDemands";
+import currentProfile, { State as CurrentProfileState } from "./currentProfile";
 
 export interface State {
   phrases: PhrasesState;
@@ -35,6 +36,7 @@ export interface State {
   quickblox: QuickbloxState;
   phrasesListStatus: PhrasesListStatusState;
   videoOnDemands: VideoOnDemandsState;
+  currentProfile: CurrentProfileState;
 }
 
 export default combineReducers({
@@ -51,5 +53,6 @@ export default combineReducers({
   phraseComment,
   quickblox,
   phrasesListStatus,
-  videoOnDemands
+  videoOnDemands,
+  currentProfile
 });
