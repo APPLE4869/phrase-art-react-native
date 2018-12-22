@@ -49,22 +49,56 @@ export type Action =
 
 // ----- 以下、アクションメソッド定義 -----//
 
+/**
+ * URIを元に、送信するファイルデータを取得する
+ */
+function getFileDataFromUri(uri: string) {
+  // URIの末尾にあるファイルの拡張子を取得
+  const extension = uri.split(".").pop();
+
+  return { uri, type: `image/${extension}`, name: "profile.jpg" };
+}
+
+/**
+ * 送信するformDataを取得する
+ */
+function getRequestFormData(
+  subcategoryId: string,
+  subcategoryName: string,
+  imageUri: string,
+  introduction: string,
+  videoOnDemandNameKeys: string[]
+) {
+  const formData = new FormData();
+
+  formData.append("id", subcategoryId);
+  if (imageUri) {
+    formData.append("image", getFileDataFromUri(imageUri));
+  }
+  formData.append("name", subcategoryName);
+  formData.append("introduction", introduction);
+
+  videoOnDemandNameKeys.forEach(key => {
+    formData.append("videoOnDemandNameKeys", key);
+  });
+
+  return formData;
+}
+
 export function submitSubcategoryModificationRequest(
   subcategoryId: string,
   subcategoryName: string,
+  imageUri: string,
   introduction: string,
   videoOnDemandNameKeys: string[]
 ) {
   return async () => {
     try {
+      const data = getRequestFormData(subcategoryId, subcategoryName, imageUri, introduction, videoOnDemandNameKeys);
       const response: AxiosResponse = await apiPrivateClient.post(
         "/update_request/submit_subcategory_modification_request",
-        {
-          id: subcategoryId,
-          name: subcategoryName,
-          videoOnDemandNameKeys,
-          introduction
-        }
+        data,
+        { timeout: 15000 }
       );
 
       if (response.status !== 200) {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../actions/categories";
 import * as SubcategoriesAction from "../../actions/subcategories";
@@ -10,7 +10,6 @@ import { State as RootState } from "../../reducers";
 import { colors } from "../../styles";
 
 interface Props {
-  navigateSubcategoryDetail: (subcategoryId: string) => void;
   phrasesListStatus: PhrasesListStatus;
   category: CategoryDTO | undefined;
   subcategory: SubcategoryDTO | undefined;
@@ -25,8 +24,6 @@ interface State {}
 class CategoryPanelOnList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-
-    this.navigateSubcategoryDetail = this.navigateSubcategoryDetail.bind(this);
 
     const { categoryId, subcategoryId } = this.props.phrasesListStatus;
     this.initializeCategory(categoryId, subcategoryId);
@@ -53,33 +50,69 @@ class CategoryPanelOnList extends React.Component<Props, State> {
     }
   }
 
-  navigateSubcategoryDetail() {
-    const { subcategoryId } = this.props.phrasesListStatus;
-    if (subcategoryId) {
-      this.props.navigateSubcategoryDetail(subcategoryId);
-    }
+  imageHeight() {
+    const { width: windowWidth } = Dimensions.get("window");
+    return windowWidth * 0.4;
   }
 
   render() {
     const { category, subcategory } = this.props;
 
     if (subcategory) {
-      return (
-        <TouchableOpacity onPress={this.navigateSubcategoryDetail} activeOpacity={0.8} style={styles.container}>
-          <View style={styles.subcategoryItem}>
-            <Text style={styles.subcategoryItemCategoryName}>{subcategory.categoryName}</Text>
-            <Text style={styles.subcategoryItemSubcategoryName}>{subcategory.name}</Text>
+      if (subcategory.imageUrl) {
+        return (
+          <View style={[styles.containerWithImage, { height: this.imageHeight() }]}>
+            <Image
+              source={{ uri: subcategory.imageUrl }}
+              style={{ position: "absolute", height: "100%", width: "100%", zIndex: -2 }}
+            />
+            <Image
+              style={{ position: "absolute", height: "100%", width: "100%", zIndex: -1 }}
+              source={require("../../../assets/images/subcategory-gradient.png")}
+            />
+            <View style={styles.containerInnerWithImage}>
+              <View style={styles.subcategoryItem}>
+                <Text style={styles.subcategoryItemCategoryName}>{subcategory.categoryName}</Text>
+                <Text style={styles.subcategoryItemSubcategoryName}>{subcategory.name}</Text>
+              </View>
+              <Image
+                style={{ height: 21, width: 13 }}
+                source={require("../../../assets/images/icon/angle-down-base.png")}
+              />
+            </View>
           </View>
-          <Image
-            style={{ height: 21, width: 13 }}
-            source={require("../../../assets/images/icon/angle-down-base.png")}
-          />
-        </TouchableOpacity>
-      );
+        );
+      } else {
+        return (
+          <View style={styles.container}>
+            <View style={styles.subcategoryItem}>
+              <Text style={styles.subcategoryItemCategoryName}>{subcategory.categoryName}</Text>
+              <Text style={styles.subcategoryItemSubcategoryName}>{subcategory.name}</Text>
+            </View>
+            <Image
+              style={{ height: 21, width: 13 }}
+              source={require("../../../assets/images/icon/angle-down-base.png")}
+              resizeMode="stretch"
+            />
+          </View>
+        );
+      }
     } else if (category) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.categoryName}>{category.name}</Text>
+        <View style={[styles.containerWithImage, { height: this.imageHeight() }]}>
+          <Image
+            source={{ uri: category.imageUrl }}
+            style={{ position: "absolute", height: "100%", width: "100%", zIndex: -2 }}
+          />
+          <Image
+            style={{ position: "absolute", height: "100%", width: "100%", zIndex: -1 }}
+            source={require("../../../assets/images/subcategory-gradient.png")}
+          />
+          <View style={styles.containerInnerWithImage}>
+            <View style={styles.subcategoryItem}>
+              <Text style={styles.categoryName}>{category.name}</Text>
+            </View>
+          </View>
         </View>
       );
     }
@@ -89,11 +122,28 @@ class CategoryPanelOnList extends React.Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
+  containerWithImage: {
+    position: "absolute",
+    width: "100%",
+    zIndex: -1
+  },
+  containerInnerWithImage: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    flexDirection: "row",
+    alignItems: "flex-end",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    paddingBottom: 15
+  },
   container: {
+    position: "absolute",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 15,
+    height: 70,
+    width: "100%",
     paddingHorizontal: 15,
     backgroundColor: colors.grayLevel5
   },
@@ -109,7 +159,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   categoryName: {
-    fontSize: 20,
+    fontSize: 22,
+    fontWeight: "bold",
     color: colors.baseBlack
   }
 });

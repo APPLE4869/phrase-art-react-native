@@ -78,9 +78,9 @@ class PhraseListScreen extends React.Component<Props> {
     navigation.navigate("SubcategoryList");
   }
 
-  navigateSubcategoryDetail(subcategoryId: string) {
+  navigateSubcategoryDetail() {
     const { navigation } = this.props;
-    navigation.navigate("SubcategoryDetail", { subcategoryId });
+    navigation.navigate("SubcategoryDetail");
   }
 
   navigateRegistrationRequest() {
@@ -106,8 +106,11 @@ class PhraseListScreen extends React.Component<Props> {
     return (
       <DefaultTemplate>
         <View style={{ width: "100%", flex: 1 }}>
-          <CategoryPanelOnList navigateSubcategoryDetail={this.navigateSubcategoryDetail} />
-          <PhraseItemList navigateDetail={this.navigateDetail} />
+          <CategoryPanelOnList />
+          <PhraseItemList
+            navigateDetail={this.navigateDetail}
+            navigateSubcategoryDetail={this.navigateSubcategoryDetail}
+          />
         </View>
       </DefaultTemplate>
     );

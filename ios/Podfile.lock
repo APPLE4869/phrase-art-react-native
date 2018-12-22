@@ -75,6 +75,8 @@ PODS:
   - Protobuf (3.6.1)
   - React (0.57.4):
     - React/Core (= 0.57.4)
+  - react-native-image-picker (0.27.2):
+    - React
   - React/Core (0.57.4):
     - yoga (= 0.57.4.React)
   - React/CxxBridge (0.57.4):
@@ -120,6 +122,7 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleAppMeasurement (~> 5.2.0)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -155,6 +158,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   RNDeviceInfo:
     :path: "../node_modules/react-native-device-info"
   yoga:
@@ -178,9 +183,10 @@ SPEC CHECKSUMS:
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-image-picker: f42de90075c5b1af53417af927631d909a1a746e
   RNDeviceInfo: 568c5641057313b4912d08a7742ff0b2f753ed5c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 6e157cf80041d7c91b533f9ff811cf5a8102bbe3
+PODFILE CHECKSUM: e03995c342ecbdd08a926f5ef8de2e758f762491
 
 COCOAPODS: 1.5.3

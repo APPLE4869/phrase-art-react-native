@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import auth, { State as AuthState } from "./auth";
 import categories, { State as CategoriesState } from "./categories";
+import currentProfile, { State as CurrentProfileState } from "./currentProfile";
 import loading, { State as LoadingState } from "./loading";
 import phraseComment, { State as phraseCommentState } from "./phrase/phraseComment";
 import phrases, { State as PhrasesState } from "./phrase/phrases";
@@ -35,6 +36,7 @@ export interface State {
   quickblox: QuickbloxState;
   phrasesListStatus: PhrasesListStatusState;
   videoOnDemands: VideoOnDemandsState;
+  currentProfile: CurrentProfileState;
 }
 
 export default combineReducers({
@@ -51,5 +53,6 @@ export default combineReducers({
   phraseComment,
   quickblox,
   phrasesListStatus,
-  videoOnDemands
+  videoOnDemands,
+  currentProfile
 });
