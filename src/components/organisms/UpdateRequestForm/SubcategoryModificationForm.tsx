@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Alert, Dimensions, Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import ImagePicker from "react-native-image-picker";
 import { connect } from "react-redux";
 import * as loadingAction from "../../../actions/loading";
 import * as QuickbloxAction from "../../../actions/quickblox";
@@ -7,8 +8,9 @@ import * as SubcategoryModificationRequestAction from "../../../actions/UpdateRe
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import VideoOnDemandDTO from "../../../models/dto/VideoOnDemandDTO";
 import { State as RootState } from "../../../reducers";
-import { formStyle } from "../../../styles";
+import { colors, formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
+import StandardText from "../../atoms/StandardText";
 import TextField from "../../molecules/FormGroup/TextField";
 import VideoOnDemandsField from "../../molecules/FormGroup/VideoOnDemandsField";
 
@@ -28,6 +30,7 @@ interface State {
   imagePath?: string;
   videoOnDemandNameKeys: string[];
   introduction?: string;
+  imageUri: string;
 }
 
 class SubcategoryModificationForm extends React.Component<Props, State> {
@@ -41,17 +44,20 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
         subcategoryName: name || "",
         imagePath: imageUrl || "",
         videoOnDemandNameKeys: videoOnDemandNameKeys || [],
-        introduction: introduction || ""
+        introduction: introduction || "",
+        imageUri: ""
       };
     } else {
       this.state = {
         subcategoryName: "",
         imagePath: "",
         videoOnDemandNameKeys: [],
-        introduction: ""
+        introduction: "",
+        imageUri: ""
       };
     }
 
+    this.imagePicker = this.imagePicker.bind(this);
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
     this.onChangeVideoOnDemandNameKeys = this.onChangeVideoOnDemandNameKeys.bind(this);
     this.onChangeIntroduction = this.onChangeIntroduction.bind(this);
@@ -68,6 +74,13 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
 
   onChangeIntroduction(introduction: string) {
     this.setState({ introduction });
+  }
+
+  imageStyle() {
+    const { width: windowWidth } = Dimensions.get("window");
+    const window = windowWidth;
+    const height = windowWidth * 0.4;
+    return { window, height };
   }
 
   isDisabled(): boolean {
@@ -101,6 +114,33 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     );
   }
 
+  imagePicker() {
+    const options = {
+      title: "イメージ画像を選択して下さい",
+      takePhotoButtonTitle: "写真を撮る",
+      chooseFromLibraryButtonTitle: "アルバムから選択",
+      cancelButtonTitle: "キャンセル",
+      maxHeight: 700,
+      maxWidth: 1000,
+      allowsEditing: true,
+      storageOptions: {
+        skipBackup: true,
+        path: "images"
+      }
+    };
+
+    ImagePicker.showImagePicker(options, response => {
+      if (response.didCancel) {
+        // ユーザーがキャンセルした
+      } else if (response.error) {
+        // ImagePicker のエラー
+        Alert.alert("プロフィール画像の選択に失敗しました");
+      } else {
+        this.setState({ imageUri: response.uri });
+      }
+    });
+  }
+
   async onSubmit() {
     const {
       subcategoryId,
@@ -110,17 +150,36 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
       navigateNextScreen,
       addMessage
     } = this.props;
-    const { subcategoryName, introduction, videoOnDemandNameKeys } = this.state;
+    const { subcategoryName, imageUri, introduction, videoOnDemandNameKeys } = this.state;
     startLoading();
 
     try {
-      await submitSubcategoryModificationRequest(subcategoryId, subcategoryName, introduction, videoOnDemandNameKeys);
+      await submitSubcategoryModificationRequest(
+        subcategoryId,
+        subcategoryName,
+        imageUri,
+        introduction,
+        videoOnDemandNameKeys
+      );
     } finally {
       endLoading();
     }
 
     addMessage("修正申請に成功しました。");
     navigateNextScreen();
+  }
+
+  imageSource() {
+    const { subcategory } = this.props;
+    const { imageUri } = this.state;
+
+    if (imageUri) {
+      return { uri: imageUri };
+    } else if (subcategory && subcategory.imageUrl) {
+      return { uri: subcategory.imageUrl };
+    } else {
+      return require("../../../../assets/images/no-subcategory-background.jpg");
+    }
   }
 
   render() {
@@ -132,35 +191,62 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     }
 
     return (
-      <View style={formStyle.container}>
-        <TextField
-          label="サブカテゴリー"
-          placeholder="経営者"
-          onChangeText={this.onChangeSubcategoryName}
-          defaultValue={subcategoryName}
-          marginTop={30}
-        />
-        {subcategory.videoOnDemandAssociated ? (
-          <VideoOnDemandsField
-            label="この作品が観れる動画配信サービス"
-            onChangeVideoOnDemandNameKeys={this.onChangeVideoOnDemandNameKeys}
-            values={videoOnDemandNameKeys}
-            videoOnDemands={videoOnDemands}
+      <View style={{ flex: 1, width: "100%" }}>
+        <View style={{ width: "100%" }}>
+          <Image style={this.imageStyle()} source={this.imageSource()} />
+          <TouchableOpacity activeOpacity={0.8} onPress={this.imagePicker} style={styles.imageFrame}>
+            <Image
+              resizeMode="contain"
+              style={{ width: 33, height: 37 }}
+              source={require("../../../../assets/images/icon/camera.png")}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={formStyle.container}>
+          <View style={{ marginTop: 30 }}>
+            <StandardText text="カテゴリー" fontSize={13} textStyle={{ color: colors.grayLevel2, marginBottom: 5 }} />
+            <StandardText text={subcategory.categoryName} fontSize={15} />
+          </View>
+          <TextField
+            label="サブカテゴリー"
+            placeholder="経営者"
+            onChangeText={this.onChangeSubcategoryName}
+            defaultValue={subcategoryName}
+            marginTop={30}
           />
-        ) : null}
-        <TextField
-          label="紹介文"
-          placeholder="組織の経営について責任を持つ者のことを経営者と呼ぶ。"
-          onChangeText={this.onChangeIntroduction}
-          marginBottom={40}
-          defaultValue={introduction}
-          isTextarea={true}
-        />
-        <FormButton title="修正申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
+          {subcategory.videoOnDemandAssociated ? (
+            <VideoOnDemandsField
+              label="この作品が観れる動画配信サービス"
+              onChangeVideoOnDemandNameKeys={this.onChangeVideoOnDemandNameKeys}
+              values={videoOnDemandNameKeys}
+              videoOnDemands={videoOnDemands}
+            />
+          ) : null}
+          <TextField
+            label="紹介文"
+            placeholder="組織の経営について責任を持つ者のことを経営者と呼ぶ。"
+            onChangeText={this.onChangeIntroduction}
+            marginBottom={40}
+            defaultValue={introduction}
+            isTextarea={true}
+          />
+          <FormButton title="修正申請する" onPress={this.onSubmit} disabled={this.isDisabled()} />
+        </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  imageFrame: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});
 
 const mapStateToProps = (state: RootState) => ({
   subcategory: state.subcategories.subcategory,

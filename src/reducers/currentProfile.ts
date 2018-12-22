@@ -8,7 +8,7 @@ export interface State {
 
 // Stateの初期値
 export const initialState: State = {
-  currentProfile: undefined,
+  currentProfile: undefined
 };
 
 // Reducer

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import * as SubcategoriesAction from "../../../actions/subcategories";
 import * as VideoOnDemandsAction from "../../../actions/videoOnDemands";
@@ -54,6 +54,37 @@ class SubcategoryDetail extends React.Component<Props> {
     );
   }
 
+  imageArea(imageUrl?: string) {
+    if (imageUrl) {
+      return <Image style={this.imageStyle()} source={{ uri: imageUrl }} />;
+    } else {
+      const emptyImage = require("../../../../assets/images/no-subcategory-background.jpg");
+      return (
+        <View style={{ width: "100%" }}>
+          <Image style={this.imageStyle()} source={emptyImage} />
+          <View
+            style={{
+              position: "absolute",
+              height: "100%",
+              width: "100%",
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <StandardText fontSize={14} text="イメージ画像 未登録" />
+          </View>
+        </View>
+      );
+    }
+  }
+
+  imageStyle() {
+    const { width: windowWidth } = Dimensions.get("window");
+    const window = windowWidth;
+    const height = windowWidth * 0.4;
+    return { window, height };
+  }
+
   render() {
     const { subcategory, videoOnDemands } = this.props;
 
@@ -62,24 +93,27 @@ class SubcategoryDetail extends React.Component<Props> {
     }
 
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.itemMarginBottom}>
-          <StandardText text={subcategory.categoryName} fontSize={14} textStyle={styles.label} />
-          <StandardText text={subcategory.name} fontSize={16} />
-        </View>
-        {subcategory.videoOnDemandAssociated ? (
+      <View style={{ width: "100%", flex: 1 }}>
+        {this.imageArea(subcategory.imageUrl)}
+        <ScrollView style={styles.container}>
           <View style={styles.itemMarginBottom}>
-            <StandardText text="この作品が観れる動画配信サービス" fontSize={14} textStyle={styles.label} />
-            <View style={styles.videoOnDemandContainer}>
-              {videoOnDemands.map(videoOnDemand => this.videoOnDemandBlock(videoOnDemand))}
-            </View>
+            <StandardText text={subcategory.categoryName} fontSize={14} textStyle={styles.label} />
+            <StandardText text={subcategory.name} fontSize={16} />
           </View>
-        ) : null}
-        <View>
-          <StandardText text="紹介文" fontSize={14} textStyle={styles.label} />
-          <StandardText text={subcategory.introduction || "未登録"} fontSize={16} />
-        </View>
-      </ScrollView>
+          {subcategory.videoOnDemandAssociated ? (
+            <View style={styles.itemMarginBottom}>
+              <StandardText text="この作品が観れる動画配信サービス" fontSize={14} textStyle={styles.label} />
+              <View style={styles.videoOnDemandContainer}>
+                {videoOnDemands.map(videoOnDemand => this.videoOnDemandBlock(videoOnDemand))}
+              </View>
+            </View>
+          ) : null}
+          <View>
+            <StandardText text="紹介文" fontSize={14} textStyle={styles.label} />
+            <StandardText text={subcategory.introduction || "未登録"} fontSize={16} />
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }

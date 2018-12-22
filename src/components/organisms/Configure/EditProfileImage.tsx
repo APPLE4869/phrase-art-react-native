@@ -2,14 +2,14 @@ import * as React from "react";
 import { Alert, Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import { connect } from "react-redux";
-import * as loadingAction from "../../../actions/loading";
 import * as currentProfileAction from "../../../actions/currentProfile";
+import * as loadingAction from "../../../actions/loading";
+import * as QuickbloxAction from "../../../actions/quickblox";
+import CurrentProfile from "../../../models/dto/CurrentProfileDTO";
+import { State as RootState } from "../../../reducers";
 import { colors, formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
 import StandardText from "../../atoms/StandardText";
-import * as QuickbloxAction from "../../../actions/quickblox";
-import { State as RootState } from "../../../reducers";
-import CurrentProfile from "../../../models/dto/CurrentProfileDTO";
 
 interface Props {
   navigateConfigureIndex: () => void;
@@ -42,7 +42,7 @@ class EditProfileImage extends React.Component<Props, State> {
     try {
       await this.props.fetchProfile();
     } finally {
-      this.setState({initialized: true});
+      this.setState({ initialized: true });
     }
 
     const { currentProfile } = this.props;

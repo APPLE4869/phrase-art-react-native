@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { Dispatch } from "redux";
 import ApplicationError from "../models/ApplicationError";
 import CurrentProfileDTO, { CurrentProfileResponse } from "../models/dto/CurrentProfileDTO";
-import { apiPrivateClient, apiPublicClient } from "../providers/apiClient";
+import { apiPrivateClient } from "../providers/apiClient";
 
 // Actions
 export const ADD_CURRENT_PROFILE = "ADD_CURRENT_PROFILE:profile";
@@ -19,7 +19,7 @@ export type Action = AddCurrentProfile;
 
 export function fetchProfile() {
   return async (dispatch: Dispatch<Action>) => {
-    const response: AxiosResponse<CurrentProfileResponse> = await apiPrivateClient.get('/current_profile');
+    const response: AxiosResponse<CurrentProfileResponse> = await apiPrivateClient.get("/current_profile");
 
     const currentProfile = new CurrentProfileDTO(response.data.currentProfile);
 
