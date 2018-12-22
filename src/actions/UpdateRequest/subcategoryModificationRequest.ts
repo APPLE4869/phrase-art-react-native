@@ -77,7 +77,10 @@ function getRequestFormData(
   }
   formData.append("name", subcategoryName);
   formData.append("introduction", introduction);
-  formData.append("videoOnDemandNameKeys", String(videoOnDemandNameKeys));
+
+  videoOnDemandNameKeys.forEach(key => {
+    formData.append("videoOnDemandNameKeys", key);
+  });
 
   return formData;
 }

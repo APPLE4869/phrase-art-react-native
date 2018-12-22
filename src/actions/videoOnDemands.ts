@@ -17,7 +17,7 @@ export type Action = AddVideOnDemands;
 // ----- 以下、アクションメソッド定義 -----//
 
 // カテゴリー(VideOnDemands)を取得
-export function fetchVideOnDemands() {
+export function fetchVideoOnDemands() {
   return async (dispatch: Dispatch<Action>) => {
     const response: AxiosResponse<VideoOnDemandsResponse> = await apiPublicClient.get("/video_on_demands");
 

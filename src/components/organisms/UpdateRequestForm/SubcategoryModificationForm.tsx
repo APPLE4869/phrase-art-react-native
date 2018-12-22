@@ -15,7 +15,6 @@ import TextField from "../../molecules/FormGroup/TextField";
 import VideoOnDemandsField from "../../molecules/FormGroup/VideoOnDemandsField";
 
 interface Props {
-  subcategoryId: string;
   subcategory?: SubcategoryDTO;
   videoOnDemands: VideoOnDemandDTO[];
   navigateNextScreen: () => void;
@@ -27,7 +26,6 @@ interface Props {
 
 interface State {
   subcategoryName: string;
-  imagePath?: string;
   videoOnDemandNameKeys: string[];
   introduction?: string;
   imageUri: string;
@@ -38,24 +36,25 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     super(props);
 
     const { subcategory } = this.props;
-    if (subcategory) {
-      const { name, imageUrl, videoOnDemandNameKeys, introduction } = subcategory;
-      this.state = {
-        subcategoryName: name || "",
-        imagePath: imageUrl || "",
-        videoOnDemandNameKeys: videoOnDemandNameKeys || [],
-        introduction: introduction || "",
-        imageUri: ""
-      };
-    } else {
+
+    if (!subcategory) {
       this.state = {
         subcategoryName: "",
-        imagePath: "",
         videoOnDemandNameKeys: [],
         introduction: "",
         imageUri: ""
       };
+      this.errorWhenSubcategoryEmpty();
+      return;
     }
+
+    const { name, videoOnDemandNameKeys, introduction } = subcategory;
+    this.state = {
+      subcategoryName: name || "",
+      videoOnDemandNameKeys: videoOnDemandNameKeys || [],
+      introduction: introduction || "",
+      imageUri: ""
+    };
 
     this.imagePicker = this.imagePicker.bind(this);
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
@@ -78,9 +77,9 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
 
   imageStyle() {
     const { width: windowWidth } = Dimensions.get("window");
-    const window = windowWidth;
+    const width = windowWidth;
     const height = windowWidth * 0.4;
-    return { window, height };
+    return { width, height };
   }
 
   isDisabled(): boolean {
@@ -100,17 +99,16 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
 
     const {
       name: currentSubcategoryName,
-      imageUrl: currentImagePath,
       videoOnDemandNameKeys: currentVideoOnDemandNameKeys,
       introduction: currentIntroduction
     } = this.props.subcategory;
-    const { subcategoryName, imagePath, videoOnDemandNameKeys, introduction } = this.state;
+    const { subcategoryName, imageUri, videoOnDemandNameKeys, introduction } = this.state;
 
     return (
       currentSubcategoryName !== subcategoryName ||
-      currentImagePath !== imagePath ||
+      !!imageUri ||
       String(currentVideoOnDemandNameKeys.sort()) !== String(videoOnDemandNameKeys.sort()) ||
-      currentIntroduction !== introduction
+      (currentIntroduction || "") !== introduction
     );
   }
 
@@ -141,9 +139,14 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     });
   }
 
+  errorWhenSubcategoryEmpty() {
+    Alert.alert("予期しないエラーが発生しました。お手数ですが、もう一度お試しください。");
+    this.props.navigateNextScreen();
+  }
+
   async onSubmit() {
     const {
-      subcategoryId,
+      subcategory,
       submitSubcategoryModificationRequest,
       startLoading,
       endLoading,
@@ -155,7 +158,7 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
 
     try {
       await submitSubcategoryModificationRequest(
-        subcategoryId,
+        (subcategory as SubcategoryDTO).id,
         subcategoryName,
         imageUri,
         introduction,
@@ -187,7 +190,8 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     const { subcategoryName, videoOnDemandNameKeys, introduction } = this.state;
 
     if (!subcategory) {
-      return null;
+      this.errorWhenSubcategoryEmpty();
+      return;
     }
 
     return (
@@ -242,7 +246,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.05)",
+    backgroundColor: "rgba(0, 0, 0, 0.15)",
     alignItems: "center",
     justifyContent: "center"
   }

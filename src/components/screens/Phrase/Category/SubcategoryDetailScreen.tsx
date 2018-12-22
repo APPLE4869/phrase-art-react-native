@@ -21,14 +21,11 @@ class SubcategoryDetailScreen extends React.Component<Props> {
       )
     };
   };
-  private subcategoryId: string;
 
   constructor(props: Props) {
     super(props);
 
     this.handleEditDialog = this.handleEditDialog.bind(this);
-
-    this.subcategoryId = this.props.navigation.getParam("subcategoryId");
   }
 
   componentDidMount() {
@@ -47,13 +44,13 @@ class SubcategoryDetailScreen extends React.Component<Props> {
       return;
     }
 
-    this.props.navigation.navigate("SubcategoryModificationRequest", { subcategoryId: this.subcategoryId });
+    this.props.navigation.navigate("SubcategoryModificationRequest");
   }
 
   render() {
     return (
       <DefaultTemplate>
-        <SubcategoryDetail subcategoryId={this.subcategoryId} />
+        <SubcategoryDetail />
       </DefaultTemplate>
     );
   }

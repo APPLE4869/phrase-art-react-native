@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
-import * as SubcategoriesAction from "../../../actions/subcategories";
 import * as VideoOnDemandsAction from "../../../actions/videoOnDemands";
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import VideoOnDemandDTO from "../../../models/dto/VideoOnDemandDTO";
@@ -12,20 +11,15 @@ import StandardText from "../../atoms/StandardText";
 interface Props {
   subcategory?: SubcategoryDTO;
   videoOnDemands: VideoOnDemandDTO[];
-  fetchVideOnDemands: any;
-  subcategoryId: string;
-  fetchSubcategoryById: any;
-  initializeSubcategory: any;
+  fetchVideoOnDemands: any;
 }
 
 class SubcategoryDetail extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
-    const { subcategoryId, fetchSubcategoryById, fetchVideOnDemands, initializeSubcategory } = this.props;
-    initializeSubcategory();
-    fetchVideOnDemands();
-    fetchSubcategoryById(subcategoryId);
+    const { fetchVideoOnDemands } = this.props;
+    fetchVideoOnDemands();
   }
 
   videoOnDemandBlock(videoOnDemand: VideoOnDemandDTO) {
@@ -146,9 +140,7 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 const mapDispatchToProps = {
-  fetchSubcategoryById: SubcategoriesAction.fetchSubcategoryById,
-  fetchVideOnDemands: VideoOnDemandsAction.fetchVideOnDemands,
-  initializeSubcategory: SubcategoriesAction.initializeSubcategory
+  fetchVideoOnDemands: VideoOnDemandsAction.fetchVideoOnDemands
 };
 
 const enhancer = connect(

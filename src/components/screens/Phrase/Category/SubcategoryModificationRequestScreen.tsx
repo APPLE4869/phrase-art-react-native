@@ -25,10 +25,7 @@ export default class SubcategoryModificationRequestScreen extends React.Componen
       <KeyboardAvoidingView behavior="padding" style={formStyle.keyboardAvoidingView}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <DefaultTemplate>
-            <SubcategoryModificationForm
-              subcategoryId={this.props.navigation.getParam("subcategoryId")}
-              navigateNextScreen={this.navigateNextScreen}
-            />
+            <SubcategoryModificationForm navigateNextScreen={this.navigateNextScreen} />
           </DefaultTemplate>
         </ScrollView>
       </KeyboardAvoidingView>
