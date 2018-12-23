@@ -21,6 +21,10 @@ interface Props {
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
   fetchPhrasesByCategoryId: any;
   fetchPhrasesBySubcategoryId: any;
+  likePhrase: any;
+  unlikePhrase: any;
+  favoritePhrase: any;
+  unfavoritePhrase: any;
   initializePhrases: any;
   initializePhrasesListStatus: any;
 }
@@ -38,6 +42,10 @@ class PhraseItemList extends React.Component<Props, State> {
     this.state = { loading: false, stopFetching: false, refreshLoading: false };
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
+    this.likeAction = this.likeAction.bind(this);
+    this.unlikeAction = this.unlikeAction.bind(this);
+    this.favoriteAction = this.favoriteAction.bind(this);
+    this.unfavoriteAction = this.unfavoriteAction.bind(this);
 
     this.props.initializePhrases();
     this.props.initializePhrasesListStatus();
@@ -121,6 +129,22 @@ class PhraseItemList extends React.Component<Props, State> {
     return loading || stopFetching || refreshLoading;
   }
 
+  likeAction(phrase: PhraseDTO) {
+    this.props.likePhrase(phrase);
+  }
+
+  unlikeAction(phrase: PhraseDTO) {
+    this.props.unlikePhrase(phrase);
+  }
+
+  favoriteAction(phrase: PhraseDTO) {
+    this.props.favoritePhrase(phrase);
+  }
+
+  unfavoriteAction(phrase: PhraseDTO) {
+    this.props.unfavoritePhrase(phrase);
+  }
+
   render() {
     const { refreshLoading } = this.state;
 
@@ -131,7 +155,15 @@ class PhraseItemList extends React.Component<Props, State> {
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         ListHeaderComponent={this.ListHeaderComponent()}
         renderItem={({ item: phrase, index }) => (
-          <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
+          <PhraseItem
+            likeAction={this.likeAction}
+            unlikeAction={this.unlikeAction}
+            favoriteAction={this.favoriteAction}
+            unfavoriteAction={this.unfavoriteAction}
+            navigateDetail={this.props.navigateDetail}
+            phrase={phrase}
+            isFirst={index === 0}
+          />
         )}
         onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}
@@ -162,6 +194,10 @@ const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
   fetchPhrasesByCategoryId: PhrasesAction.fetchPhrasesByCategoryId,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
+  likePhrase: PhrasesAction.likePhrase,
+  unlikePhrase: PhrasesAction.unlikePhrase,
+  favoritePhrase: PhrasesAction.favoritePhrase,
+  unfavoritePhrase: PhrasesAction.unfavoritePhrase,
   initializePhrases: PhrasesAction.initializePhrases,
   initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus
 };

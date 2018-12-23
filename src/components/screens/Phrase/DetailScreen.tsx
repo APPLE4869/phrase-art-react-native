@@ -10,6 +10,9 @@ import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { replaceDateStringForIOS } from "../../../support/replace";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import CommentWithCount from "../../atoms/PhraseItem/CommentWithCount";
+import FavoriteWithCount from "../../atoms/PhraseItem/FavoriteWithCount";
+import LikeWithCount from "../../atoms/PhraseItem/LikeWithCount";
 import StandardText from "../../atoms/StandardText";
 import Chat from "../../molecules/Chat";
 import ReportIcon from "../../molecules/ReportIcon";
@@ -24,12 +27,21 @@ interface Props {
   phraseComments: PhraseCommentDTO[];
   fetchPreviousPhraseComments: any;
   fetchFollowingPhraseComments: any;
+  likePhrase: any;
+  unlikePhrase: any;
+  favoritePhrase: any;
+  unfavoritePhrase: any;
   initializePhraseComments: any;
   initializePhrase: any;
 }
 
+interface State {
+  isInProgressLikeAction: boolean;
+  isInProgressFavoriteAction: boolean;
+}
+
 // TODO : Screenで全てやってしまっているので、Organismsに切り出す。
-class PhraseDetailScreen extends React.Component<Props> {
+class PhraseDetailScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
       headerRight: (
@@ -44,6 +56,8 @@ class PhraseDetailScreen extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
 
+    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false };
+
     const phraseId = this.props.navigation.getParam("phraseId");
 
     this.props.initializePhrase();
@@ -53,6 +67,10 @@ class PhraseDetailScreen extends React.Component<Props> {
     this.navigateModificationRequest = this.navigateModificationRequest.bind(this);
     this.navigateDeletionRequest = this.navigateDeletionRequest.bind(this);
     this.onSend = this.onSend.bind(this);
+    this.likeActivate = this.likeActivate.bind(this);
+    this.likeUnactivate = this.likeUnactivate.bind(this);
+    this.favoriteActivate = this.favoriteActivate.bind(this);
+    this.favoriteUnactivate = this.favoriteUnactivate.bind(this);
 
     this.initializeComments(phraseId);
   }
@@ -153,6 +171,58 @@ class PhraseDetailScreen extends React.Component<Props> {
     }
   }
 
+  async likeActivate() {
+    if (this.state.isInProgressLikeAction) {
+      return;
+    }
+
+    this.setState({ isInProgressLikeAction: true });
+
+    const { phrase, likePhrase } = this.props;
+    await likePhrase(phrase);
+
+    this.setState({ isInProgressLikeAction: false });
+  }
+
+  async likeUnactivate() {
+    if (this.state.isInProgressLikeAction) {
+      return;
+    }
+
+    this.setState({ isInProgressLikeAction: true });
+
+    const { phrase, unlikePhrase } = this.props;
+    await unlikePhrase(phrase);
+
+    this.setState({ isInProgressLikeAction: false });
+  }
+
+  async favoriteActivate() {
+    if (this.state.isInProgressFavoriteAction) {
+      return;
+    }
+
+    this.setState({ isInProgressFavoriteAction: true });
+
+    const { phrase, favoritePhrase } = this.props;
+    await favoritePhrase(phrase);
+
+    this.setState({ isInProgressFavoriteAction: false });
+  }
+
+  async favoriteUnactivate() {
+    if (this.state.isInProgressFavoriteAction) {
+      return;
+    }
+
+    this.setState({ isInProgressFavoriteAction: true });
+
+    const { phrase, unfavoritePhrase } = this.props;
+    await unfavoritePhrase(phrase);
+
+    this.setState({ isInProgressFavoriteAction: false });
+  }
+
   messages() {
     return this.props.phraseComments.map(comment => {
       const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
@@ -188,6 +258,21 @@ class PhraseDetailScreen extends React.Component<Props> {
             </View>
             <StandardText text={phrase.content} fontSize={16} textStyle={{ marginVertical: 13 }} />
             <StandardText text={phrase.authorName} fontSize={14} />
+            <View style={styles.itemBottom}>
+              <CommentWithCount count={phrase.commentCount} />
+              <LikeWithCount
+                activate={this.likeActivate}
+                unactivate={this.likeUnactivate}
+                isActive={phrase.currentUserLiked}
+                count={phrase.likeCount}
+              />
+              <FavoriteWithCount
+                activate={this.favoriteActivate}
+                unactivate={this.favoriteUnactivate}
+                isActive={phrase.currentUserFavorited}
+                count={phrase.favoriteCount}
+              />
+            </View>
           </View>
           <Chat
             onSend={this.onSend}
@@ -215,6 +300,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
+  },
+  itemBottom: {
+    marginTop: 15,
+    flexDirection: "row",
+    justifyContent: "space-around"
   }
 });
 
@@ -229,6 +319,10 @@ const mapDispatchToProps = {
   submitComment: PhraseCommentAction.submitComment,
   fetchPreviousPhraseComments: PhraseCommentAction.fetchPreviousPhraseComments,
   fetchFollowingPhraseComments: PhraseCommentAction.fetchFollowingPhraseComments,
+  likePhrase: PhrasesAction.likePhrase,
+  unlikePhrase: PhrasesAction.unlikePhrase,
+  favoritePhrase: PhrasesAction.favoritePhrase,
+  unfavoritePhrase: PhrasesAction.unfavoritePhrase,
   initializePhraseComments: PhraseCommentAction.initializePhraseComments,
   initializePhrase: PhrasesAction.initializePhrase
 };
