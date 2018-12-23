@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingVertical: 20,
     paddingHorizontal: 15,
-    borderBottomColor: colors.grayLevel4
+    borderBottomColor: colors.grayLevel4,
+    backgroundColor: "rgba(255, 255, 255, 0.7)"
   },
   firstContainer: {
     borderTopWidth: 1,

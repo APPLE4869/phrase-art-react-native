@@ -9,13 +9,13 @@ export default class SubcategoryModificationRequestDTO {
   readonly requestedSubcategoryId: string;
   readonly requestedSubcategoryName: string;
   readonly requestedSubcategoryIntroduction?: string;
-  readonly requestedSubcategoryImagePath?: string;
+  readonly requestedSubcategoryImageUrl?: string;
   readonly requestedVideoOnDemandNameKeys?: string[];
   readonly currentCategoryId: string;
   readonly currentCategoryName: string;
   readonly currentSubcategoryName: string;
   readonly currentSubcategoryIntroduction?: string;
-  readonly currentSubcategoryImagePath?: string;
+  readonly currentSubcategoryImageUrl?: string;
   readonly currentVideoOnDemandNameKeys?: string[];
   readonly approvedCount: number;
   readonly rejectedCount: number;
@@ -28,13 +28,13 @@ export default class SubcategoryModificationRequestDTO {
     requestedSubcategoryId,
     requestedSubcategoryName,
     requestedSubcategoryIntroduction,
-    requestedSubcategoryImagePath,
+    requestedSubcategoryImageUrl,
     requestedVideoOnDemandNameKeys,
     currentCategoryId,
     currentCategoryName,
     currentSubcategoryName,
     currentSubcategoryIntroduction,
-    currentSubcategoryImagePath,
+    currentSubcategoryImageUrl,
     currentVideoOnDemandNameKeys,
     approvedCount,
     rejectedCount
@@ -46,13 +46,13 @@ export default class SubcategoryModificationRequestDTO {
     this.requestedSubcategoryId = requestedSubcategoryId;
     this.requestedSubcategoryName = requestedSubcategoryName;
     this.requestedSubcategoryIntroduction = requestedSubcategoryIntroduction;
-    this.requestedSubcategoryImagePath = requestedSubcategoryImagePath;
+    this.requestedSubcategoryImageUrl = requestedSubcategoryImageUrl;
     this.requestedVideoOnDemandNameKeys = requestedVideoOnDemandNameKeys;
     this.currentCategoryId = currentCategoryId;
     this.currentCategoryName = currentCategoryName;
     this.currentSubcategoryName = currentSubcategoryName;
     this.currentSubcategoryIntroduction = currentSubcategoryIntroduction;
-    this.currentSubcategoryImagePath = currentSubcategoryImagePath;
+    this.currentSubcategoryImageUrl = currentSubcategoryImageUrl;
     this.currentVideoOnDemandNameKeys = currentVideoOnDemandNameKeys;
     this.approvedCount = approvedCount;
     this.rejectedCount = rejectedCount;
@@ -67,13 +67,13 @@ interface SubcategoryModificationRequestProperty {
   requestedSubcategoryId: string;
   requestedSubcategoryName: string;
   requestedSubcategoryIntroduction?: string;
-  requestedSubcategoryImagePath?: string;
+  requestedSubcategoryImageUrl?: string;
   requestedVideoOnDemandNameKeys?: string[];
   currentCategoryId: string;
   currentCategoryName: string;
   currentSubcategoryName: string;
   currentSubcategoryIntroduction?: string;
-  currentSubcategoryImagePath?: string;
+  currentSubcategoryImageUrl?: string;
   currentVideoOnDemandNameKeys?: string[];
   approvedCount: number;
   rejectedCount: number;

@@ -1,17 +1,22 @@
 import * as React from "react";
-import { FlatList, RefreshControl, StyleSheet } from "react-native";
+import { Dimensions, FlatList, RefreshControl, StyleSheet, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
+import CategoryDTO from "../../../models/dto/CategoryDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
+import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
+  navigateSubcategoryDetail: () => void;
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
+  category?: CategoryDTO;
+  subcategory?: SubcategoryDTO;
   phrasesListStatus: PhrasesListStatus;
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
   fetchPhrasesByCategoryId: any;
@@ -67,6 +72,27 @@ class PhraseItemList extends React.Component<Props, State> {
     }
   }
 
+  ListHeaderComponent() {
+    const { category, subcategory, navigateSubcategoryDetail } = this.props;
+
+    if (subcategory && subcategory.imageUrl) {
+      const { width: windowWidth } = Dimensions.get("window");
+      const height = windowWidth * 0.4;
+
+      return <TouchableOpacity onPress={navigateSubcategoryDetail} style={{ height }} />;
+    } else if (subcategory) {
+      const height = 70;
+      return <TouchableOpacity onPress={navigateSubcategoryDetail} style={{ height }} />;
+    } else if (category) {
+      const { width: windowWidth } = Dimensions.get("window");
+      const height = windowWidth * 0.4;
+
+      return <View style={{ height }} />;
+    }
+
+    return null;
+  }
+
   async fetchPhrases(offset: number = 0) {
     const { fetchPhrases, phrasesListStatus, fetchPhrasesByCategoryId, fetchPhrasesBySubcategoryId } = this.props;
 
@@ -103,6 +129,7 @@ class PhraseItemList extends React.Component<Props, State> {
         style={styles.container}
         data={this.props.phrases}
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
+        ListHeaderComponent={this.ListHeaderComponent()}
         renderItem={({ item: phrase, index }) => (
           <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
         )}
@@ -125,6 +152,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
+  category: state.categories.category,
+  subcategory: state.subcategories.subcategory,
   phrases: state.phrases.phrases,
   phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
