@@ -11,7 +11,7 @@ interface Props {
 }
 
 interface State {
-  bounceValue: any;
+  bounceValue: AnimatedValue;
 }
 
 class Quickblox extends React.Component<Props, State> {

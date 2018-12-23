@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, TouchableOpacity } from "react-native";
+import { Animated, TouchableOpacity } from "react-native";
 import { colors } from "../../../styles";
 import StandardText from "../../atoms/StandardText";
 
@@ -10,11 +10,36 @@ interface Props {
   unactivate: () => void;
 }
 
-export default class LikeWithCount extends React.Component<Props> {
+interface State {
+  imageSize: any;
+  imageLeft: any;
+}
+
+const imageDefaultSize = 19;
+const imageMaxSize = 24;
+
+export default class LikeWithCount extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    const animateValue = this.props.isActive ? 2 : 0;
+    this.state = { imageSize: new Animated.Value(animateValue), imageLeft: new Animated.Value(animateValue) };
+
     this.onPress = this.onPress.bind(this);
+  }
+
+  imageSize() {
+    return this.state.imageSize.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [imageDefaultSize, imageMaxSize, imageDefaultSize]
+    });
+  }
+
+  imageLeft() {
+    return this.state.imageSize.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [0, (imageDefaultSize - imageMaxSize) / 2, 0]
+    });
   }
 
   onPress() {
@@ -25,6 +50,19 @@ export default class LikeWithCount extends React.Component<Props> {
     } else {
       activate();
     }
+
+    const toValue = isActive ? 0 : 2;
+    const { imageSize, imageLeft } = this.state;
+    Animated.parallel([
+      Animated.spring(imageSize, {
+        toValue,
+        speed: 1.5
+      }),
+      Animated.spring(imageLeft, {
+        toValue,
+        speed: 1.5
+      })
+    ]).start();
   }
 
   imageSource() {
@@ -52,9 +90,13 @@ export default class LikeWithCount extends React.Component<Props> {
       <TouchableOpacity
         onPress={this.onPress}
         activeOpacity={1}
-        style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: 43 }}
+        style={{ flexDirection: "row", alignItems: "center", justifyContent: "flex-end", width: 43 }}
       >
-        <Image style={{ width: 19, height: 19 }} resizeMode="contain" source={this.imageSource()} />
+        <Animated.Image
+          style={{ width: this.imageSize(), height: this.imageSize(), position: "absolute", left: this.imageLeft() }}
+          resizeMode="contain"
+          source={this.imageSource()}
+        />
         {count > 0 ? <StandardText text={String(count)} fontSize={11} textStyle={{ color: this.textColor() }} /> : null}
       </TouchableOpacity>
     );

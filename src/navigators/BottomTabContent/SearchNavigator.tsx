@@ -22,4 +22,4 @@ const SearchStack = createStackNavigator(
 
 export default SearchStack;
 
-export const visibleBottomTabIndex = [0, 1, 2];
+export const visibleBottomTabIndex = [0, 1];

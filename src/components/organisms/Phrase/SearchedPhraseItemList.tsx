@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { FlatList, RefreshControl, StyleSheet } from "react-native";
 import { NavigationEventsProps } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
@@ -7,7 +7,6 @@ import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import { signinRequestAlert } from "../../../support/alert";
-import StandardText from "../../atoms/StandardText";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
