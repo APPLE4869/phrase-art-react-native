@@ -2,12 +2,21 @@ import * as React from "react";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "react-navigation";
 import { colors } from "../styles";
-import ConfigureNavigator from "./BottomTabContent/ConfigureNavigator";
-import PhraseNavigator from "./BottomTabContent/PhraseNavigator";
-import UpdateRequestNavigator from "./BottomTabContent/UpdateRequestNavigator";
+import ConfigureNavigator, {
+  visibleBottomTabIndex as configureVisibleBottomTabIndex
+} from "./BottomTabContent/ConfigureNavigator";
+import PhraseNavigator, {
+  visibleBottomTabIndex as phraseVisibleBottomTabIndex
+} from "./BottomTabContent/PhraseNavigator";
+import SearchNavigator, {
+  visibleBottomTabIndex as searchVisibleBottomTabIndex
+} from "./BottomTabContent/SearchNavigator";
+import UpdateRequestNavigator, {
+  visibleBottomTabIndex as updateRequestVisibleBottomTabIndex
+} from "./BottomTabContent/UpdateRequestNavigator";
 
 // タブアイコン
-type TabIconType = "phrase" | "updateRequest" | "configure";
+type TabIconType = "phrase" | "updateRequest" | "search" | "configure";
 const tabIconDir = "../../assets/images/icon/navigation";
 const tabIconPaths = {
   phrase: {
@@ -17,6 +26,10 @@ const tabIconPaths = {
   updateRequest: {
     active: require(`${tabIconDir}/update-request-active.png`),
     inactive: require(`${tabIconDir}/update-request.png`)
+  },
+  search: {
+    active: require(`${tabIconDir}/search-active.png`),
+    inactive: require(`${tabIconDir}/search.png`)
   },
   configure: {
     active: require(`${tabIconDir}/configure-active.png`),
@@ -28,12 +41,21 @@ const navigationOptionsConfigure = (title: string, iconType: TabIconType) => ({
   title,
   tabBarIcon: ({ focused }: { focused: boolean }) => {
     return focused ? (
-      <Image style={{ marginTop: 2 }} source={tabIconPaths[iconType].active} />
+      <Image style={{ width: 28, height: 28 }} resizeMode="contain" source={tabIconPaths[iconType].active} />
     ) : (
-      <Image style={{ marginTop: 2 }} source={tabIconPaths[iconType].inactive} />
+      <Image style={{ width: 28, height: 28 }} resizeMode="contain" source={tabIconPaths[iconType].inactive} />
     );
   }
 });
+
+type BottomTabTypes = "PhraseTab" | "UpdateRequestTab" | "SearchTab" | "ConfigureTab";
+
+const visibleBottomTabScreenIndex = {
+  PhraseTab: configureVisibleBottomTabIndex,
+  UpdateRequestTab: phraseVisibleBottomTabIndex,
+  SearchTab: searchVisibleBottomTabIndex,
+  ConfigureTab: updateRequestVisibleBottomTabIndex
+};
 
 export default createBottomTabNavigator(
   {
@@ -45,6 +67,10 @@ export default createBottomTabNavigator(
       screen: UpdateRequestNavigator,
       navigationOptions: navigationOptionsConfigure("申請", "updateRequest")
     },
+    SearchTab: {
+      screen: SearchNavigator,
+      navigationOptions: navigationOptionsConfigure("検索", "search")
+    },
     ConfigureTab: {
       screen: ConfigureNavigator,
       navigationOptions: navigationOptionsConfigure("設定", "configure")
@@ -53,7 +79,10 @@ export default createBottomTabNavigator(
   {
     backBehavior: "none",
     navigationOptions: ({ navigation }) => {
-      return { tabBarVisible: navigation.state.index === 0 };
+      const currentRouteName = navigation.state.routeName as BottomTabTypes;
+      const currentIndex = navigation.state.index;
+      const isVisible = visibleBottomTabScreenIndex[currentRouteName].includes(currentIndex);
+      return { tabBarVisible: isVisible };
     },
     tabBarOptions: {
       activeTintColor: colors.clickable,
@@ -71,6 +100,7 @@ export default createBottomTabNavigator(
         marginTop: 2,
         marginBottom: 3,
         fontSize: 10,
+        letterSpacing: 0.3,
         fontWeight: "bold"
       }
     }

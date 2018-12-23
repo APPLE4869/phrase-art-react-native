@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Alert, Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
+import { signinRequestAlert } from "../../../support/alert";
 import HeaderMenuButton from "../../atoms/HeaderMenuButton";
 import CategoryPanelOnList from "../../organisms/CategoryPanelOnList";
 import PhraseItemList from "../../organisms/Phrase/PhraseItemList";
@@ -25,7 +26,11 @@ class PhraseListScreen extends React.Component<Props> {
       headerLeft: <HeaderMenuButton onPress={onPressForLeft} title={titleForLeft} />,
       headerRight: (
         <TouchableOpacity activeOpacity={1} onPress={onPressForRight}>
-          <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/plus.png")} />
+          <Image
+            style={{ width: 20, height: 20 }}
+            resizeMode="contain"
+            source={require("../../../../assets/images/icon/plus.png")}
+          />
         </TouchableOpacity>
       )
     };
@@ -87,11 +92,7 @@ class PhraseListScreen extends React.Component<Props> {
     const { auth } = this.props;
 
     if (!auth || !auth.jwt) {
-      Alert.alert(
-        "ログインする必要があります",
-        "名言の登録を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）",
-        [{ text: "OK" }]
-      );
+      signinRequestAlert("名言の登録申請", this.props.navigation);
       return;
     }
 
@@ -110,6 +111,7 @@ class PhraseListScreen extends React.Component<Props> {
           <PhraseItemList
             navigateDetail={this.navigateDetail}
             navigateSubcategoryDetail={this.navigateSubcategoryDetail}
+            navigation={this.props.navigation}
           />
         </View>
       </DefaultTemplate>

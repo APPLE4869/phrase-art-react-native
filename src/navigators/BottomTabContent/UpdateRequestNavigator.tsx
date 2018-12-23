@@ -20,3 +20,5 @@ const PhraseStack = createStackNavigator(
 );
 
 export default PhraseStack;
+
+export const visibleBottomTabIndex = [0];

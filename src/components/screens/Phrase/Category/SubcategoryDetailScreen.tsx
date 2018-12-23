@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Alert, Image, TouchableOpacity } from "react-native";
+import { Image, TouchableOpacity } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import { State as RootState } from "../../../../reducers";
+import { signinRequestAlert } from "../../../../support/alert";
 import SubcategoryDetail from "../../../organisms/Category/SubcategoryDetail";
 import DefaultTemplate from "../../../templates/DefaultTemplate";
 
@@ -33,14 +34,10 @@ class SubcategoryDetailScreen extends React.Component<Props> {
   }
 
   handleEditDialog() {
-    const { auth } = this.props;
+    const { auth, navigation } = this.props;
 
     if (!auth || !auth.jwt) {
-      Alert.alert(
-        "ログインする必要があります",
-        "サブカテゴリーの修正を申請するには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）",
-        [{ text: "OK" }]
-      );
+      signinRequestAlert("サブカテゴリーの修正申請をする", navigation);
       return;
     }
 
