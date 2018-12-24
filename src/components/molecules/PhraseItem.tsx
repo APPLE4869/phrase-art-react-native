@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import PhraseDTO from "../../models/dto/PhraseDTO";
 import { colors } from "../../styles";
 import InlineCategoryNames from "../atoms/InlineCategoryNames";
@@ -22,19 +22,26 @@ interface Props {
 interface State {
   isInProgressLikeAction: boolean;
   isInProgressFavoriteAction: boolean;
+  isScrollViewAtContent: boolean;
 }
 
 export default class PhraseItem extends React.Component<Props, State> {
+  private contentHeightThreshold: number;
+
   constructor(props: Props) {
     super(props);
 
-    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false };
+    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false, isScrollViewAtContent: false };
 
     this.navigatePhraseDetail = this.navigatePhraseDetail.bind(this);
     this.likeActivate = this.likeActivate.bind(this);
     this.likeUnactivate = this.likeUnactivate.bind(this);
     this.favoriteActivate = this.favoriteActivate.bind(this);
     this.favoriteUnactivate = this.favoriteUnactivate.bind(this);
+    this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
+
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.3;
   }
 
   navigatePhraseDetail() {
@@ -94,8 +101,15 @@ export default class PhraseItem extends React.Component<Props, State> {
     this.setState({ isInProgressFavoriteAction: false });
   }
 
+  onLayoutOfContent(e: any) {
+    if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
+      this.setState({ isScrollViewAtContent: true });
+    }
+  }
+
   render() {
     const { phrase, isFirst } = this.props;
+    const { isScrollViewAtContent } = this.state;
 
     return (
       <TouchableOpacity
@@ -107,7 +121,21 @@ export default class PhraseItem extends React.Component<Props, State> {
           <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
           <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
         </View>
-        <StandardText text={phrase.content} fontSize={14} textStyle={{ marginVertical: 10 }} />
+        {isScrollViewAtContent ? (
+          <View style={{ width: "100%", marginVertical: 10 }}>
+            <StandardText text={phrase.content} fontSize={14} textStyle={{ height: this.contentHeightThreshold }} />
+            <Text style={{ textAlign: "center", lineHeight: 5, color: colors.grayLevel2 }}>
+              .{"\n"}.{"\n"}.
+            </Text>
+          </View>
+        ) : (
+          <StandardText
+            text={phrase.content}
+            fontSize={14}
+            textStyle={{ marginVertical: 10 }}
+            onLayout={this.onLayoutOfContent}
+          />
+        )}
         <StandardText text={phrase.authorName} fontSize={12} />
         <View style={styles.itemBottom}>
           <CommentWithCount count={phrase.commentCount} />

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Keyboard, Platform, StyleSheet, View } from "react-native";
+import { Dimensions, Keyboard, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { IMessage } from "react-native-gifted-chat";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
@@ -38,15 +38,17 @@ interface Props {
 interface State {
   isInProgressLikeAction: boolean;
   isInProgressFavoriteAction: boolean;
+  isScrollViewAtContent: boolean;
 }
 
 class Detail extends React.Component<Props, State> {
   private firstFetchCommentId: string = "";
+  private contentHeightThreshold: number;
 
   constructor(props: Props) {
     super(props);
 
-    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false };
+    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false, isScrollViewAtContent: false };
 
     const phraseId = this.props.navigation.getParam("phraseId");
 
@@ -58,6 +60,10 @@ class Detail extends React.Component<Props, State> {
     this.likeUnactivate = this.likeUnactivate.bind(this);
     this.favoriteActivate = this.favoriteActivate.bind(this);
     this.favoriteUnactivate = this.favoriteUnactivate.bind(this);
+    this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
+
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.45;
 
     this.initializeComments(phraseId);
   }
@@ -176,6 +182,12 @@ class Detail extends React.Component<Props, State> {
     this.setState({ isInProgressFavoriteAction: false });
   }
 
+  onLayoutOfContent(e: any) {
+    if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
+      this.setState({ isScrollViewAtContent: true });
+    }
+  }
+
   messages() {
     return this.props.phraseComments.map(comment => {
       const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
@@ -196,6 +208,7 @@ class Detail extends React.Component<Props, State> {
   render() {
     const { phrase } = this.props;
     const { currentUser } = this.props.auth; // JWTが出力されるとセキュリティ的にまずいので注意
+    const { isScrollViewAtContent } = this.state;
 
     if (phrase === undefined) {
       return null;
@@ -208,7 +221,18 @@ class Detail extends React.Component<Props, State> {
             <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
             <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
           </View>
-          <StandardText text={phrase.content} fontSize={16} textStyle={{ marginVertical: 13 }} />
+          {isScrollViewAtContent ? (
+            <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 13 }}>
+              <StandardText text={phrase.content} fontSize={16} />
+            </ScrollView>
+          ) : (
+            <StandardText
+              text={phrase.content}
+              fontSize={16}
+              textStyle={{ marginVertical: 13 }}
+              onLayout={this.onLayoutOfContent}
+            />
+          )}
           <StandardText text={phrase.authorName} fontSize={14} />
           <View style={styles.itemBottom}>
             <CommentWithCount count={phrase.commentCount} />

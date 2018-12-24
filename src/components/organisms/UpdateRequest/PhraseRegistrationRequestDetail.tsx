@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, Dimensions, ScrollView, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as PhraseRegistrationRequestAction from "../../../actions/UpdateRequest/phraseRegistrationRequest";
@@ -32,16 +32,23 @@ interface Props {
 
 interface State {
   choiceButtonGroupActiveIndex?: 0 | 1;
+  isScrollViewAtContent: boolean;
 }
 
 class RegistrationRequestDetail extends React.Component<Props, State> {
+  private contentHeightThreshold: number;
+
   constructor(props: Props) {
     super(props);
 
-    this.state = { choiceButtonGroupActiveIndex: undefined };
+    this.state = { choiceButtonGroupActiveIndex: undefined, isScrollViewAtContent: false };
 
     this.onPressForPositive = this.onPressForPositive.bind(this);
     this.onPressForNegative = this.onPressForNegative.bind(this);
+    this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
+
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.35;
 
     this.initialize();
   }
@@ -114,9 +121,15 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     return decisionExpiresAtMoment.diff(currentMoment, "minutes") < 0;
   }
 
+  onLayoutOfContent(e: any) {
+    if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
+      this.setState({ isScrollViewAtContent: true });
+    }
+  }
+
   render() {
     const { phraseRegistrationRequest: request } = this.props;
-    const { choiceButtonGroupActiveIndex } = this.state;
+    const { choiceButtonGroupActiveIndex, isScrollViewAtContent } = this.state;
 
     if (!request) {
       return null;
@@ -136,7 +149,18 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
           <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
         </View>
         <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-        <StandardText text={request.phraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
+        {isScrollViewAtContent ? (
+          <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 10 }}>
+            <StandardText text={request.phraseContent} fontSize={15} />
+          </ScrollView>
+        ) : (
+          <StandardText
+            text={request.phraseContent}
+            fontSize={15}
+            textStyle={{ marginVertical: 10 }}
+            onLayout={this.onLayoutOfContent}
+          />
+        )}
         <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE} />

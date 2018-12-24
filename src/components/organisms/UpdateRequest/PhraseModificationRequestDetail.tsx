@@ -1,6 +1,6 @@
 import moment from "moment";
 import * as React from "react";
-import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as PhraseModificationRequestAction from "../../../actions/UpdateRequest/phraseModificationRequest";
@@ -34,18 +34,25 @@ interface Props {
 interface State {
   choiceButtonGroupActiveIndex?: 0 | 1;
   isVisibleModal: boolean;
+  isScrollViewAtContent: boolean;
 }
 
 class ModificationRequestDetail extends React.Component<Props, State> {
+  private contentHeightThreshold: number;
+
   constructor(props: Props) {
     super(props);
 
-    this.state = { choiceButtonGroupActiveIndex: undefined, isVisibleModal: false };
+    this.state = { choiceButtonGroupActiveIndex: undefined, isVisibleModal: false, isScrollViewAtContent: false };
 
     this.onPressForPositive = this.onPressForPositive.bind(this);
     this.onPressForNegative = this.onPressForNegative.bind(this);
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
+
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.32;
 
     this.initialize();
   }
@@ -126,9 +133,15 @@ class ModificationRequestDetail extends React.Component<Props, State> {
     this.setState({ isVisibleModal: false });
   }
 
+  onLayoutOfContent(e: any) {
+    if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
+      this.setState({ isScrollViewAtContent: true });
+    }
+  }
+
   render() {
     const { phraseModificationRequest: request } = this.props;
-    const { choiceButtonGroupActiveIndex, isVisibleModal } = this.state;
+    const { choiceButtonGroupActiveIndex, isVisibleModal, isScrollViewAtContent } = this.state;
 
     if (!request) {
       return null;
@@ -151,7 +164,18 @@ class ModificationRequestDetail extends React.Component<Props, State> {
           categoryName={request.requestedCategoryName}
           subcategoryName={request.requestedSubcategoryName}
         />
-        <StandardText text={request.requestedPhraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
+        {isScrollViewAtContent ? (
+          <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 10 }}>
+            <StandardText text={request.requestedPhraseContent} fontSize={15} />
+          </ScrollView>
+        ) : (
+          <StandardText
+            text={request.requestedPhraseContent}
+            fontSize={15}
+            textStyle={{ marginVertical: 10 }}
+            onLayout={this.onLayoutOfContent}
+          />
+        )}
         <StandardText text={request.requestedPhraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE} />
