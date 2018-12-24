@@ -3,12 +3,14 @@ export default class VideoOnDemandDTO {
   readonly username: string;
   readonly imageUrl: string;
   readonly url: string;
+  readonly appDeepLink?: string;
 
-  constructor({ nameKey, username, imageUrl, url }: VideoOnDemandProperty) {
+  constructor({ nameKey, username, imageUrl, url, appDeepLink }: VideoOnDemandProperty) {
     this.nameKey = nameKey;
     this.username = username;
     this.imageUrl = imageUrl;
     this.url = url;
+    this.appDeepLink = appDeepLink;
   }
 }
 
@@ -17,6 +19,7 @@ interface VideoOnDemandProperty {
   username: string;
   imageUrl: string;
   url: string;
+  appDeepLink?: string;
 }
 
 export interface VideoOnDemandsResponse {

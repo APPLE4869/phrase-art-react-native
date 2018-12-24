@@ -324,11 +324,6 @@ const styles = StyleSheet.create({
     width: "100%",
     minHeight: 100,
     flex: 1,
-    borderTopColor: colors.grayLevel4,
-    borderRightColor: "transparent",
-    borderLeftColor: "transparent",
-    borderBottomColor: "transparent",
-    borderWidth: 1,
     backgroundColor: colors.grayLevel5
   }
 });

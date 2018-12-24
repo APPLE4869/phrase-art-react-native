@@ -250,7 +250,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     paddingTop: 20,
     paddingBottom: 5,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
+    borderTopColor: "transparent",
+    borderRightColor: "transparent",
+    borderLeftColor: "transparent",
+    borderBottomColor: colors.grayLevel4,
+    borderWidth: 1,
   },
   itemCategoryArea: {
     flexDirection: "row",

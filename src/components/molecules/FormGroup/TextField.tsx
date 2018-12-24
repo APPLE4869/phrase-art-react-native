@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     color: colors.grayLevel2,
-    fontSize: 13,
+    fontSize: 14,
     letterSpacing: 1.5,
     marginBottom: 5
   },
