@@ -6,7 +6,6 @@ import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
-import { signinRequestAlert } from "../../../support/alert";
 import StandardText from "../../atoms/StandardText";
 import PhraseItem from "../../molecules/PhraseItem";
 
@@ -16,11 +15,6 @@ interface Props {
   favoritePhrases: PhraseDTO[];
   fetchFavoritePhrases: any;
   initializeFavoritePhrase: any;
-  likePhrase: any;
-  unlikePhrase: any;
-  favoritePhrase: any;
-  unfavoritePhrase: any;
-  auth: any;
 }
 
 interface State {
@@ -28,20 +22,16 @@ interface State {
   loading: boolean;
   stopFetching: boolean;
   refreshLoading: boolean;
-  unfavoriteCount: number;
 }
 
+// TODO : 現状の仕様だと、途中でお気に入りを解除した際にoffsetがズレるバグがあるので、それをうまく調整するように改修する。
 class FavoritePhraseItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { initializing: true, loading: false, stopFetching: false, refreshLoading: false, unfavoriteCount: 0 };
+    this.state = { initializing: true, loading: false, stopFetching: false, refreshLoading: false };
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.likeAction = this.likeAction.bind(this);
-    this.unlikeAction = this.unlikeAction.bind(this);
-    this.favoriteAction = this.favoriteAction.bind(this);
-    this.unfavoriteAction = this.unfavoriteAction.bind(this);
 
     this.initialize();
   }
@@ -61,9 +51,8 @@ class FavoritePhraseItemList extends React.Component<Props, State> {
     this.setState({ loading: true });
 
     const { favoritePhrases, fetchFavoritePhrases } = this.props;
-    const { unfavoriteCount } = this.state;
     const offset: number = favoritePhrases.length;
-    await fetchFavoritePhrases(offset + unfavoriteCount);
+    await fetchFavoritePhrases(offset);
 
     if (this.props.favoritePhrases.length === offset) {
       // 取得件数が0の場合は、それ以降の取得処理を停止
@@ -79,7 +68,6 @@ class FavoritePhraseItemList extends React.Component<Props, State> {
     const { initializeFavoritePhrase, fetchFavoritePhrases } = this.props;
 
     initializeFavoritePhrase();
-    this.setState({ unfavoriteCount: 0 });
 
     await fetchFavoritePhrases();
     this.setState({ initializing: false, stopFetching: false });
@@ -88,56 +76,6 @@ class FavoritePhraseItemList extends React.Component<Props, State> {
   isUnableToFetch(): boolean {
     const { loading, stopFetching, refreshLoading } = this.state;
     return loading || stopFetching || refreshLoading;
-  }
-
-  likeAction(phrase: PhraseDTO) {
-    const { auth, likePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    likePhrase(phrase);
-  }
-
-  unlikeAction(phrase: PhraseDTO) {
-    const { auth, unlikePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    unlikePhrase(phrase);
-  }
-
-  favoriteAction(phrase: PhraseDTO) {
-    const { auth, favoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    favoritePhrase(phrase);
-
-    const { unfavoriteCount } = this.state;
-    this.setState({ unfavoriteCount: unfavoriteCount - 1 });
-  }
-
-  unfavoriteAction(phrase: PhraseDTO) {
-    const { auth, unfavoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    unfavoritePhrase(phrase);
-
-    const { unfavoriteCount } = this.state;
-    this.setState({ unfavoriteCount: unfavoriteCount + 1 });
   }
 
   listEmptyComponent() {
@@ -156,6 +94,7 @@ class FavoritePhraseItemList extends React.Component<Props, State> {
   }
 
   render() {
+    const { navigation } = this.props;
     const { refreshLoading } = this.state;
 
     return (
@@ -165,10 +104,7 @@ class FavoritePhraseItemList extends React.Component<Props, State> {
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         renderItem={({ item: phrase, index }) => (
           <PhraseItem
-            likeAction={this.likeAction}
-            unlikeAction={this.unlikeAction}
-            favoriteAction={this.favoriteAction}
-            unfavoriteAction={this.unfavoriteAction}
+            navigation={navigation}
             navigateDetail={this.props.navigateDetail}
             phrase={phrase}
             isFirst={index === 0}
@@ -199,17 +135,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth,
   favoritePhrases: state.phrases.favoritePhrases
 });
 
 const mapDispatchToProps = {
   fetchFavoritePhrases: PhrasesAction.fetchFavoritePhrases,
-  initializeFavoritePhrase: PhrasesAction.initializeFavoritePhrase,
-  likePhrase: PhrasesAction.likePhrase,
-  unlikePhrase: PhrasesAction.unlikePhrase,
-  favoritePhrase: PhrasesAction.favoritePhrase,
-  unfavoritePhrase: PhrasesAction.unfavoritePhrase
+  initializeFavoritePhrase: PhrasesAction.initializeFavoritePhrase
 };
 
 const enhancer = connect(

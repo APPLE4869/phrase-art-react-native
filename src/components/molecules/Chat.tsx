@@ -74,6 +74,7 @@ class Chat extends React.Component<Props> {
               borderColor: colors.grayLevel4,
               borderWidth: 1,
               borderRadius: 20,
+              marginTop: 2,
               borderTopLeftRadius: 3,
               padding: 7
             },

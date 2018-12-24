@@ -1,27 +1,21 @@
 import * as React from "react";
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { NavigationParams } from "react-navigation";
 import PhraseDTO from "../../models/dto/PhraseDTO";
 import { colors } from "../../styles";
 import InlineCategoryNames from "../atoms/InlineCategoryNames";
-import CommentWithCount from "../atoms/PhraseItem/CommentWithCount";
-import FavoriteWithCount from "../atoms/PhraseItem/FavoriteWithCount";
-import LikeWithCount from "../atoms/PhraseItem/LikeWithCount";
 import StandardText from "../atoms/StandardText";
+import PhraseBottomActions from "../molecules/PhraseBottomActions";
 import ReportIcon from "./ReportIcon";
 
 interface Props {
+  navigation: NavigationParams;
   phrase: PhraseDTO;
   navigateDetail: (phraseId: string) => void;
   isFirst?: boolean;
-  likeAction: (phrase: PhraseDTO) => void;
-  unlikeAction: (phrase: PhraseDTO) => void;
-  favoriteAction: (phrase: PhraseDTO) => void;
-  unfavoriteAction: (phrase: PhraseDTO) => void;
 }
 
 interface State {
-  isInProgressLikeAction: boolean;
-  isInProgressFavoriteAction: boolean;
   isScrollViewAtContent: boolean;
 }
 
@@ -31,13 +25,9 @@ export default class PhraseItem extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false, isScrollViewAtContent: false };
+    this.state = { isScrollViewAtContent: false };
 
     this.navigatePhraseDetail = this.navigatePhraseDetail.bind(this);
-    this.likeActivate = this.likeActivate.bind(this);
-    this.likeUnactivate = this.likeUnactivate.bind(this);
-    this.favoriteActivate = this.favoriteActivate.bind(this);
-    this.favoriteUnactivate = this.favoriteUnactivate.bind(this);
     this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
 
     const windowSize = Dimensions.get("window");
@@ -49,58 +39,6 @@ export default class PhraseItem extends React.Component<Props, State> {
     navigateDetail(phrase.id);
   }
 
-  async likeActivate() {
-    if (this.state.isInProgressLikeAction) {
-      return;
-    }
-
-    this.setState({ isInProgressLikeAction: true });
-
-    const { phrase, likeAction } = this.props;
-    await likeAction(phrase);
-
-    this.setState({ isInProgressLikeAction: false });
-  }
-
-  async likeUnactivate() {
-    if (this.state.isInProgressLikeAction) {
-      return;
-    }
-
-    this.setState({ isInProgressLikeAction: true });
-
-    const { phrase, unlikeAction } = this.props;
-    await unlikeAction(phrase);
-
-    this.setState({ isInProgressLikeAction: false });
-  }
-
-  async favoriteActivate() {
-    if (this.state.isInProgressFavoriteAction) {
-      return;
-    }
-
-    this.setState({ isInProgressFavoriteAction: true });
-
-    const { phrase, favoriteAction } = this.props;
-    await favoriteAction(phrase);
-
-    this.setState({ isInProgressFavoriteAction: false });
-  }
-
-  async favoriteUnactivate() {
-    if (this.state.isInProgressFavoriteAction) {
-      return;
-    }
-
-    this.setState({ isInProgressFavoriteAction: true });
-
-    const { phrase, unfavoriteAction } = this.props;
-    await unfavoriteAction(phrase);
-
-    this.setState({ isInProgressFavoriteAction: false });
-  }
-
   onLayoutOfContent(e: any) {
     if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
       this.setState({ isScrollViewAtContent: true });
@@ -108,7 +46,7 @@ export default class PhraseItem extends React.Component<Props, State> {
   }
 
   render() {
-    const { phrase, isFirst } = this.props;
+    const { phrase, navigation, isFirst } = this.props;
     const { isScrollViewAtContent } = this.state;
 
     return (
@@ -137,21 +75,7 @@ export default class PhraseItem extends React.Component<Props, State> {
           />
         )}
         <StandardText text={phrase.authorName} fontSize={12} />
-        <View style={styles.itemBottom}>
-          <CommentWithCount count={phrase.commentCount} />
-          <LikeWithCount
-            activate={this.likeActivate}
-            unactivate={this.likeUnactivate}
-            isActive={phrase.currentUserLiked}
-            count={phrase.likeCount}
-          />
-          <FavoriteWithCount
-            activate={this.favoriteActivate}
-            unactivate={this.favoriteUnactivate}
-            isActive={phrase.currentUserFavorited}
-            count={phrase.favoriteCount}
-          />
-        </View>
+        <PhraseBottomActions navigation={navigation} phrase={phrase} />
       </TouchableOpacity>
     );
   }

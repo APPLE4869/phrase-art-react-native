@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Dimensions, FlatList, RefreshControl, StyleSheet, TouchableOpacity, View } from "react-native";
-import { NavigationEventsProps } from "react-navigation";
+import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
@@ -10,11 +10,10 @@ import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
-import { signinRequestAlert } from "../../../support/alert";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
-  navigation: NavigationEventsProps;
+  navigation: NavigationParams;
   navigateSubcategoryDetail: () => void;
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
@@ -24,13 +23,8 @@ interface Props {
   fetchPhrases: any; // typeof PhrasesAction.fetchPhrases;
   fetchPhrasesByCategoryId: any;
   fetchPhrasesBySubcategoryId: any;
-  likePhrase: any;
-  unlikePhrase: any;
-  favoritePhrase: any;
-  unfavoritePhrase: any;
   initializePhrases: any;
   initializePhrasesListStatus: any;
-  auth: any;
 }
 
 interface State {
@@ -46,10 +40,6 @@ class PhraseItemList extends React.Component<Props, State> {
     this.state = { loading: false, stopFetching: false, refreshLoading: false };
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.likeAction = this.likeAction.bind(this);
-    this.unlikeAction = this.unlikeAction.bind(this);
-    this.favoriteAction = this.favoriteAction.bind(this);
-    this.unfavoriteAction = this.unfavoriteAction.bind(this);
 
     this.props.initializePhrases();
     this.props.initializePhrasesListStatus();
@@ -133,51 +123,8 @@ class PhraseItemList extends React.Component<Props, State> {
     return loading || stopFetching || refreshLoading;
   }
 
-  likeAction(phrase: PhraseDTO) {
-    const { auth, likePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    likePhrase(phrase);
-  }
-
-  unlikeAction(phrase: PhraseDTO) {
-    const { auth, unlikePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    unlikePhrase(phrase);
-  }
-
-  favoriteAction(phrase: PhraseDTO) {
-    const { auth, favoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    favoritePhrase(phrase);
-  }
-
-  unfavoriteAction(phrase: PhraseDTO) {
-    const { auth, unfavoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    unfavoritePhrase(phrase);
-  }
-
   render() {
+    const { navigation } = this.props;
     const { refreshLoading } = this.state;
 
     return (
@@ -188,10 +135,7 @@ class PhraseItemList extends React.Component<Props, State> {
         ListHeaderComponent={this.ListHeaderComponent()}
         renderItem={({ item: phrase, index }) => (
           <PhraseItem
-            likeAction={this.likeAction}
-            unlikeAction={this.unlikeAction}
-            favoriteAction={this.favoriteAction}
-            unfavoriteAction={this.unfavoriteAction}
+            navigation={navigation}
             navigateDetail={this.props.navigateDetail}
             phrase={phrase}
             isFirst={index === 0}
@@ -216,7 +160,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth,
   category: state.categories.category,
   subcategory: state.subcategories.subcategory,
   phrases: state.phrases.phrases,
@@ -227,10 +170,6 @@ const mapDispatchToProps = {
   fetchPhrases: PhrasesAction.fetchPhrases,
   fetchPhrasesByCategoryId: PhrasesAction.fetchPhrasesByCategoryId,
   fetchPhrasesBySubcategoryId: PhrasesAction.fetchPhrasesBySubcategoryId,
-  likePhrase: PhrasesAction.likePhrase,
-  unlikePhrase: PhrasesAction.unlikePhrase,
-  favoritePhrase: PhrasesAction.favoritePhrase,
-  unfavoritePhrase: PhrasesAction.unfavoritePhrase,
   initializePhrases: PhrasesAction.initializePhrases,
   initializePhrasesListStatus: PhrasesListStatusAction.initializePhrasesListStatus
 };

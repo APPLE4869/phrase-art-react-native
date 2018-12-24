@@ -1,5 +1,15 @@
 import * as React from "react";
-import { Dimensions, Keyboard, Platform, ScrollView, StyleSheet, View } from "react-native";
+import {
+  Animated,
+  Dimensions,
+  Image,
+  Keyboard,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View
+} from "react-native";
 import { IMessage } from "react-native-gifted-chat";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
@@ -8,14 +18,13 @@ import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseCommentDTO from "../../../models/dto/Phrase/PhraseCommentDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
+import { colors } from "../../../styles";
 import { signinRequestAlert } from "../../../support/alert";
 import { replaceDateStringForIOS } from "../../../support/replace";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
-import CommentWithCount from "../../atoms/PhraseItem/CommentWithCount";
-import FavoriteWithCount from "../../atoms/PhraseItem/FavoriteWithCount";
-import LikeWithCount from "../../atoms/PhraseItem/LikeWithCount";
 import StandardText from "../../atoms/StandardText";
 import Chat from "../../molecules/Chat";
+import PhraseBottomActions from "../../molecules/PhraseBottomActions";
 import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
@@ -27,10 +36,6 @@ interface Props {
   phraseComments: PhraseCommentDTO[];
   fetchPreviousPhraseComments: any;
   fetchFollowingPhraseComments: any;
-  likePhrase: any;
-  unlikePhrase: any;
-  favoritePhrase: any;
-  unfavoritePhrase: any;
   initializePhraseComments: any;
   initializePhrase: any;
 }
@@ -39,16 +44,30 @@ interface State {
   isInProgressLikeAction: boolean;
   isInProgressFavoriteAction: boolean;
   isScrollViewAtContent: boolean;
+  itemAnimationMaxHeight: any;
+  isShowItem: boolean;
 }
 
 class Detail extends React.Component<Props, State> {
   private firstFetchCommentId: string = "";
   private contentHeightThreshold: number;
+  private itemDefaultMaxHeight: number = 1000;
+  private keyboardDidShowListener: any;
 
   constructor(props: Props) {
     super(props);
 
-    this.state = { isInProgressLikeAction: false, isInProgressFavoriteAction: false, isScrollViewAtContent: false };
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.45;
+    this.itemDefaultMaxHeight = windowSize.height;
+
+    this.state = {
+      isInProgressLikeAction: false,
+      isInProgressFavoriteAction: false,
+      isScrollViewAtContent: false,
+      itemAnimationMaxHeight: new Animated.Value(this.itemDefaultMaxHeight),
+      isShowItem: true
+    };
 
     const phraseId = this.props.navigation.getParam("phraseId");
 
@@ -56,16 +75,24 @@ class Detail extends React.Component<Props, State> {
     this.props.fetchPhraseById(phraseId);
 
     this.onSendComment = this.onSendComment.bind(this);
-    this.likeActivate = this.likeActivate.bind(this);
-    this.likeUnactivate = this.likeUnactivate.bind(this);
-    this.favoriteActivate = this.favoriteActivate.bind(this);
-    this.favoriteUnactivate = this.favoriteUnactivate.bind(this);
     this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
-
-    const windowSize = Dimensions.get("window");
-    this.contentHeightThreshold = windowSize.height * 0.45;
+    this.slideUpItem = this.slideUpItem.bind(this);
+    this.slideDownItem = this.slideDownItem.bind(this);
+    this.keyboardDidShow = this.keyboardDidShow.bind(this);
 
     this.initializeComments(phraseId);
+  }
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", this.keyboardDidShow);
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+  }
+
+  keyboardDidShow() {
+    this.slideUpItem();
   }
 
   async initializeComments(phraseId: string) {
@@ -106,86 +133,45 @@ class Detail extends React.Component<Props, State> {
     }
   }
 
-  async likeActivate() {
-    const { auth, phrase, likePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    if (this.state.isInProgressLikeAction) {
-      return;
-    }
-
-    this.setState({ isInProgressLikeAction: true });
-
-    await likePhrase(phrase);
-
-    this.setState({ isInProgressLikeAction: false });
-  }
-
-  async likeUnactivate() {
-    const { auth, phrase, unlikePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    if (this.state.isInProgressLikeAction) {
-      return;
-    }
-
-    this.setState({ isInProgressLikeAction: true });
-
-    await unlikePhrase(phrase);
-
-    this.setState({ isInProgressLikeAction: false });
-  }
-
-  async favoriteActivate() {
-    const { auth, phrase, favoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    if (this.state.isInProgressFavoriteAction) {
-      return;
-    }
-
-    this.setState({ isInProgressFavoriteAction: true });
-
-    await favoritePhrase(phrase);
-
-    this.setState({ isInProgressFavoriteAction: false });
-  }
-
-  async favoriteUnactivate() {
-    const { auth, phrase, unfavoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    if (this.state.isInProgressFavoriteAction) {
-      return;
-    }
-
-    this.setState({ isInProgressFavoriteAction: true });
-
-    await unfavoritePhrase(phrase);
-
-    this.setState({ isInProgressFavoriteAction: false });
-  }
-
   onLayoutOfContent(e: any) {
     if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
       this.setState({ isScrollViewAtContent: true });
     }
+  }
+
+  slideUpItem() {
+    Animated.spring(this.state.itemAnimationMaxHeight, {
+      toValue: 0,
+      friction: 10,
+      velocity: 1.5
+    }).start();
+    this.setState({ isShowItem: false });
+  }
+
+  slideDownItem() {
+    Animated.spring(this.state.itemAnimationMaxHeight, {
+      toValue: this.itemDefaultMaxHeight,
+      friction: 10,
+      velocity: 1.5
+    }).start();
+    this.setState({ isShowItem: true });
+
+    Keyboard.dismiss();
+  }
+
+  toggleButton() {
+    const { isShowItem } = this.state;
+
+    const onPress = isShowItem ? this.slideUpItem : this.slideDownItem;
+    const imageSource = isShowItem
+      ? require("../../../../assets/images/icon/phrase-detail/angle-up.png")
+      : require("../../../../assets/images/icon/phrase-detail/angle-down.png");
+
+    return (
+      <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{ alignItems: "center", paddingBottom: 10 }}>
+        <Image style={{ width: 20, height: 14 }} resizeMode="contain" source={imageSource} />
+      </TouchableOpacity>
+    );
   }
 
   messages() {
@@ -206,9 +192,9 @@ class Detail extends React.Component<Props, State> {
   }
 
   render() {
-    const { phrase } = this.props;
+    const { phrase, navigation } = this.props;
     const { currentUser } = this.props.auth; // JWTが出力されるとセキュリティ的にまずいので注意
-    const { isScrollViewAtContent } = this.state;
+    const { itemAnimationMaxHeight, isScrollViewAtContent } = this.state;
 
     if (phrase === undefined) {
       return null;
@@ -217,38 +203,28 @@ class Detail extends React.Component<Props, State> {
     return (
       <View style={styles.container}>
         <View style={styles.item}>
-          <View style={styles.itemCategoryArea}>
-            <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
-            <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
-          </View>
-          {isScrollViewAtContent ? (
-            <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 13 }}>
-              <StandardText text={phrase.content} fontSize={16} />
-            </ScrollView>
-          ) : (
-            <StandardText
-              text={phrase.content}
-              fontSize={16}
-              textStyle={{ marginVertical: 13 }}
-              onLayout={this.onLayoutOfContent}
-            />
-          )}
-          <StandardText text={phrase.authorName} fontSize={14} />
-          <View style={styles.itemBottom}>
-            <CommentWithCount count={phrase.commentCount} />
-            <LikeWithCount
-              activate={this.likeActivate}
-              unactivate={this.likeUnactivate}
-              isActive={phrase.currentUserLiked}
-              count={phrase.likeCount}
-            />
-            <FavoriteWithCount
-              activate={this.favoriteActivate}
-              unactivate={this.favoriteUnactivate}
-              isActive={phrase.currentUserFavorited}
-              count={phrase.favoriteCount}
-            />
-          </View>
+          <Animated.View style={{ maxHeight: itemAnimationMaxHeight, overflow: "hidden" }}>
+            <View style={styles.itemCategoryArea}>
+              <InlineCategoryNames categoryName={phrase.categoryName} subcategoryName={phrase.subcategoryName} />
+              <ReportIcon reportSymbol="Phrase" reportId={phrase.id} />
+            </View>
+            {isScrollViewAtContent ? (
+              <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 13 }}>
+                <StandardText text={phrase.content} fontSize={16} />
+              </ScrollView>
+            ) : (
+              <StandardText
+                text={phrase.content}
+                fontSize={16}
+                textStyle={{ marginVertical: 13 }}
+                onLayout={this.onLayoutOfContent}
+              />
+            )}
+            <StandardText text={phrase.authorName} fontSize={14} />
+            <PhraseBottomActions navigation={navigation} phrase={phrase} />
+            <View style={{ height: 25 }} />
+          </Animated.View>
+          {this.toggleButton()}
         </View>
         <Chat
           onSend={this.onSendComment}
@@ -267,14 +243,20 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   item: {
+    position: "absolute",
+    width: "100%",
+    zIndex: 10,
+    height: "auto",
+    backgroundColor: colors.white,
     paddingTop: 20,
-    paddingBottom: 30,
+    paddingBottom: 5,
     paddingHorizontal: 15
   },
   itemCategoryArea: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    paddingBottom: 10
   },
   itemBottom: {
     marginTop: 15,
@@ -294,10 +276,6 @@ const mapDispatchToProps = {
   submitComment: PhraseCommentAction.submitComment,
   fetchPreviousPhraseComments: PhraseCommentAction.fetchPreviousPhraseComments,
   fetchFollowingPhraseComments: PhraseCommentAction.fetchFollowingPhraseComments,
-  likePhrase: PhrasesAction.likePhrase,
-  unlikePhrase: PhrasesAction.unlikePhrase,
-  favoritePhrase: PhrasesAction.favoritePhrase,
-  unfavoritePhrase: PhrasesAction.unfavoritePhrase,
   initializePhraseComments: PhraseCommentAction.initializePhraseComments,
   initializePhrase: PhrasesAction.initializePhrase
 };

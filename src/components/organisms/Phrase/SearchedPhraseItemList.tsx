@@ -6,7 +6,6 @@ import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
-import { signinRequestAlert } from "../../../support/alert";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
@@ -16,31 +15,21 @@ interface Props {
   fetchPhrasesBySearchWord: any;
   searchedWord?: string;
   initializeSearchedPhrase: any;
-  likePhrase: any;
-  unlikePhrase: any;
-  favoritePhrase: any;
-  unfavoritePhrase: any;
-  auth: any;
 }
 
 interface State {
   loading: boolean;
   stopFetching: boolean;
   refreshLoading: boolean;
-  unfavoriteCount: number;
 }
 
 class SearchedPhraseItemList extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { loading: false, stopFetching: false, refreshLoading: false, unfavoriteCount: 0 };
+    this.state = { loading: false, stopFetching: false, refreshLoading: false };
     this.fetchPhraseWithAwait = this.fetchPhraseWithAwait.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.likeAction = this.likeAction.bind(this);
-    this.unlikeAction = this.unlikeAction.bind(this);
-    this.favoriteAction = this.favoriteAction.bind(this);
-    this.unfavoriteAction = this.unfavoriteAction.bind(this);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -60,9 +49,8 @@ class SearchedPhraseItemList extends React.Component<Props, State> {
     this.setState({ loading: true });
 
     const { searchedPhrases, fetchPhrasesBySearchWord, searchedWord } = this.props;
-    const { unfavoriteCount } = this.state;
     const offset: number = searchedPhrases.length;
-    await fetchPhrasesBySearchWord(searchedWord, offset + unfavoriteCount);
+    await fetchPhrasesBySearchWord(searchedWord, offset);
 
     if (this.props.searchedPhrases.length === offset) {
       // 取得件数が0の場合は、それ以降の取得処理を停止
@@ -76,7 +64,6 @@ class SearchedPhraseItemList extends React.Component<Props, State> {
     const { initializeSearchedPhrase, fetchPhrasesBySearchWord, searchedWord } = this.props;
 
     initializeSearchedPhrase();
-    this.setState({ unfavoriteCount: 0 });
 
     await fetchPhrasesBySearchWord(searchedWord);
     this.setState({ stopFetching: false });
@@ -87,57 +74,8 @@ class SearchedPhraseItemList extends React.Component<Props, State> {
     return loading || stopFetching || refreshLoading;
   }
 
-  likeAction(phrase: PhraseDTO) {
-    const { auth, likePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    likePhrase(phrase);
-  }
-
-  unlikeAction(phrase: PhraseDTO) {
-    const { auth, unlikePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("いいねをする", this.props.navigation);
-      return;
-    }
-
-    unlikePhrase(phrase);
-  }
-
-  favoriteAction(phrase: PhraseDTO) {
-    const { auth, favoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    favoritePhrase(phrase);
-
-    const { unfavoriteCount } = this.state;
-    this.setState({ unfavoriteCount: unfavoriteCount - 1 });
-  }
-
-  unfavoriteAction(phrase: PhraseDTO) {
-    const { auth, unfavoritePhrase } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("お気に入り登録", this.props.navigation);
-      return;
-    }
-
-    unfavoritePhrase(phrase);
-
-    const { unfavoriteCount } = this.state;
-    this.setState({ unfavoriteCount: unfavoriteCount + 1 });
-  }
-
   render() {
+    const { navigation } = this.props;
     const { refreshLoading } = this.state;
 
     return (
@@ -147,10 +85,7 @@ class SearchedPhraseItemList extends React.Component<Props, State> {
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         renderItem={({ item: phrase, index }) => (
           <PhraseItem
-            likeAction={this.likeAction}
-            unlikeAction={this.unlikeAction}
-            favoriteAction={this.favoriteAction}
-            unfavoriteAction={this.unfavoriteAction}
+            navigation={navigation}
             navigateDetail={this.props.navigateDetail}
             phrase={phrase}
             isFirst={index === 0}
@@ -180,18 +115,13 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootState) => ({
-  auth: state.auth,
   searchedWord: state.phrases.searchedWord,
   searchedPhrases: state.phrases.searchedPhrases
 });
 
 const mapDispatchToProps = {
   fetchPhrasesBySearchWord: PhrasesAction.fetchPhrasesBySearchWord,
-  initializeSearchedPhrase: PhrasesAction.initializeSearchedPhrase,
-  likePhrase: PhrasesAction.likePhrase,
-  unlikePhrase: PhrasesAction.unlikePhrase,
-  favoritePhrase: PhrasesAction.favoritePhrase,
-  unfavoritePhrase: PhrasesAction.unfavoritePhrase
+  initializeSearchedPhrase: PhrasesAction.initializeSearchedPhrase
 };
 
 const enhancer = connect(
