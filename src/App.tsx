@@ -9,6 +9,7 @@ import RootNavigator from "./navigators/RootNavigator";
 import checkNewVersion from "./providers/AppStoreVersionChecker";
 import { persistor, store } from "./stores";
 import { colors } from "./styles";
+import SplashScreen from 'react-native-splash-screen'
 
 // providers/apiClientでJWTをheaderに詰める際、Storeを参照できるようにするため。
 declare global {
@@ -21,6 +22,7 @@ window.store = store;
 interface Props {}
 export default class App extends React.Component<Props> {
   componentDidMount() {
+    SplashScreen.hide();
     checkNewVersion();
   }
 
