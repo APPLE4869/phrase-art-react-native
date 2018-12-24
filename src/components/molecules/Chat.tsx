@@ -20,7 +20,9 @@ import { connect } from "react-redux";
 import * as loadingAction from "../../actions/loading";
 import * as QuickbloxAction from "../../actions/quickblox";
 import * as ReportsAction from "../../actions/reports";
+import { CommentInterface } from "../../models/dto/CommentInterface";
 import { colors } from "../../styles";
+import { replaceDateStringForIOS } from "../../support/replace";
 
 interface MessageWithUser {
   _id: any;
@@ -35,7 +37,7 @@ interface MessageWithUser {
 
 interface Props {
   onSend: (messages: IMessage[]) => void;
-  messages: IMessage[];
+  comments: CommentInterface[];
   reportSymbol: string;
   userId: undefined | string;
   startLoading: any;
@@ -291,12 +293,29 @@ class Chat extends React.Component<Props> {
     addMessage(finishedMessage);
   }
 
+  messages(): IMessage[] {
+    return this.props.comments.map(comment => {
+      const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
+
+      return {
+        _id: comment.id,
+        text: comment.content,
+        createdAt: new Date(createdAt),
+        user: {
+          _id: comment.userId,
+          name: comment.username,
+          avatar: comment.userImageUrl || require("../../../assets/images/no-avatar.png")
+        }
+      };
+    });
+  }
+
   render() {
     return (
       <View style={styles.chatContainer}>
         <GiftedChat
           imageStyle={{}}
-          messages={this.props.messages}
+          messages={this.messages()}
           onSend={messages => this.props.onSend(messages)}
           user={{ _id: this.props.userId }}
           placeholder="コメントを入力"

@@ -39,23 +39,25 @@ export default class PhraseUpdateRequest extends React.Component<Props> {
   }
 
   render() {
+    const { navigation } = this.props;
+
     switch (this.updateRequestType) {
       case UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE:
         return (
           <DefaultTemplate>
-            <RegistrationRequestDetail updateRequestId={this.updateRequestId} />
+            <RegistrationRequestDetail navigation={navigation} updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
       case UpdateRequestDTO.PHRASE_MODIFICATION_REQUEST_TYPE:
         return (
           <DefaultTemplate>
-            <ModificationRequestDetail updateRequestId={this.updateRequestId} />
+            <ModificationRequestDetail navigation={navigation} updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
       default:
         return (
           <DefaultTemplate>
-            <DeletionRequestDetail updateRequestId={this.updateRequestId} />
+            <DeletionRequestDetail navigation={navigation} updateRequestId={this.updateRequestId} />
           </DefaultTemplate>
         );
     }

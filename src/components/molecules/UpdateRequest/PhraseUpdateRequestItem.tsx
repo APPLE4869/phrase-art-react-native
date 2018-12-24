@@ -6,6 +6,7 @@ import { colors } from "../../../styles";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import CommentWithCount from "../../atoms/PhraseItem/CommentWithCount";
 import StandardText from "../../atoms/StandardText";
 import FinalResult from "../../atoms/UpdateRequest/FinalResult";
 import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
@@ -65,11 +66,14 @@ export default class PhraseUpdateRequestItem extends React.Component<Props> {
           fontSize={14}
           textStyle={{ color: colors.grayLevel1, marginVertical: 10 }}
         />
-        <StandardText
-          text={phraseUpdateRequest.phraseAuthorName}
-          fontSize={12}
-          textStyle={{ color: colors.grayLevel1 }}
-        />
+        <View style={styles.authorAndCommentRow}>
+          <StandardText
+            text={phraseUpdateRequest.phraseAuthorName}
+            fontSize={12}
+            textStyle={{ color: colors.grayLevel1 }}
+          />
+          <CommentWithCount count={phraseUpdateRequest.commentCount} />
+        </View>
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={phraseUpdateRequest.type} />
           <DecisionCounts
@@ -104,5 +108,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 10
+  },
+  authorAndCommentRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
   }
 });

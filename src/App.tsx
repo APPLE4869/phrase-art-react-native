@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StatusBar, View } from "react-native";
+import SplashScreen from "react-native-splash-screen";
 import { Provider } from "react-redux";
 import { Store } from "redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -9,7 +10,6 @@ import RootNavigator from "./navigators/RootNavigator";
 import checkNewVersion from "./providers/AppStoreVersionChecker";
 import { persistor, store } from "./stores";
 import { colors } from "./styles";
-import SplashScreen from 'react-native-splash-screen'
 
 // providers/apiClientでJWTをheaderに詰める際、Storeを参照できるようにするため。
 declare global {

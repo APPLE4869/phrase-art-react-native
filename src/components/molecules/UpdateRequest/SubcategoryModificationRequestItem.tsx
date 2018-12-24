@@ -6,6 +6,7 @@ import { colors } from "../../../styles";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
+import CommentWithCount from "../../atoms/PhraseItem/CommentWithCount";
 import StandardText from "../../atoms/StandardText";
 import FinalResult from "../../atoms/UpdateRequest/FinalResult";
 import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
@@ -69,6 +70,9 @@ export default class SubcategoryModificationRequestItem extends React.Component<
           fontSize={14}
           textStyle={{ color: colors.grayLevel1, marginTop: 10 }}
         />
+        <View style={styles.commentRow}>
+          <CommentWithCount count={subcategoryModificationRequest.commentCount} />
+        </View>
         <View style={styles.itemBottom}>
           <IconImageWithLabel type={subcategoryModificationRequest.type} />
           <DecisionCounts
@@ -103,5 +107,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 10
+  },
+  commentRow: {
+    alignItems: "flex-end"
   }
 });

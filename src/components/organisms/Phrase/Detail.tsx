@@ -1,15 +1,5 @@
 import * as React from "react";
-import {
-  Animated,
-  Dimensions,
-  Image,
-  Keyboard,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { Animated, Dimensions, Keyboard, ScrollView, StyleSheet, View } from "react-native";
 import { IMessage } from "react-native-gifted-chat";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
@@ -20,9 +10,9 @@ import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
 import { signinRequestAlert } from "../../../support/alert";
-import { replaceDateStringForIOS } from "../../../support/replace";
 import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import StandardText from "../../atoms/StandardText";
+import VerticalSlideToggleButton from "../../atoms/VerticalSlideToggleButton";
 import Chat from "../../molecules/Chat";
 import PhraseBottomActions from "../../molecules/PhraseBottomActions";
 import ReportIcon from "../../molecules/ReportIcon";
@@ -51,7 +41,7 @@ interface State {
 class Detail extends React.Component<Props, State> {
   private firstFetchCommentId: string = "";
   private contentHeightThreshold: number;
-  private itemDefaultMaxHeight: number = 1000;
+  private itemDefaultMaxHeight: number;
   private keyboardDidShowListener: any;
 
   constructor(props: Props) {
@@ -159,42 +149,10 @@ class Detail extends React.Component<Props, State> {
     Keyboard.dismiss();
   }
 
-  toggleButton() {
-    const { isShowItem } = this.state;
-
-    const onPress = isShowItem ? this.slideUpItem : this.slideDownItem;
-    const imageSource = isShowItem
-      ? require("../../../../assets/images/icon/phrase-detail/angle-up.png")
-      : require("../../../../assets/images/icon/phrase-detail/angle-down.png");
-
-    return (
-      <TouchableOpacity activeOpacity={0.8} onPress={onPress} style={{ alignItems: "center", paddingBottom: 10 }}>
-        <Image style={{ width: 20, height: 14 }} resizeMode="contain" source={imageSource} />
-      </TouchableOpacity>
-    );
-  }
-
-  messages() {
-    return this.props.phraseComments.map(comment => {
-      const createdAt = Platform.OS === "ios" ? replaceDateStringForIOS(comment.createdAt) : comment.createdAt;
-
-      return {
-        _id: comment.id,
-        text: comment.content,
-        createdAt: new Date(createdAt),
-        user: {
-          _id: comment.userId,
-          name: comment.username,
-          avatar: comment.userImageUrl || require("../../../../assets/images/no-avatar.png")
-        }
-      };
-    });
-  }
-
   render() {
-    const { phrase, navigation } = this.props;
+    const { phrase, navigation, phraseComments } = this.props;
     const { currentUser } = this.props.auth; // JWTが出力されるとセキュリティ的にまずいので注意
-    const { itemAnimationMaxHeight, isScrollViewAtContent } = this.state;
+    const { isShowItem, itemAnimationMaxHeight, isScrollViewAtContent } = this.state;
 
     if (phrase === undefined) {
       return null;
@@ -224,11 +182,15 @@ class Detail extends React.Component<Props, State> {
             <PhraseBottomActions navigation={navigation} phrase={phrase} />
             <View style={{ height: 25 }} />
           </Animated.View>
-          {this.toggleButton()}
+          <VerticalSlideToggleButton
+            isShowItem={isShowItem}
+            onSlideUp={this.slideUpItem}
+            onSlideDown={this.slideDownItem}
+          />
         </View>
         <Chat
           onSend={this.onSendComment}
-          messages={this.messages()}
+          comments={phraseComments}
           userId={currentUser ? currentUser.id : undefined}
           reportSymbol="PhraseComment"
         />
@@ -246,7 +208,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     zIndex: 10,
-    height: "auto",
     backgroundColor: colors.white,
     paddingTop: 20,
     paddingBottom: 5,
@@ -255,7 +216,7 @@ const styles = StyleSheet.create({
     borderRightColor: "transparent",
     borderLeftColor: "transparent",
     borderBottomColor: colors.grayLevel4,
-    borderWidth: 1,
+    borderWidth: 1
   },
   itemCategoryArea: {
     flexDirection: "row",

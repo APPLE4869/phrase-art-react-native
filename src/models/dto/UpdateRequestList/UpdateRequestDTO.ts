@@ -12,6 +12,7 @@ export default class UpdateRequestDTO {
   readonly finalDecisionResult?: FinalDecisionResultType;
   readonly approvedCount: number;
   readonly rejectedCount: number;
+  readonly commentCount: number;
 
   constructor({
     id,
@@ -21,7 +22,8 @@ export default class UpdateRequestDTO {
     decisionExpiresAt,
     finalDecisionResult,
     approvedCount,
-    rejectedCount
+    rejectedCount,
+    commentCount
   }: UpdateRequestProperty) {
     this.id = id;
     this.userId = userId;
@@ -31,6 +33,7 @@ export default class UpdateRequestDTO {
     this.finalDecisionResult = finalDecisionResult;
     this.approvedCount = approvedCount;
     this.rejectedCount = rejectedCount;
+    this.commentCount = commentCount;
   }
 }
 
@@ -43,6 +46,7 @@ export interface UpdateRequestProperty {
   finalDecisionResult?: FinalDecisionResultType;
   approvedCount: number;
   rejectedCount: number;
+  commentCount: number;
 }
 
 export type FinalDecisionResultType = "approve" | "reject";
