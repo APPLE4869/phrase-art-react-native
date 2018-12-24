@@ -86,7 +86,7 @@ class Detail extends React.Component<Props, State> {
     if (!phrase) {
       return;
     }
-    await submitComment(phrase.id, messages[0].text);
+    await submitComment(phrase.id, messages[0].text.trim());
 
     if (phraseComments.length > 0) {
       fetchFollowingPhraseComments(phrase.id, phraseComments[0].id);

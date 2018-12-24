@@ -9,6 +9,7 @@ import CategoryDTO from "../../../models/dto/CategoryDTO";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
+import { deleteAllHalfAndFullSpace, replaceMoreThreeBlankLineToTwo } from "../../../support/replace";
 import FormButton from "../../atoms/FormButton";
 import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
@@ -128,7 +129,13 @@ class ModificationForm extends React.Component<Props, State> {
     startLoading();
 
     try {
-      await submitPhraseModificationRequest(phrase.id, categoryId, subcategoryName, content, author);
+      await submitPhraseModificationRequest(
+        phrase.id,
+        categoryId,
+        subcategoryName.trim(),
+        replaceMoreThreeBlankLineToTwo(content.trim()),
+        deleteAllHalfAndFullSpace(author.trim())
+      );
     } finally {
       endLoading();
     }
