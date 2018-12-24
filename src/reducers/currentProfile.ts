@@ -1,4 +1,4 @@
-import { Action, ADD_CURRENT_PROFILE } from "../actions/currentProfile";
+import { Action, ADD_CURRENT_PROFILE, CLEAR_CURRENT_PROFILE } from "../actions/currentProfile";
 import CurrentProfileDTO from "../models/dto/CurrentProfileDTO";
 
 // Stateの型定義
@@ -16,6 +16,9 @@ export default (state: State = initialState, action: Action) => {
   switch (action.type) {
     case ADD_CURRENT_PROFILE: {
       return { ...state, currentProfile: action.payload };
+    }
+    case CLEAR_CURRENT_PROFILE: {
+      return { ...state, currentProfile: undefined };
     }
     default: {
       return state;

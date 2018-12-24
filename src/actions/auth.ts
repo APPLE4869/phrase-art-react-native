@@ -8,6 +8,7 @@ import { apiPrivateClient, apiPublicClient } from "../providers/apiClient";
 // Actions
 export const ADD_JWT = "ADD_JWT:auth";
 export const ADD_CURRENT_USER = "ADD_CURRENT_USER:auth";
+export const UPDATE_USERNAME = "UPDATE_USERNAME:auth";
 export const CLEAR_AUTH = "CLEAR_AUTH:auth";
 
 interface AddJwt {
@@ -20,12 +21,17 @@ interface AddCurrentUser {
   payload: CurrentUserDTO;
 }
 
+interface UpdateUsername {
+  type: typeof UPDATE_USERNAME;
+  payload: string;
+}
+
 interface RemoveJwt {
   type: typeof CLEAR_AUTH;
 }
 
 // Reducer用に利用するActionの型を定義
-export type Action = AddJwt | AddCurrentUser | RemoveJwt;
+export type Action = AddJwt | AddCurrentUser | UpdateUsername | RemoveJwt;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -107,4 +113,44 @@ export function login(username: string, password: string) {
 
 export function logout(): RemoveJwt {
   return { type: CLEAR_AUTH };
+}
+
+// 会員登録処理
+export function updateUsername(username: string) {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const response: AxiosResponse = await apiPrivateClient.patch("/current_user/username", { username });
+
+      if (response.status !== 200) {
+        throw new Error("予期しないエラーが発生しました。お手数ですが、もう一度お試しください。");
+      }
+
+      dispatch({ type: UPDATE_USERNAME, payload: username });
+    } catch (e) {
+      new ApplicationError(e).alertMessage();
+
+      throw e;
+    }
+  };
+}
+
+// 会員登録処理
+export function updatePassword(currentPassword: string, newPassword: string, confirmNewPassword: string) {
+  return async () => {
+    try {
+      const response: AxiosResponse = await apiPrivateClient.patch("/current_user/password", {
+        currentPassword,
+        newPassword,
+        confirmNewPassword
+      });
+
+      if (response.status !== 200) {
+        throw new Error("予期しないエラーが発生しました。お手数ですが、もう一度お試しください。");
+      }
+    } catch (e) {
+      new ApplicationError(e).alertMessage();
+
+      throw e;
+    }
+  };
 }

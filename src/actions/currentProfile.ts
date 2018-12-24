@@ -6,14 +6,19 @@ import { apiPrivateClient } from "../providers/apiClient";
 
 // Actions
 export const ADD_CURRENT_PROFILE = "ADD_CURRENT_PROFILE:profile";
+export const CLEAR_CURRENT_PROFILE = "CLEAR_CURRENT_PROFILE:profile";
 
 interface AddCurrentProfile {
   type: typeof ADD_CURRENT_PROFILE;
   payload: CurrentProfileDTO;
 }
 
+interface ClearCurrentProfile {
+  type: typeof CLEAR_CURRENT_PROFILE;
+}
+
 // Reducer用に利用するActionの型を定義
-export type Action = AddCurrentProfile;
+export type Action = AddCurrentProfile | ClearCurrentProfile;
 
 // ----- 以下、アクションメソッド定義 -----//
 
@@ -64,4 +69,8 @@ export function registerProfile(imageUri: string) {
       throw e;
     }
   };
+}
+
+export function clearCurrentProfile(): ClearCurrentProfile {
+  return { type: CLEAR_CURRENT_PROFILE };
 }

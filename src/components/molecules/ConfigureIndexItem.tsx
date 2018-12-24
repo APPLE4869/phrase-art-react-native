@@ -1,26 +1,30 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../../styles";
 
 interface Props {
   onPress: () => void;
   title: string;
+  arrowLeftElm?: any;
   hiddenRightArrow?: boolean;
 }
 
 export default class ConfigureIndexItem extends React.Component<Props> {
   render() {
-    const { onPress, title, hiddenRightArrow } = this.props;
+    const { onPress, title, arrowLeftElm, hiddenRightArrow } = this.props;
 
     return (
       <TouchableOpacity style={styles.item} activeOpacity={1} onPress={onPress}>
         <Text style={styles.itemText}>{title}</Text>
-        {!!hiddenRightArrow ? null : (
-          <Image
-            style={{ height: 14, width: 14 }}
-            source={require("../../../assets/images/icon/angle-right-gray2.png")}
-          />
-        )}
+        <View style={styles.rightArea}>
+          {arrowLeftElm}
+          {!!hiddenRightArrow ? null : (
+            <Image
+              style={{ marginLeft: 20, height: 14, width: 14 }}
+              source={require("../../../assets/images/icon/angle-right-gray2.png")}
+            />
+          )}
+        </View>
       </TouchableOpacity>
     );
   }
@@ -33,7 +37,7 @@ const styles = StyleSheet.create({
     paddingRight: "5%",
     borderBottomWidth: 1,
     borderBottomColor: colors.grayLevel4,
-    paddingVertical: 28,
+    height: 75,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
@@ -42,5 +46,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     letterSpacing: 1.5,
     color: colors.baseBlack
+  },
+  rightArea: {
+    flexDirection: "row",
+    alignItems: "center"
   }
 });
