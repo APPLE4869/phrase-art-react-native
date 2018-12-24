@@ -85,7 +85,6 @@ class EditPassword extends React.Component<Props, State> {
           onChangeText={this.onChangeNewPassword}
           description="8文字以上で入力してください。"
           secureTextEntry={true}
-          marginBottom={30}
         />
         <TextField
           label="新しいパスワード（確認用）"

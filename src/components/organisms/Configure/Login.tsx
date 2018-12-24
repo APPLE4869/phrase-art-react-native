@@ -2,6 +2,7 @@ import * as React from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
+import * as currentProfileAction from "../../../actions/currentProfile";
 import * as loadingAction from "../../../actions/loading";
 import * as QuickbloxAction from "../../../actions/quickblox";
 import { formStyle } from "../../../styles";
@@ -14,6 +15,7 @@ interface Props {
   startLoading: any;
   endLoading: any;
   addMessage: any;
+  fetchProfile: any;
 }
 
 interface State {
@@ -50,7 +52,7 @@ class Login extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { startLoading, endLoading, addMessage, navigateConfigureIndex } = this.props;
+    const { startLoading, fetchProfile, endLoading, addMessage, navigateConfigureIndex } = this.props;
     const { username, password } = this.state;
 
     startLoading();
@@ -61,6 +63,7 @@ class Login extends React.Component<Props, State> {
       endLoading();
     }
 
+    fetchProfile();
     addMessage("ログインに成功しました。");
     navigateConfigureIndex();
   }
@@ -82,7 +85,8 @@ const mapDispatchToProps = {
   login: authAction.login,
   startLoading: loadingAction.startLoading,
   endLoading: loadingAction.endLoading,
-  addMessage: QuickbloxAction.addMessage
+  addMessage: QuickbloxAction.addMessage,
+  fetchProfile: currentProfileAction.fetchProfile
 };
 
 const enhancer = connect(

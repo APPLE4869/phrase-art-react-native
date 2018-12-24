@@ -6,8 +6,7 @@ import * as loadingAction from "../../../actions/loading";
 import * as QuickbloxAction from "../../../actions/quickblox";
 import CurrentUserDTO from "../../../models/dto/currentUserDTO";
 import { State as RootState } from "../../../reducers";
-import { formStyle } from "../../../styles";
-import { colors } from "../../../styles";
+import { colors, formStyle } from "../../../styles";
 import FormButton from "../../atoms/FormButton";
 import StandardText from "../../atoms/StandardText";
 import TextField from "../../molecules/FormGroup/TextField";
@@ -80,7 +79,7 @@ class EditUsername extends React.Component<Props, State> {
         <TextField
           label="新しいユーザー名"
           onChangeText={this.onChangeUsername}
-          placeholder="半角英数字で入力してください。"
+          description="半角英数字で入力してください。"
           marginBottom={40}
         />
         <FormButton title="更新する" onPress={this.onSubmit} disabled={this.isDisabled()} />

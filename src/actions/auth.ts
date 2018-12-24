@@ -21,7 +21,7 @@ interface AddCurrentUser {
   payload: CurrentUserDTO;
 }
 
-interface updateUsername {
+interface UpdateUsername {
   type: typeof UPDATE_USERNAME;
   payload: string;
 }
@@ -31,7 +31,7 @@ interface RemoveJwt {
 }
 
 // Reducer用に利用するActionの型を定義
-export type Action = AddJwt | AddCurrentUser | updateUsername | RemoveJwt;
+export type Action = AddJwt | AddCurrentUser | UpdateUsername | RemoveJwt;
 
 // ----- 以下、アクションメソッド定義 -----//
 
