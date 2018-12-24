@@ -21,7 +21,9 @@ class Index extends React.Component<Props, State> {
     super(props);
 
     this.handleLogoutDialog = this.handleLogoutDialog.bind(this);
+    this.navigateEditUsername = this.navigateEditUsername.bind(this);
     this.navigateEditProfileImage = this.navigateEditProfileImage.bind(this);
+    this.navigateEditPassword = this.navigateEditPassword.bind(this);
     this.navigateLogin = this.navigateLogin.bind(this);
     this.navigateSignup = this.navigateSignup.bind(this);
     this.navigateTermsOfService = this.navigateTermsOfService.bind(this);
@@ -64,8 +66,16 @@ class Index extends React.Component<Props, State> {
     }
   }
 
+  navigateEditUsername() {
+    this.props.navigation.navigate("EditUsername");
+  }
+
   navigateEditProfileImage() {
     this.props.navigation.navigate("EditProfileImage");
+  }
+
+  navigateEditPassword() {
+    this.props.navigation.navigate("EditPassword");
   }
 
   navigateLogin() {
@@ -87,7 +97,9 @@ class Index extends React.Component<Props, State> {
     if (auth && auth.jwt) {
       return (
         <View style={styles.container}>
+          <ConfigureIndexItem title="ユーザーネーム" onPress={this.navigateEditUsername} />
           <ConfigureIndexItem title="プロフィール画像" onPress={this.navigateEditProfileImage} />
+          <ConfigureIndexItem title="パスワード" onPress={this.navigateEditPassword} />
           <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
           <ConfigureIndexItem title="ログアウト" onPress={this.handleLogoutDialog} hiddenRightArrow={true} />
         </View>
