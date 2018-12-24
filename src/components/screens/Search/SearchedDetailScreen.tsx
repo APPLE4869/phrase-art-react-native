@@ -16,7 +16,7 @@ interface Props {
 
 interface State {}
 
-class PhraseDetailScreen extends React.Component<Props, State> {
+class SearchedDetailScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
       headerRight: (
@@ -104,4 +104,4 @@ const enhancer = connect(
   mapDispatchToProps
 );
 
-export default enhancer(PhraseDetailScreen);
+export default enhancer(SearchedDetailScreen);

@@ -74,6 +74,7 @@ class Chat extends React.Component<Props> {
               borderColor: colors.grayLevel4,
               borderWidth: 1,
               borderRadius: 20,
+              marginTop: 2,
               borderTopLeftRadius: 3,
               padding: 7
             },
@@ -323,11 +324,6 @@ const styles = StyleSheet.create({
     width: "100%",
     minHeight: 100,
     flex: 1,
-    borderTopColor: colors.grayLevel4,
-    borderRightColor: "transparent",
-    borderLeftColor: "transparent",
-    borderBottomColor: "transparent",
-    borderWidth: 1,
     backgroundColor: colors.grayLevel5
   }
 });

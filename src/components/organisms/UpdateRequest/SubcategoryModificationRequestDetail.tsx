@@ -293,7 +293,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
             </View>
           </View>
 
-          <View style={{width: "100%"}} onLayout={this.onImageLayoutForModal}>
+          <View style={{ width: "100%" }} onLayout={this.onImageLayoutForModal}>
             <StandardText text="イメージ画像" fontSize={13} textStyle={{ color: colors.grayLevel1, marginBottom: 4 }} />
             <StandardText text="修正前" fontSize={12} textStyle={{ color: colors.grayLevel2, marginBottom: 5 }} />
             {request.currentSubcategoryImageUrl ? (

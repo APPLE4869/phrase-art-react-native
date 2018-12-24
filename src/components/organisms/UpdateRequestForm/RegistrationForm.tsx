@@ -8,6 +8,7 @@ import * as registrationRequestAction from "../../../actions/UpdateRequest/phras
 import CategoryDTO from "../../../models/dto/CategoryDTO";
 import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
+import { deleteAllHalfAndFullSpace, replaceMoreThreeBlankLineToTwo } from "../../../support/replace";
 import FormButton from "../../atoms/FormButton";
 import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
@@ -99,7 +100,12 @@ class RegistrationForm extends React.Component<Props, State> {
     startLoading();
 
     try {
-      await submitRegisterRequest(categoryId, subcategoryName, content, author);
+      await submitRegisterRequest(
+        categoryId,
+        subcategoryName.trim(),
+        replaceMoreThreeBlankLineToTwo(content.trim()),
+        deleteAllHalfAndFullSpace(author.trim())
+      );
     } finally {
       endLoading();
     }
