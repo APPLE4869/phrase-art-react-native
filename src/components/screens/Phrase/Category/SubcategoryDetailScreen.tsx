@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Image, TouchableOpacity } from "react-native";
+import { Image, Platform, TouchableOpacity } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import { State as RootState } from "../../../../reducers";
@@ -16,7 +16,11 @@ class SubcategoryDetailScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
       headerRight: (
-        <TouchableOpacity activeOpacity={1} onPress={navigation.getParam("handleEditDialog")}>
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={navigation.getParam("handleEditDialog")}
+          style={{ marginRight: Platform.OS === "android" ? 15 : 0 }}
+        >
           <Image style={{ width: 20, height: 20 }} source={require("../../../../../assets/images/icon/edit.png")} />
         </TouchableOpacity>
       )

@@ -106,9 +106,10 @@ const styles = StyleSheet.create({
     height: 45
   },
   textareaField: {
-    height: 200,
-    paddingTop: 10,
-    paddingBottom: 10,
+    minHeight: 72,
+    maxHeight: 200,
+    paddingTop: 15,
+    paddingBottom: 15,
     lineHeight: 21
   },
   isFocused: {

@@ -68,7 +68,7 @@ class SearchWindow extends React.Component<Props, State> {
 const styles = StyleSheet.create({
   searchWindow: {
     backgroundColor: colors.white,
-    width: "100%",
+    flex: 1,
     borderRadius: 15,
     paddingVertical: 8,
     paddingHorizontal: 15,

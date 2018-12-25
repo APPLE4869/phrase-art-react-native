@@ -1,13 +1,16 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { Platform } from "react-native";
+
+const devBaseUrl = Platform.OS === "android" ? "http://10.0.2.2:5000" : "http://localhost:5000";
 
 const axiosPublicConfig: AxiosRequestConfig = {
   timeout: 5000,
-  baseURL: __DEV__ ? "http://localhost:5000/api/public" : "https://phrase-art.herokuapp.com/api/public"
+  baseURL: __DEV__ ? `${devBaseUrl}/api/public` : "https://phrase-art.herokuapp.com/api/public"
 };
 
 const axiosPrivateConfig: AxiosRequestConfig = {
   timeout: 5000,
-  baseURL: __DEV__ ? "http://localhost:5000/api/private" : "https://phrase-art.herokuapp.com/api/private"
+  baseURL: __DEV__ ? `${devBaseUrl}/api/private` : "https://phrase-art.herokuapp.com/api/private"
 };
 
 const apiPublicClient = axios.create(axiosPublicConfig);

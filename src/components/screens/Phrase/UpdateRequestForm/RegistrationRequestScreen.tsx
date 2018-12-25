@@ -1,5 +1,5 @@
 import * as React from "react";
-import { KeyboardAvoidingView, ScrollView } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { formStyle } from "../../../../styles";
 import RegistrationForm from "../../../organisms/UpdateRequestForm/RegistrationForm";
@@ -22,7 +22,7 @@ export default class RegistrationRequestScreen extends React.Component<Props> {
 
   render() {
     return (
-      <KeyboardAvoidingView behavior="padding" style={formStyle.keyboardAvoidingView}>
+      <KeyboardAvoidingView behavior="padding" style={formStyle.keyboardAvoidingView} enabled={Platform.OS === "ios"}>
         <ScrollView keyboardShouldPersistTaps="handled">
           <DefaultTemplate>
             <RegistrationForm navigateNextScreen={this.navigateNextScreen} />

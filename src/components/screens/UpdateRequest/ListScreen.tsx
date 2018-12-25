@@ -4,7 +4,7 @@ import { NavigationParams } from "react-navigation";
 import UpdateRequestDTO, { UpdateRequestType } from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import NavigationOptions from "../../../navigators/NavigationOptions";
 import { colors } from "../../../styles";
-import HeaderSegmentedControlIOS from "../../molecules/HeaderSegmentedControlIOS";
+import HeaderSegmented from "../../molecules/HeaderSegmented";
 import FinishedUpdateRequestItemList from "../../organisms/UpdateRequest/FinishedUpdateRequestItemList";
 import RequestingUpdateRequestItemList from "../../organisms/UpdateRequest/RequestingUpdateRequestItemList";
 import DefaultTemplate from "../../templates/DefaultTemplate";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 interface State {
-  headerSegmentedControlIOSIndex: number;
+  headerSegmentedIndex: number;
 }
 
 export default class ListScreen extends React.Component<Props, State> {
@@ -25,10 +25,10 @@ export default class ListScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { headerSegmentedControlIOSIndex: 0 };
+    this.state = { headerSegmentedIndex: 0 };
 
     this.navigateUpdateRequest = this.navigateUpdateRequest.bind(this);
-    this.onChangeSegmentedControl = this.onChangeSegmentedControl.bind(this);
+    this.onChangeIndex = this.onChangeIndex.bind(this);
   }
 
   navigateUpdateRequest(updateRequestId: string, updateRequestType: UpdateRequestType) {
@@ -43,23 +43,22 @@ export default class ListScreen extends React.Component<Props, State> {
     }
   }
 
-  onChangeSegmentedControl(event: any) {
-    const { selectedSegmentIndex } = event.nativeEvent;
-    this.setState({ headerSegmentedControlIOSIndex: selectedSegmentIndex });
+  onChangeIndex(headerSegmentedIndex: number) {
+    this.setState({ headerSegmentedIndex });
   }
 
   render() {
-    const { headerSegmentedControlIOSIndex } = this.state;
+    const { headerSegmentedIndex } = this.state;
 
     return (
       <DefaultTemplate>
         <View style={{ width: "100%", flex: 1 }}>
-          <HeaderSegmentedControlIOS
+          <HeaderSegmented
             values={["申請中", "完了済"]}
-            onChange={this.onChangeSegmentedControl}
-            selectedIndex={headerSegmentedControlIOSIndex}
+            onChangeIndex={this.onChangeIndex}
+            selectedIndex={headerSegmentedIndex}
           />
-          {headerSegmentedControlIOSIndex === 0 ? (
+          {headerSegmentedIndex === 0 ? (
             <RequestingUpdateRequestItemList onPress={this.navigateUpdateRequest} />
           ) : (
             <FinishedUpdateRequestItemList onPress={this.navigateUpdateRequest} />
