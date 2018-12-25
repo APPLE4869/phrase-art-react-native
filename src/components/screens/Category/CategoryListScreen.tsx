@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
@@ -23,7 +24,11 @@ interface Props {
 class CategoryListScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerRight: <HeaderMenuButton onPress={() => navigation.navigate("PhraseList")} title="キャンセル" />
+      headerRight: (
+        <View style={{ marginRight: Platform.OS === "android" ? 15 : 0 }}>
+          <HeaderMenuButton onPress={() => navigation.navigate("PhraseList")} title="キャンセル" />
+        </View>
+      )
     };
   };
 

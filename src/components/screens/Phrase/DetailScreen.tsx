@@ -1,10 +1,9 @@
 import * as React from "react";
-import { ActionSheetIOS, Alert, Image, Platform, TouchableOpacity } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import PhraseDTO from "../../../models/dto/PhraseDTO";
 import { State as RootState } from "../../../reducers";
-import { signinRequestAlert } from "../../../support/alert";
+import PhraseUpdateButton from "../../molecules/PhraseUpdateButton";
 import PhraseDetail from "../../organisms/Phrase/Detail";
 import DefaultTemplate from "../../templates/DefaultTemplate";
 
@@ -18,11 +17,18 @@ interface State {}
 
 class PhraseDetailScreen extends React.Component<Props, State> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
+    const auth = navigation.getParam("auth");
+    const navigateModificationRequest = navigation.getParam("navigateModificationRequest");
+    const navigateDeletionRequest = navigation.getParam("navigateDeletionRequest");
+
     return {
       headerRight: (
-        <TouchableOpacity activeOpacity={1} onPress={navigation.getParam("handleEditDialog")}>
-          <Image style={{ width: 20, height: 20 }} source={require("../../../../assets/images/icon/edit.png")} />
-        </TouchableOpacity>
+        <PhraseUpdateButton
+          auth={auth}
+          navigation={navigation}
+          navigateModificationRequest={navigateModificationRequest}
+          navigateDeletionRequest={navigateDeletionRequest}
+        />
       )
     };
   };
@@ -30,47 +36,16 @@ class PhraseDetailScreen extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.handleEditDialog = this.handleEditDialog.bind(this);
+    this.navigateModificationRequest = this.navigateModificationRequest.bind(this);
+    this.navigateDeletionRequest = this.navigateDeletionRequest.bind(this);
   }
 
   componentDidMount() {
-    this.props.navigation.setParams({ handleEditDialog: this.handleEditDialog });
-  }
-
-  handleEditDialog() {
-    const { auth } = this.props;
-
-    if (!auth || !auth.jwt) {
-      signinRequestAlert("名言の修正・削除申請", this.props.navigation);
-      return;
-    }
-
-    if (Platform.OS === "ios") {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ["キャンセル", "修正を申請する", "削除を申請する"],
-          cancelButtonIndex: 0
-        },
-        buttonIndex => {
-          if (buttonIndex === 1) {
-            this.navigateModificationRequest();
-          } else if (buttonIndex === 2) {
-            this.navigateDeletionRequest();
-          }
-        }
-      );
-    } else {
-      Alert.alert(
-        "修正、削除のどちらを申請するか選択してください。",
-        undefined,
-        [
-          { text: "キャンセル", style: "cancel" },
-          { text: "修正を申請する", onPress: this.navigateModificationRequest },
-          { text: "削除を申請する", onPress: this.navigateDeletionRequest }
-        ],
-        { cancelable: true }
-      );
-    }
+    this.props.navigation.setParams({
+      auth: this.props.auth,
+      navigateModificationRequest: this.navigateModificationRequest,
+      navigateDeletionRequest: this.navigateDeletionRequest
+    });
   }
 
   navigateModificationRequest() {

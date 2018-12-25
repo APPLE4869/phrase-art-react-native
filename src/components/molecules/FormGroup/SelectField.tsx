@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Platform, StyleSheet, Text, View } from "react-native";
 import PickerSelect from "react-native-picker-select";
 import { colors } from "../../../styles";
 
@@ -24,14 +24,26 @@ export default class SelectField extends React.Component<Props> {
     return (
       <View style={[styles.form, { marginTop: marginTop || 0 }, { marginBottom: marginBottom || 30 }]}>
         <Text style={styles.formLabel}>{label}</Text>
-        <PickerSelect
-          placeholder={{}}
-          style={{ ...pickerSelectStyles }}
-          items={items}
-          onValueChange={onChangeValue}
-          value={defaultValue}
-          doneText="確定"
-        />
+        {Platform.OS === "ios" ? (
+          <PickerSelect
+            placeholder={{}}
+            style={{ ...pickerSelectStyles }}
+            items={items}
+            onValueChange={onChangeValue}
+            value={defaultValue}
+            doneText="確定"
+          />
+        ) : (
+          <View style={[pickerSelectStyles.pickerAndroid]}>
+            <PickerSelect
+              placeholder={{}}
+              style={{ ...pickerSelectStyles }}
+              items={items}
+              onValueChange={onChangeValue}
+              value={defaultValue}
+            />
+          </View>
+        )}
         {description ? <Text style={styles.formDescription}>{description}</Text> : null}
       </View>
     );
@@ -54,7 +66,7 @@ const pickerSelectStyles = StyleSheet.create({
   },
   pickerAndroid: {
     height: 45,
-    paddingHorizontal: 15,
+    paddingLeft: 15,
     borderWidth: 1,
     borderRadius: 30,
     borderColor: colors.grayLevel3

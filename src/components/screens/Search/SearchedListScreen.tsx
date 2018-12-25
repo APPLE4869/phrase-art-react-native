@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import SearchWindow from "../../molecules/SearchWindow";
 import SearchedPhraseItemList from "../../organisms/Phrase/SearchedPhraseItemList";
@@ -10,7 +11,13 @@ interface Props {
 
 export default class PhraseListScreen extends React.Component<Props> {
   static navigationOptions = () => {
-    return { headerTitle: <SearchWindow /> };
+    return {
+      headerTitle: (
+        <View style={{ flexDirection: "row", flex: 1, marginRight: Platform.OS === "android" ? 15 : 0 }}>
+          <SearchWindow />
+        </View>
+      )
+    };
   };
 
   constructor(props: Props) {

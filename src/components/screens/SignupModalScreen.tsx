@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Platform, View } from "react-native";
 import { NavigationParams } from "react-navigation";
 import HeaderMenuButton from "../atoms/HeaderMenuButton";
 import Signup from "../organisms/Configure/Signup";
@@ -11,7 +12,11 @@ interface Props {
 export default class SignupScreen extends React.Component<Props> {
   static navigationOptions = ({ navigation }: { navigation: NavigationParams }) => {
     return {
-      headerRight: <HeaderMenuButton onPress={() => navigation.goBack(null)} title="キャンセル" />
+      headerRight: (
+        <View style={{ marginRight: Platform.OS === "android" ? 15 : 0 }}>
+          <HeaderMenuButton onPress={() => navigation.goBack(null)} title="キャンセル" />
+        </View>
+      )
     };
   };
 
