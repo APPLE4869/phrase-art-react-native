@@ -159,9 +159,9 @@ class SubcategoryModificationForm extends React.Component<Props, State> {
     try {
       await submitSubcategoryModificationRequest(
         (subcategory as SubcategoryDTO).id,
-        subcategoryName,
+        subcategoryName.trim(),
         imageUri,
-        introduction,
+        introduction ? introduction.trim() : introduction,
         videoOnDemandNameKeys
       );
     } finally {

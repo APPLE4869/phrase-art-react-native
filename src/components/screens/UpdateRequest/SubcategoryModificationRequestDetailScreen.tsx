@@ -20,7 +20,10 @@ export default class PhraseUpdateRequest extends React.Component<Props> {
   render() {
     return (
       <DefaultTemplate>
-        <SubcategoryModificationRequestDetail updateRequestId={this.updateRequestId} />
+        <SubcategoryModificationRequestDetail
+          navigation={this.props.navigation}
+          updateRequestId={this.updateRequestId}
+        />
       </DefaultTemplate>
     );
   }

@@ -1,4 +1,4 @@
-import { Action, ADD_CURRENT_USER, ADD_JWT, CLEAR_AUTH } from "../actions/auth";
+import { Action, ADD_CURRENT_USER, ADD_JWT, CLEAR_AUTH, UPDATE_USERNAME } from "../actions/auth";
 import CurrentUserDTO from "../models/dto/currentUserDTO";
 
 // Stateの型定義
@@ -21,6 +21,13 @@ export default (state: State = initialState, action: Action) => {
     }
     case ADD_CURRENT_USER: {
       return { ...state, currentUser: action.payload };
+    }
+    case UPDATE_USERNAME: {
+      if (!state.currentUser) {
+        return state;
+      }
+      const currentUser = new CurrentUserDTO({ id: state.currentUser.id, username: action.payload });
+      return { ...state, currentUser };
     }
     case CLEAR_AUTH: {
       return { ...state, jwt: undefined, currentUser: undefined };

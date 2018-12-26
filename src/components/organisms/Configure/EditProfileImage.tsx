@@ -89,7 +89,7 @@ class EditProfileImage extends React.Component<Props, State> {
   }
 
   async onSubmit() {
-    const { registerProfile, startLoading, endLoading, addMessage, navigateConfigureIndex } = this.props;
+    const { registerProfile, fetchProfile, startLoading, endLoading, addMessage, navigateConfigureIndex } = this.props;
     const { imageUri } = this.state;
 
     startLoading();
@@ -100,6 +100,7 @@ class EditProfileImage extends React.Component<Props, State> {
       endLoading();
     }
 
+    fetchProfile();
     addMessage("プロフィール画像を更新しました。");
     navigateConfigureIndex();
   }

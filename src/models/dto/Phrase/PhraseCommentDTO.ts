@@ -1,4 +1,6 @@
-export default class PhraseCommentDTO {
+import { CommentInterface } from "../CommentInterface";
+
+export default class PhraseCommentDTO implements CommentInterface {
   readonly id: string;
   readonly userId: string;
   readonly username: string;

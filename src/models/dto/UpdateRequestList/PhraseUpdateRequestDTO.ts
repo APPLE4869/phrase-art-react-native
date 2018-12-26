@@ -22,9 +22,20 @@ export default class PhraseUpdateRequestDTO extends UpdateRequestDTO {
     phraseContent,
     phraseAuthorName,
     approvedCount,
-    rejectedCount
+    rejectedCount,
+    commentCount
   }: PhraseUpdateRequestProperty) {
-    super({ id, userId, type, finished, decisionExpiresAt, finalDecisionResult, approvedCount, rejectedCount });
+    super({
+      id,
+      userId,
+      type,
+      finished,
+      decisionExpiresAt,
+      finalDecisionResult,
+      approvedCount,
+      rejectedCount,
+      commentCount
+    });
     this.categoryId = categoryId;
     this.categoryName = categoryName;
     this.subcategoryName = subcategoryName;

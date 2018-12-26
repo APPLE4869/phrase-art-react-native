@@ -12,7 +12,7 @@ interface Props {
   contextMenuHidden?: boolean;
   secureTextEntry?: boolean;
   marginTop?: 0 | 30;
-  marginBottom?: 30 | 40;
+  marginBottom?: 0 | 30 | 40;
   isTextarea?: boolean;
 }
 
@@ -56,7 +56,13 @@ export default class TextField extends React.Component<Props, State> {
     const { focused } = this.state;
 
     return (
-      <View style={[styles.form, { marginTop: marginTop || 0 }, { marginBottom: marginBottom || 30 }]}>
+      <View
+        style={[
+          styles.form,
+          { marginTop: marginTop || 0 },
+          { marginBottom: marginBottom !== undefined ? marginBottom : 30 }
+        ]}
+      >
         <Text style={styles.formLabel}>{label}</Text>
         <TextInput
           multiline={!!isTextarea}
@@ -89,7 +95,7 @@ const styles = StyleSheet.create({
   },
   formLabel: {
     color: colors.grayLevel2,
-    fontSize: 13,
+    fontSize: 14,
     letterSpacing: 1.5,
     marginBottom: 5
   },
@@ -106,9 +112,10 @@ const styles = StyleSheet.create({
     height: 45
   },
   textareaField: {
-    height: 200,
-    paddingTop: 10,
-    paddingBottom: 10,
+    minHeight: 72,
+    maxHeight: 200,
+    paddingTop: 15,
+    paddingBottom: 15,
     lineHeight: 21
   },
   isFocused: {

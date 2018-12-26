@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Dimensions, FlatList, RefreshControl, StyleSheet, TouchableOpacity, View } from "react-native";
+import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as PhrasesAction from "../../../actions/Phrase/phrases";
 import * as PhrasesListStatusAction from "../../../actions/Phrase/phrasesListStatus";
@@ -12,6 +13,7 @@ import { colors } from "../../../styles";
 import PhraseItem from "../../molecules/PhraseItem";
 
 interface Props {
+  navigation: NavigationParams;
   navigateSubcategoryDetail: () => void;
   navigateDetail: (phraseId: string) => void;
   phrases: PhraseDTO[];
@@ -122,6 +124,7 @@ class PhraseItemList extends React.Component<Props, State> {
   }
 
   render() {
+    const { navigation } = this.props;
     const { refreshLoading } = this.state;
 
     return (
@@ -131,7 +134,12 @@ class PhraseItemList extends React.Component<Props, State> {
         keyExtractor={(phrase: PhraseDTO) => phrase.id}
         ListHeaderComponent={this.ListHeaderComponent()}
         renderItem={({ item: phrase, index }) => (
-          <PhraseItem navigateDetail={this.props.navigateDetail} phrase={phrase} isFirst={index === 0} />
+          <PhraseItem
+            navigation={navigation}
+            navigateDetail={this.props.navigateDetail}
+            phrase={phrase}
+            isFirst={index === 0}
+          />
         )}
         onEndReached={this.fetchPhraseWithAwait}
         onEndReachedThreshold={3}

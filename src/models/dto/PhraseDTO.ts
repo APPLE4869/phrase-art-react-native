@@ -9,6 +9,8 @@ export default class PhraseDTO {
   readonly commentCount: number;
   readonly likeCount: number;
   readonly favoriteCount: number;
+  readonly currentUserLiked: boolean;
+  readonly currentUserFavorited: boolean;
 
   constructor({
     id,
@@ -20,7 +22,9 @@ export default class PhraseDTO {
     authorName,
     commentCount,
     likeCount,
-    favoriteCount
+    favoriteCount,
+    currentUserLiked,
+    currentUserFavorited
   }: PhraseProperty) {
     this.id = id;
     this.categoryId = categoryId;
@@ -32,6 +36,8 @@ export default class PhraseDTO {
     this.commentCount = commentCount;
     this.likeCount = likeCount;
     this.favoriteCount = favoriteCount;
+    this.currentUserLiked = currentUserLiked;
+    this.currentUserFavorited = currentUserFavorited;
   }
 }
 
@@ -46,6 +52,8 @@ interface PhraseProperty {
   commentCount: number;
   likeCount: number;
   favoriteCount: number;
+  currentUserLiked: boolean;
+  currentUserFavorited: boolean;
 }
 
 export interface PhrasesResponse {

@@ -6,6 +6,7 @@ interface Props {
   text: string;
   fontSize: 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20;
   textStyle?: object;
+  onLayout?: (e: any) => void;
 }
 
 export default class StandardText extends React.Component<Props> {
@@ -27,8 +28,12 @@ export default class StandardText extends React.Component<Props> {
   }
 
   render() {
-    const { text } = this.props;
+    const { text, onLayout } = this.props;
 
-    return <Text style={[this.styleConfigure()]}>{text}</Text>;
+    return (
+      <Text style={[this.styleConfigure()]} onLayout={onLayout}>
+        {text}
+      </Text>
+    );
   }
 }

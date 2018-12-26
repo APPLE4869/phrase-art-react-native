@@ -1,14 +1,19 @@
 import moment from "moment";
 import * as React from "react";
-import { Alert, StyleSheet, View } from "react-native";
+import { Animated, Dimensions, Keyboard, ScrollView, StyleSheet, View } from "react-native";
+import { IMessage } from "react-native-gifted-chat";
+import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as DecisionAction from "../../../actions/UpdateRequest/decision";
 import * as PhraseRegistrationRequestAction from "../../../actions/UpdateRequest/phraseRegistrationRequest";
+import * as UpdateRequestCommentAction from "../../../actions/UpdateRequest/updateRequestComment";
 import PhraseDecisionDTO from "../../../models/dto/UpdateRequest/PhraseDecisionDTO";
 import PhraseRegistrationRequestDTO from "../../../models/dto/UpdateRequest/PhraseRegistrationRequestDTO";
+import UpdateRequestCommentDTO from "../../../models/dto/UpdateRequest/UpdateRequestCommentDTO";
 import UpdateRequestDTO from "../../../models/dto/UpdateRequestList/UpdateRequestDTO";
 import { State as RootState } from "../../../reducers";
 import { colors } from "../../../styles";
+import { signinRequestAlert } from "../../../support/alert";
 import ChoiceButtonGroup from "../../atoms/ChoiceButtonGroup";
 import DecisionCounts from "../../atoms/DecisionCounts";
 import IconImageWithLabel from "../../atoms/IconImageWithLabel";
@@ -16,9 +21,12 @@ import InlineCategoryNames from "../../atoms/InlineCategoryNames";
 import StandardText from "../../atoms/StandardText";
 import FinalResult from "../../atoms/UpdateRequest/FinalResult";
 import RemainingTime from "../../atoms/UpdateRequest/RemainingTime";
+import VerticalSlideToggleButton from "../../atoms/VerticalSlideToggleButton";
+import Chat from "../../molecules/Chat";
 import ReportIcon from "../../molecules/ReportIcon";
 
 interface Props {
+  navigation: NavigationParams;
   updateRequestId: string;
   phraseRegistrationRequest?: PhraseRegistrationRequestDTO;
   phraseDecision?: PhraseDecisionDTO;
@@ -26,24 +34,64 @@ interface Props {
   approve: any;
   reject: any;
   auth: any;
+  updateRequestComments: UpdateRequestCommentDTO[];
   initializePhraseRegistrationRequest: any;
   initializeDecision: any;
+  submitComment: any;
+  fetchPreviousUpdateRequestComments: any;
+  fetchFollowingUpdateRequestComments: any;
+  initializeUpdateRequestComments: any;
 }
 
 interface State {
   choiceButtonGroupActiveIndex?: 0 | 1;
+  isScrollViewAtContent: boolean;
+  itemAnimationMaxHeight: any;
+  isShowItem: boolean;
 }
 
 class RegistrationRequestDetail extends React.Component<Props, State> {
+  private firstFetchCommentId: string = "";
+  private contentHeightThreshold: number;
+  private itemDefaultMaxHeight: number;
+  private keyboardDidShowListener: any;
+
   constructor(props: Props) {
     super(props);
 
-    this.state = { choiceButtonGroupActiveIndex: undefined };
+    const windowSize = Dimensions.get("window");
+    this.contentHeightThreshold = windowSize.height * 0.35;
+    this.itemDefaultMaxHeight = windowSize.height;
+
+    this.state = {
+      choiceButtonGroupActiveIndex: undefined,
+      isScrollViewAtContent: false,
+      itemAnimationMaxHeight: new Animated.Value(this.itemDefaultMaxHeight),
+      isShowItem: true
+    };
 
     this.onPressForPositive = this.onPressForPositive.bind(this);
     this.onPressForNegative = this.onPressForNegative.bind(this);
+    this.onLayoutOfContent = this.onLayoutOfContent.bind(this);
+    this.slideUpItem = this.slideUpItem.bind(this);
+    this.slideDownItem = this.slideDownItem.bind(this);
+    this.keyboardDidShow = this.keyboardDidShow.bind(this);
+    this.onSendComment = this.onSendComment.bind(this);
 
     this.initialize();
+    this.initializeComments();
+  }
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", this.keyboardDidShow);
+  }
+
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+  }
+
+  keyboardDidShow() {
+    this.slideUpItem();
   }
 
   async initialize() {
@@ -56,6 +104,51 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     const { phraseDecision } = this.props;
     if (phraseDecision) {
       this.setState({ choiceButtonGroupActiveIndex: phraseDecision.result === "approve" ? 0 : 1 });
+    }
+  }
+
+  async initializeComments() {
+    const { updateRequestId, fetchPreviousUpdateRequestComments } = this.props;
+    this.props.initializeUpdateRequestComments();
+
+    await fetchPreviousUpdateRequestComments(updateRequestId);
+
+    const { updateRequestComments } = this.props;
+    if (updateRequestComments.length > 0) {
+      this.firstFetchCommentId = updateRequestComments[0].id;
+    }
+  }
+
+  async onSendComment(messages: IMessage[]) {
+    Keyboard.dismiss();
+
+    const { auth } = this.props;
+
+    if (!auth || !auth.jwt) {
+      signinRequestAlert("コメントをする", this.props.navigation);
+      return;
+    }
+
+    const {
+      phraseRegistrationRequest,
+      submitComment,
+      fetchFollowingUpdateRequestComments,
+      updateRequestComments
+    } = this.props;
+    if (!phraseRegistrationRequest) {
+      return;
+    }
+    await submitComment(phraseRegistrationRequest.id, messages[0].text.trim());
+
+    if (updateRequestComments.length > 0) {
+      fetchFollowingUpdateRequestComments(phraseRegistrationRequest.id, updateRequestComments[0].id);
+      return;
+    }
+
+    await this.props.fetchPreviousUpdateRequestComments(phraseRegistrationRequest.id);
+
+    if (this.props.updateRequestComments.length > 0 && !this.firstFetchCommentId) {
+      this.firstFetchCommentId = this.props.updateRequestComments[0].id;
     }
   }
 
@@ -93,10 +186,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     const { auth } = this.props;
 
     if (!auth || !auth.jwt) {
-      Alert.alert(
-        "ログインする必要があります",
-        "承認または否認をするには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）"
-      );
+      signinRequestAlert("承認または否認をする", this.props.navigation);
       return false;
     }
     return true;
@@ -114,9 +204,36 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     return decisionExpiresAtMoment.diff(currentMoment, "minutes") < 0;
   }
 
+  onLayoutOfContent(e: any) {
+    if (this.contentHeightThreshold < e.nativeEvent.layout.height) {
+      this.setState({ isScrollViewAtContent: true });
+    }
+  }
+
+  slideUpItem() {
+    Animated.spring(this.state.itemAnimationMaxHeight, {
+      toValue: 0,
+      friction: 10,
+      velocity: 1.5
+    }).start();
+    this.setState({ isShowItem: false });
+  }
+
+  slideDownItem() {
+    Animated.spring(this.state.itemAnimationMaxHeight, {
+      toValue: this.itemDefaultMaxHeight,
+      friction: 10,
+      velocity: 1.5
+    }).start();
+    this.setState({ isShowItem: true });
+
+    Keyboard.dismiss();
+  }
+
   render() {
-    const { phraseRegistrationRequest: request } = this.props;
-    const { choiceButtonGroupActiveIndex } = this.state;
+    const { phraseRegistrationRequest: request, auth, updateRequestComments } = this.props;
+    const { currentUser } = auth;
+    const { choiceButtonGroupActiveIndex, isScrollViewAtContent, isShowItem, itemAnimationMaxHeight } = this.state;
 
     if (!request) {
       return null;
@@ -124,32 +241,59 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
 
     return (
       <View style={styles.container}>
-        <View style={styles.itemTop}>
-          {request.finalDecisionResult ? (
-            <FinalResult
-              decisionExpiresAt={request.decisionExpiresAt}
-              finalDecisionResult={request.finalDecisionResult}
+        <View style={styles.item}>
+          <Animated.View style={{ maxHeight: itemAnimationMaxHeight, overflow: "hidden" }}>
+            <View style={styles.itemTop}>
+              {request.finalDecisionResult ? (
+                <FinalResult
+                  decisionExpiresAt={request.decisionExpiresAt}
+                  finalDecisionResult={request.finalDecisionResult}
+                />
+              ) : (
+                <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
+              )}
+              <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
+            </View>
+            <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
+            {isScrollViewAtContent ? (
+              <ScrollView style={{ width: "100%", height: this.contentHeightThreshold, marginVertical: 10 }}>
+                <StandardText text={request.phraseContent} fontSize={15} />
+              </ScrollView>
+            ) : (
+              <StandardText
+                text={request.phraseContent}
+                fontSize={15}
+                textStyle={{ marginVertical: 10 }}
+                onLayout={this.onLayoutOfContent}
+              />
+            )}
+            <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
+            <View style={styles.itemBottom}>
+              <IconImageWithLabel type={UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE} />
+              <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
+            </View>
+            <ChoiceButtonGroup
+              positiveTitle="承認する"
+              negativeTitle="否認する"
+              onPressForPositive={this.onPressForPositive}
+              onPressForNegative={this.onPressForNegative}
+              activeIndex={choiceButtonGroupActiveIndex}
+              marginTop={20}
+              isDisabled={this.isExpired()}
             />
-          ) : (
-            <RemainingTime decisionExpiresAt={request.decisionExpiresAt} />
-          )}
-          <ReportIcon reportSymbol="UpdateRequest" reportId={request.id} />
+            <View style={{ height: 25 }} />
+          </Animated.View>
+          <VerticalSlideToggleButton
+            isShowItem={isShowItem}
+            onSlideUp={this.slideUpItem}
+            onSlideDown={this.slideDownItem}
+          />
         </View>
-        <InlineCategoryNames categoryName={request.categoryName} subcategoryName={request.subcategoryName} />
-        <StandardText text={request.phraseContent} fontSize={15} textStyle={{ marginVertical: 10 }} />
-        <StandardText text={request.phraseAuthorName} fontSize={13} textStyle={{ color: colors.grayLevel1 }} />
-        <View style={styles.itemBottom}>
-          <IconImageWithLabel type={UpdateRequestDTO.PHRASE_REGISTRATION_REQUEST_TYPE} />
-          <DecisionCounts approvedCount={request.approvedCount} rejectedCount={request.rejectedCount} />
-        </View>
-        <ChoiceButtonGroup
-          positiveTitle="承認する"
-          negativeTitle="否認する"
-          onPressForPositive={this.onPressForPositive}
-          onPressForNegative={this.onPressForNegative}
-          activeIndex={choiceButtonGroupActiveIndex}
-          marginTop={20}
-          isDisabled={this.isExpired()}
+        <Chat
+          onSend={this.onSendComment}
+          comments={updateRequestComments}
+          userId={currentUser ? currentUser.id : undefined}
+          reportSymbol="UpdateRequestComment"
         />
       </View>
     );
@@ -158,9 +302,22 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    width: "100%"
+  },
+  item: {
+    position: "absolute",
     width: "100%",
+    zIndex: 10,
+    backgroundColor: colors.white,
+    paddingTop: 15,
+    paddingBottom: 5,
     paddingHorizontal: 15,
-    paddingTop: 15
+    borderTopColor: "transparent",
+    borderRightColor: "transparent",
+    borderLeftColor: "transparent",
+    borderBottomColor: colors.grayLevel4,
+    borderWidth: 1
   },
   itemTop: {
     marginBottom: 10,
@@ -179,7 +336,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: RootState) => ({
   phraseRegistrationRequest: state.phraseRegistrationRequest.phraseRegistrationRequest,
   phraseDecision: state.phraseRegistrationRequest.phraseDecision,
-  auth: state.auth
+  auth: state.auth,
+  updateRequestComments: state.updateRequestComment.updateRequestComments
 });
 
 const mapDispatchToProps = {
@@ -187,7 +345,11 @@ const mapDispatchToProps = {
   initializePhraseRegistrationRequest: PhraseRegistrationRequestAction.initializePhraseRegistrationRequest,
   initializeDecision: PhraseRegistrationRequestAction.initializeDecision,
   approve: DecisionAction.approve,
-  reject: DecisionAction.reject
+  reject: DecisionAction.reject,
+  submitComment: UpdateRequestCommentAction.submitComment,
+  fetchPreviousUpdateRequestComments: UpdateRequestCommentAction.fetchPreviousUpdateRequestComments,
+  fetchFollowingUpdateRequestComments: UpdateRequestCommentAction.fetchFollowingUpdateRequestComments,
+  initializeUpdateRequestComments: UpdateRequestCommentAction.initializeUpdateRequestComments
 };
 
 const enhancer = connect(

@@ -1,5 +1,7 @@
 import { createStackNavigator } from "react-navigation";
+import EditPasswordScreen from "../../components/screens/Configure/EditPasswordScreen";
 import EditProfileImageScreen from "../../components/screens/Configure/EditProfileImageScreen";
+import EditUsernameScreen from "../../components/screens/Configure/EditUsernameScreen";
 import ConfigureIndexScreen from "../../components/screens/Configure/IndexScreen";
 import ConfigureLoginScreen from "../../components/screens/Configure/LoginScreen";
 import ConfigureSignupScreen from "../../components/screens/Configure/SignupScreen";
@@ -12,6 +14,8 @@ const PhraseStack = createStackNavigator(
     EditProfileImage: { screen: EditProfileImageScreen, navigationOptions: { title: "プロフィール画像" } },
     ConfigureLogin: { screen: ConfigureLoginScreen, navigationOptions: { title: "ログイン" } },
     ConfigureSignup: { screen: ConfigureSignupScreen, navigationOptions: { title: "アカウント作成" } },
+    EditUsername: { screen: EditUsernameScreen, navigationOptions: { title: "ユーザー名" } },
+    EditPassword: { screen: EditPasswordScreen, navigationOptions: { title: "パスワード" } },
     ConfigureTermsOfService: { screen: ConfigureTermsOfServiceScreen, navigationOptions: { title: "利用規約" } }
   },
   {
@@ -21,3 +25,5 @@ const PhraseStack = createStackNavigator(
 );
 
 export default PhraseStack;
+
+export const visibleBottomTabIndex = [0];

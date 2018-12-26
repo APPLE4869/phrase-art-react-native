@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dimensions, Image, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, Image, Linking, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import * as VideoOnDemandsAction from "../../../actions/videoOnDemands";
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
@@ -40,11 +40,35 @@ class SubcategoryDetail extends React.Component<Props> {
           }}
         />
         {isActive ? (
-          <StandardText text="対応" fontSize={14} textStyle={{ marginTop: 10 }} />
+          this.toAppLink(videoOnDemand)
         ) : (
           <StandardText text="未対応" fontSize={14} textStyle={{ color: colors.grayLevel2, marginTop: 10 }} />
         )}
       </View>
+    );
+  }
+
+  toAppLink(videoOnDemand: VideoOnDemandDTO) {
+    return (
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => {
+          if (!videoOnDemand.appDeepLink) {
+            Linking.openURL(videoOnDemand.url);
+            return;
+          }
+          Linking.canOpenURL(videoOnDemand.appDeepLink).then(supported => {
+            if (supported) {
+              Linking.openURL(videoOnDemand.appDeepLink as string);
+            } else {
+              Linking.openURL(videoOnDemand.url);
+            }
+          });
+        }}
+        style={{ marginTop: 10 }}
+      >
+        <StandardText text="今すぐ観てみる" fontSize={14} textStyle={{ color: colors.clickable }} />
+      </TouchableOpacity>
     );
   }
 

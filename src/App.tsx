@@ -1,5 +1,6 @@
 import * as React from "react";
 import { StatusBar, View } from "react-native";
+import SplashScreen from "react-native-splash-screen";
 import { Provider } from "react-redux";
 import { Store } from "redux";
 import { PersistGate } from "redux-persist/integration/react";
@@ -21,6 +22,7 @@ window.store = store;
 interface Props {}
 export default class App extends React.Component<Props> {
   componentDidMount() {
+    SplashScreen.hide();
     checkNewVersion();
   }
 
