@@ -12,7 +12,7 @@ interface Props {
   contextMenuHidden?: boolean;
   secureTextEntry?: boolean;
   marginTop?: 0 | 30;
-  marginBottom?: 30 | 40;
+  marginBottom?: 0 | 30 | 40;
   isTextarea?: boolean;
 }
 
@@ -56,7 +56,13 @@ export default class TextField extends React.Component<Props, State> {
     const { focused } = this.state;
 
     return (
-      <View style={[styles.form, { marginTop: marginTop || 0 }, { marginBottom: marginBottom || 30 }]}>
+      <View
+        style={[
+          styles.form,
+          { marginTop: marginTop || 0 },
+          { marginBottom: marginBottom !== undefined ? marginBottom : 30 }
+        ]}
+      >
         <Text style={styles.formLabel}>{label}</Text>
         <TextInput
           multiline={!!isTextarea}

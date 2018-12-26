@@ -26,7 +26,7 @@ export default class SelectField extends React.Component<Props> {
         <Text style={styles.formLabel}>{label}</Text>
         {Platform.OS === "ios" ? (
           <PickerSelect
-            placeholder={{}}
+            placeholder={{ label: "選択してください" }}
             style={{ ...pickerSelectStyles }}
             items={items}
             onValueChange={onChangeValue}
@@ -36,7 +36,7 @@ export default class SelectField extends React.Component<Props> {
         ) : (
           <View style={[pickerSelectStyles.pickerAndroid]}>
             <PickerSelect
-              placeholder={{}}
+              placeholder={{ label: "選択してください" }}
               style={{ ...pickerSelectStyles }}
               items={items}
               onValueChange={onChangeValue}
@@ -58,7 +58,9 @@ const pickerSelectStyles = StyleSheet.create({
     letterSpacing: 2,
     borderWidth: 1,
     borderRadius: 30,
-    borderColor: colors.grayLevel3
+    borderColor: colors.grayLevel3,
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    color: colors.baseBlack
   },
   inputAndroid: {
     height: 45,
@@ -69,7 +71,9 @@ const pickerSelectStyles = StyleSheet.create({
     paddingLeft: 15,
     borderWidth: 1,
     borderRadius: 30,
-    borderColor: colors.grayLevel3
+    borderColor: colors.grayLevel3,
+    backgroundColor: "rgba(255, 255, 255, 0.85)",
+    color: colors.baseBlack
   },
   icon: {
     borderLeftWidth: 5,

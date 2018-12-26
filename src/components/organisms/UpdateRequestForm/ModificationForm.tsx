@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
@@ -11,6 +11,8 @@ import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
 import { deleteAllHalfAndFullSpace, replaceMoreThreeBlankLineToTwo } from "../../../support/replace";
 import FormButton from "../../atoms/FormButton";
+import TextFieldWithAuthorCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithAuthorCandidates";
+import TextFieldWithSubcategoryCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithSubcategoryCandidates";
 import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
 
@@ -27,6 +29,7 @@ interface Props {
 }
 
 interface State {
+  selectedCategory?: CategoryDTO;
   categoryId: string;
   subcategoryName: string;
   author: string;
@@ -34,11 +37,17 @@ interface State {
 }
 
 class ModificationForm extends React.Component<Props, State> {
+  private windowWidth: number;
+
   constructor(props: Props) {
     super(props);
 
+    const windowSize = Dimensions.get("window");
+    this.windowWidth = windowSize.width;
+
     const { phrase } = this.props;
     this.state = {
+      selectedCategory: undefined,
       categoryId: phrase.categoryId,
       subcategoryName: phrase.subcategoryName || "",
       author: phrase.authorName,
@@ -55,19 +64,25 @@ class ModificationForm extends React.Component<Props, State> {
   }
 
   async fetchCategoriesAndsetInitialCategoryId() {
-    const { fetchCategories } = this.props;
+    const { fetchCategories, phrase } = this.props;
 
     // 初期表示用のカテゴリーを取得
     await fetchCategories();
 
-    const { categories } = this.props;
-    if (!this.state.categoryId && categories.length > 0) {
-      this.setState({ categoryId: categories[0].id });
-    }
+    this.onChangeSelectedCategory(phrase.categoryId);
+  }
+
+  onChangeSelectedCategory(categoryId: string) {
+    this.props.categories.forEach(category => {
+      if (categoryId === category.id) {
+        this.setState({ selectedCategory: category });
+      }
+    });
   }
 
   onChangeCategoryId(categoryId: string) {
     this.setState({ categoryId });
+    this.onChangeSelectedCategory(categoryId);
   }
 
   onChangeSubcategoryName(subcategoryName: string) {
@@ -145,7 +160,7 @@ class ModificationForm extends React.Component<Props, State> {
   }
 
   render() {
-    const { categoryId, subcategoryName, author, content } = this.state;
+    const { selectedCategory, categoryId, subcategoryName, author, content } = this.state;
     const { categories } = this.props;
 
     if (categories.length === 0) {
@@ -161,18 +176,28 @@ class ModificationForm extends React.Component<Props, State> {
           onChangeValue={this.onChangeCategoryId}
           defaultValue={categoryId}
         />
-        <TextField
-          label="サブカテゴリー"
-          placeholder="経営者"
+        {selectedCategory ? (
+          <Image
+            style={{
+              width: this.windowWidth,
+              height: this.windowWidth * 0.3,
+              position: "absolute",
+              zIndex: -1,
+              opacity: 0.3
+            }}
+            source={{ uri: selectedCategory.imageUrl }}
+          />
+        ) : null}
+        <TextFieldWithSubcategoryCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
           onChangeText={this.onChangeSubcategoryName}
-          defaultValue={subcategoryName}
         />
-        <TextField
-          label="作者"
-          placeholder="スティーブ・ジョブズ"
-          description="スペースは入力できません。"
+        <TextFieldWithAuthorCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
+          authorName={author}
           onChangeText={this.onChangeAuthor}
-          defaultValue={author}
         />
         <TextField
           label="内容"
