@@ -11,6 +11,8 @@ import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
 import { deleteAllHalfAndFullSpace, replaceMoreThreeBlankLineToTwo } from "../../../support/replace";
 import FormButton from "../../atoms/FormButton";
+import TextFieldWithAuthorCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithAuthorCandidates";
+import TextFieldWithSubcategoryCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithSubcategoryCandidates";
 import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
 
@@ -181,23 +183,21 @@ class ModificationForm extends React.Component<Props, State> {
               height: this.windowWidth * 0.3,
               position: "absolute",
               zIndex: -1,
-              opacity: 0.25
+              opacity: 0.3
             }}
             source={{ uri: selectedCategory.imageUrl }}
           />
         ) : null}
-        <TextField
-          label="サブカテゴリー"
-          placeholder="経営者"
+        <TextFieldWithSubcategoryCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
           onChangeText={this.onChangeSubcategoryName}
-          defaultValue={subcategoryName}
         />
-        <TextField
-          label="作者"
-          placeholder="スティーブ・ジョブズ"
-          description="スペースは入力できません。"
+        <TextFieldWithAuthorCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
+          authorName={author}
           onChangeText={this.onChangeAuthor}
-          defaultValue={author}
         />
         <TextField
           label="内容"

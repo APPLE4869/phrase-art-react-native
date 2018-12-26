@@ -1,7 +1,6 @@
 import moment from "moment";
 import * as React from "react";
 import {
-  Alert,
   Animated,
   Dimensions,
   Image,
@@ -214,10 +213,7 @@ class RegistrationRequestDetail extends React.Component<Props, State> {
     const { auth } = this.props;
 
     if (!auth || !auth.jwt) {
-      Alert.alert(
-        "ログインする必要があります",
-        "承認または否認をするには、ログインする必要があります。\n設定からアカウントを作成してください。\n（作成は２０秒でできます。）"
-      );
+      signinRequestAlert("承認または否認をする", this.props.navigation);
       return false;
     }
     return true;

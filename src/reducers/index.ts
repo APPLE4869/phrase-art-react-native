@@ -3,6 +3,7 @@ import auth, { State as AuthState } from "./auth";
 import categories, { State as CategoriesState } from "./categories";
 import currentProfile, { State as CurrentProfileState } from "./currentProfile";
 import loading, { State as LoadingState } from "./loading";
+import authors, { State as AuthorsState } from "./phrase/authors";
 import phraseComment, { State as phraseCommentState } from "./phrase/phraseComment";
 import phrases, { State as PhrasesState } from "./phrase/phrases";
 import phrasesListStatus, { State as PhrasesListStatusState } from "./phrase/PhrasesListStatus";
@@ -39,6 +40,7 @@ export interface State {
   phrasesListStatus: PhrasesListStatusState;
   videoOnDemands: VideoOnDemandsState;
   currentProfile: CurrentProfileState;
+  authors: AuthorsState;
 }
 
 export default combineReducers({
@@ -57,5 +59,6 @@ export default combineReducers({
   phrasesListStatus,
   videoOnDemands,
   currentProfile,
-  updateRequestComment
+  updateRequestComment,
+  authors
 });

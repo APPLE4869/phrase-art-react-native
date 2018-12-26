@@ -10,6 +10,8 @@ import { State as RootState } from "../../../reducers";
 import { formStyle } from "../../../styles";
 import { deleteAllHalfAndFullSpace, replaceMoreThreeBlankLineToTwo } from "../../../support/replace";
 import FormButton from "../../atoms/FormButton";
+import TextFieldWithAuthorCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithAuthorCandidates";
+import TextFieldWithSubcategoryCandidates from "../../molecules/FormGroup/Candidates/TextFieldWithSubcategoryCandidates";
 import SelectField from "../../molecules/FormGroup/SelectField";
 import TextField from "../../molecules/FormGroup/TextField";
 
@@ -47,16 +49,17 @@ class RegistrationForm extends React.Component<Props, State> {
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
     this.onChangeAuthor = this.onChangeAuthor.bind(this);
     this.onChangeContent = this.onChangeContent.bind(this);
+    this.onPressCandidates = this.onPressCandidates.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.fetchCategoriesAndsetInitialCategoryId();
   }
 
-  async fetchCategoriesAndsetInitialCategoryId() {
+  fetchCategoriesAndsetInitialCategoryId() {
     const { fetchCategories } = this.props;
 
     // 初期表示用のカテゴリーを取得
-    await fetchCategories();
+    fetchCategories();
   }
 
   onChangeCategoryId(categoryId: string) {
@@ -124,6 +127,10 @@ class RegistrationForm extends React.Component<Props, State> {
     navigateNextScreen();
   }
 
+  onPressCandidates(value: string) {
+    alert(value);
+  }
+
   render() {
     const { selectedCategory, categoryId, subcategoryName, author, content } = this.state;
     const { categories } = this.props;
@@ -148,23 +155,21 @@ class RegistrationForm extends React.Component<Props, State> {
               height: this.windowWidth * 0.3,
               position: "absolute",
               zIndex: -1,
-              opacity: 0.25
+              opacity: 0.3
             }}
             source={{ uri: selectedCategory.imageUrl }}
           />
         ) : null}
-        <TextField
-          label="サブカテゴリー"
-          placeholder="経営者"
+        <TextFieldWithSubcategoryCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
           onChangeText={this.onChangeSubcategoryName}
-          defaultValue={subcategoryName}
         />
-        <TextField
-          label="作者"
-          placeholder="スティーブ・ジョブズ"
-          description="スペースは入力できません。"
+        <TextFieldWithAuthorCandidates
+          categoryId={categoryId}
+          subcategoryName={subcategoryName}
+          authorName={author}
           onChangeText={this.onChangeAuthor}
-          defaultValue={author}
         />
         <TextField
           label="内容"
