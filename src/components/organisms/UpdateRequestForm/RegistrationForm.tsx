@@ -1,5 +1,5 @@
 import * as React from "react";
-import { View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
 import { connect } from "react-redux";
 import * as CategoriesAction from "../../../actions/categories";
 import * as loadingAction from "../../../actions/loading";
@@ -25,6 +25,7 @@ interface Props {
 }
 
 interface State {
+  selectedCategory?: CategoryDTO;
   categoryId: string;
   subcategoryName: string;
   author: string;
@@ -32,10 +33,15 @@ interface State {
 }
 
 class RegistrationForm extends React.Component<Props, State> {
+  private windowWidth: number;
+
   constructor(props: Props) {
     super(props);
 
-    this.state = { categoryId: "", subcategoryName: "", author: "", content: "" };
+    const windowSize = Dimensions.get("window");
+    this.windowWidth = windowSize.width;
+
+    this.state = { selectedCategory: undefined, categoryId: "", subcategoryName: "", author: "", content: "" };
 
     this.onChangeCategoryId = this.onChangeCategoryId.bind(this);
     this.onChangeSubcategoryName = this.onChangeSubcategoryName.bind(this);
@@ -51,15 +57,19 @@ class RegistrationForm extends React.Component<Props, State> {
 
     // 初期表示用のカテゴリーを取得
     await fetchCategories();
-
-    const { categories } = this.props;
-    if (categories.length > 0) {
-      this.setState({ categoryId: categories[0].id });
-    }
   }
 
   onChangeCategoryId(categoryId: string) {
     this.setState({ categoryId });
+    this.onChangeSelectedCategory(categoryId);
+  }
+
+  onChangeSelectedCategory(categoryId: string) {
+    this.props.categories.forEach(category => {
+      if (categoryId === category.id) {
+        this.setState({ selectedCategory: category });
+      }
+    });
   }
 
   onChangeSubcategoryName(subcategoryName: string) {
@@ -115,7 +125,7 @@ class RegistrationForm extends React.Component<Props, State> {
   }
 
   render() {
-    const { categoryId, subcategoryName, author, content } = this.state;
+    const { selectedCategory, categoryId, subcategoryName, author, content } = this.state;
     const { categories } = this.props;
 
     if (categories.length === 0) {
@@ -131,6 +141,18 @@ class RegistrationForm extends React.Component<Props, State> {
           onChangeValue={this.onChangeCategoryId}
           defaultValue={categoryId}
         />
+        {selectedCategory ? (
+          <Image
+            style={{
+              width: this.windowWidth,
+              height: this.windowWidth * 0.3,
+              position: "absolute",
+              zIndex: -1,
+              opacity: 0.25
+            }}
+            source={{ uri: selectedCategory.imageUrl }}
+          />
+        ) : null}
         <TextField
           label="サブカテゴリー"
           placeholder="経営者"
