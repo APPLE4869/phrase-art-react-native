@@ -67,7 +67,7 @@ class EditPassword extends React.Component<Props, State> {
       endLoading();
     }
 
-    addMessage("ログインに成功しました。");
+    addMessage("パスワードを更新しました。");
     navigateConfigureIndex();
   }
 
