@@ -7,14 +7,15 @@ interface Props {
   title: string;
   arrowLeftElm?: any;
   hiddenRightArrow?: boolean;
+  isFirst?: boolean;
 }
 
 export default class ConfigureIndexItem extends React.Component<Props> {
   render() {
-    const { onPress, title, arrowLeftElm, hiddenRightArrow } = this.props;
+    const { onPress, title, arrowLeftElm, hiddenRightArrow, isFirst } = this.props;
 
     return (
-      <TouchableOpacity style={styles.item} activeOpacity={1} onPress={onPress}>
+      <TouchableOpacity style={[styles.item, isFirst ? styles.isFirst : {}]} activeOpacity={1} onPress={onPress}>
         <Text style={styles.itemText}>{title}</Text>
         <View style={styles.rightArea}>
           {arrowLeftElm}
@@ -41,6 +42,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
+  },
+  isFirst: {
+    borderTopWidth: 1,
+    borderTopColor: colors.grayLevel4
   },
   itemText: {
     fontSize: 15,

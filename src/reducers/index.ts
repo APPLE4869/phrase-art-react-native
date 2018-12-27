@@ -2,6 +2,7 @@ import { combineReducers } from "redux";
 import auth, { State as AuthState } from "./auth";
 import categories, { State as CategoriesState } from "./categories";
 import currentProfile, { State as CurrentProfileState } from "./currentProfile";
+import freeChatComment, { State as freeChatCommentState } from "./freeChatComment";
 import loading, { State as LoadingState } from "./loading";
 import authors, { State as AuthorsState } from "./phrase/authors";
 import phraseComment, { State as phraseCommentState } from "./phrase/phraseComment";
@@ -41,6 +42,7 @@ export interface State {
   videoOnDemands: VideoOnDemandsState;
   currentProfile: CurrentProfileState;
   authors: AuthorsState;
+  freeChatComment: freeChatCommentState;
 }
 
 export default combineReducers({
@@ -60,5 +62,6 @@ export default combineReducers({
   videoOnDemands,
   currentProfile,
   updateRequestComment,
-  authors
+  authors,
+  freeChatComment
 });
