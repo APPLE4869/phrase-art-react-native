@@ -59,7 +59,7 @@ class EditUsername extends React.Component<Props, State> {
       endLoading();
     }
 
-    addMessage("ログインに成功しました。");
+    addMessage("ユーザー名を更新しました。");
     navigateConfigureIndex();
   }
 

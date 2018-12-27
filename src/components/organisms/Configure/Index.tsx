@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ActionSheetIOS, Alert, Image, Platform, StyleSheet, View } from "react-native";
+import { ActionSheetIOS, Alert, Image, Platform, ScrollView, StyleSheet } from "react-native";
 import { NavigationParams } from "react-navigation";
 import { connect } from "react-redux";
 import * as authAction from "../../../actions/auth";
@@ -30,6 +30,7 @@ class Index extends React.Component<Props, State> {
     this.navigateEditUsername = this.navigateEditUsername.bind(this);
     this.navigateEditProfileImage = this.navigateEditProfileImage.bind(this);
     this.navigateEditPassword = this.navigateEditPassword.bind(this);
+    this.navigateConfigureChatting = this.navigateConfigureChatting.bind(this);
     this.navigateLogin = this.navigateLogin.bind(this);
     this.navigateSignup = this.navigateSignup.bind(this);
     this.navigateTermsOfService = this.navigateTermsOfService.bind(this);
@@ -86,6 +87,10 @@ class Index extends React.Component<Props, State> {
     this.props.navigation.navigate("EditPassword");
   }
 
+  navigateConfigureChatting() {
+    this.props.navigation.navigate("ConfigureChatting");
+  }
+
   navigateLogin() {
     this.props.navigation.navigate("ConfigureLogin");
   }
@@ -104,7 +109,7 @@ class Index extends React.Component<Props, State> {
     // ログイン中
     if (auth && auth.jwt) {
       return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           <ConfigureIndexItem
             title="ユーザー名"
             arrowLeftElm={
@@ -113,6 +118,7 @@ class Index extends React.Component<Props, State> {
               ) : null
             }
             onPress={this.navigateEditUsername}
+            isFirst={true}
           />
           <ConfigureIndexItem
             title="プロフィール画像"
@@ -129,19 +135,21 @@ class Index extends React.Component<Props, State> {
             onPress={this.navigateEditProfileImage}
           />
           <ConfigureIndexItem title="パスワード" onPress={this.navigateEditPassword} />
+          <ConfigureIndexItem title="質問・雑談チャット" onPress={this.navigateConfigureChatting} />
           <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
           <ConfigureIndexItem title="ログアウト" onPress={this.handleLogoutDialog} hiddenRightArrow={true} />
-        </View>
+        </ScrollView>
       );
     }
 
     // 未ログイン
     return (
-      <View style={styles.container}>
-        <ConfigureIndexItem title="ログイン" onPress={this.navigateLogin} />
+      <ScrollView style={styles.container}>
+        <ConfigureIndexItem title="ログイン" onPress={this.navigateLogin} isFirst={true} />
         <ConfigureIndexItem title="アカウント作成" onPress={this.navigateSignup} />
+        <ConfigureIndexItem title="質問・雑談チャット" onPress={this.navigateConfigureChatting} />
         <ConfigureIndexItem title="利用規約" onPress={this.navigateTermsOfService} />
-      </View>
+      </ScrollView>
     );
   }
 }
