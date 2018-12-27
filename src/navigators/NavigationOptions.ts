@@ -10,6 +10,6 @@ export default {
   },
   headerBackTitle: null,
   headerTintColor: colors.clickable,
-  headerTitleStyle: { color: colors.baseBlack, fontSize: 17 },
+  headerTitleStyle: { color: colors.baseBlack, fontSize: 16 },
   headerPressColorAndroid: colors.baseBlack
 };

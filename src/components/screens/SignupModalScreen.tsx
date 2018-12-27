@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Platform, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import { NavigationParams } from "react-navigation";
+import { formStyle } from "../../styles";
 import HeaderMenuButton from "../atoms/HeaderMenuButton";
 import Signup from "../organisms/Configure/Signup";
 import DefaultTemplate from "../templates/DefaultTemplate";
@@ -28,13 +29,17 @@ export default class SignupScreen extends React.Component<Props> {
     const { navigation } = this.props;
 
     return (
-      <DefaultTemplate>
-        <Signup
-          navigateConfigureIndex={() => {
-            navigation.goBack(null);
-          }}
-        />
-      </DefaultTemplate>
+      <KeyboardAvoidingView behavior="padding" style={formStyle.keyboardAvoidingView} enabled={Platform.OS === "ios"}>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <DefaultTemplate>
+            <Signup
+              navigateConfigureIndex={() => {
+                navigation.goBack(null);
+              }}
+            />
+          </DefaultTemplate>
+        </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }
