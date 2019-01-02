@@ -116,6 +116,10 @@ android {
         }
     }
     buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+        }
+
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
@@ -137,8 +141,9 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-splash-screen')
-    compile project(':react-native-image-picker')
+    implementation project(':react-native-splash-screen')
+    implementation project(':react-native-image-picker')
+    implementation project(':react-native-device-info')
     implementation project(':react-native-firebase')
     implementation "com.google.firebase:firebase-config:16.1.0"
     implementation fileTree(dir: "libs", include: ["*.jar"])
