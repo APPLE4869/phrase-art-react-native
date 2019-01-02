@@ -54,17 +54,16 @@ const attemptUpgrade = () => {
       }
     });
   } else {
-    // TODO : Androidリリース時にappIdも修正して、コメントアウトを外す。
-    // const appId = "PhraseArt";
-    // const playStoreURI = `market://details?id=${appId}`;
-    // const playStoreURL = `https://play.google.com/store/apps/details?id=${appId}`;
-    // Linking.canOpenURL(playStoreURI).then(supported => {
-    //   if (supported) {
-    //     Linking.openURL(playStoreURI);
-    //   } else {
-    //     Linking.openURL(playStoreURL);
-    //   }
-    // });
+    const appId = "com.phraseart";
+    const playStoreURI = `market://details?id=${appId}`;
+    const playStoreURL = `https://play.google.com/store/apps/details?id=${appId}`;
+    Linking.canOpenURL(playStoreURI).then(supported => {
+      if (supported) {
+        Linking.openURL(playStoreURI);
+      } else {
+        Linking.openURL(playStoreURL);
+      }
+    });
   }
 };
 
