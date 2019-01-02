@@ -12,6 +12,16 @@
 #import <Firebase.h>
 #import "RNSplashScreen.h"
 
+/*
+ * firebase
+ * 環境ごとに使用するplist名を定義しておく
+ */
+#ifdef RELEASE
+  static NSString * const firebasePlistName = @"GoogleService-Info.production";
+#else
+  static NSString * const firebasePlistName = @"GoogleService-Info.development";
+#endif
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -20,7 +30,11 @@
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
-  [FIRApp configure];
+  // Firebase
+  NSString *filePath =[[NSBundle mainBundle] pathForResource:firebasePlistName ofType:@"plist"];
+  FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:filePath];
+  [FIRApp configureWithOptions:options];
+
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"PhraseArt"
                                                initialProperties:nil

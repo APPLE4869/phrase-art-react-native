@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "android": "node node_modules/react-native/local-cli/cli.js run-android",
+    "android": "node node_modules/react-native/local-cli/cli.js run-android --appIdSuffix debug",
     "ios": "node node_modules/react-native/local-cli/cli.js run-ios --simulator='iPhone 8'",
     "fmt": "prettier --write 'src/**/*.ts{,x}' && tslint 'src/**/*.ts{,x}' --fix --project tsconfig.json",
     "lint": "tslint 'src/**/*.ts{,x}' --format stylish --project tsconfig.json"

@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "994765902126",
-    "firebase_url": "https://phrase-art-production-38b53.firebaseio.com",
-    "project_id": "phrase-art-production-38b53",
-    "storage_bucket": "phrase-art-production-38b53.appspot.com"
+    "project_number": "808677440971",
+    "firebase_url": "https://phrase-art-development.firebaseio.com",
+    "project_id": "phrase-art-development",
+    "storage_bucket": "phrase-art-development.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:994765902126:android:c4107d2c5cc67a5b",
+        "mobilesdk_app_id": "1:808677440971:android:7a9e5050c6024539",
         "android_client_info": {
-          "package_name": "com.phraseart"
+          "package_name": "com.phraseart.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "994765902126-oaprho9oc8giongfk9779canqkqhch4e.apps.googleusercontent.com",
+          "client_id": "808677440971-smv7il7qvsdn33ngh93ts7hk9ltf2s7n.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDYIeG0_oCRAJbBWSpFZVNRTciIptR2jvg"
+          "current_key": "AIzaSyDTG0VWwRnFntpKIQzN_GgLSPld89Iotes"
         }
       ],
       "services": {
