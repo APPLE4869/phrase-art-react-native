@@ -1,16 +1,21 @@
 import * as React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { connect } from "react-redux";
+import * as CategoriesAction from "../../../actions/categories";
 import * as SubcategoriesAction from "../../../actions/subcategories";
+import CategoryDTO from "../../../models/dto/CategoryDTO";
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
-import CategoryItemForAll from "../../molecules/Category/CategoryItemForAll";
+import { colors } from "../../../styles";
+import CategoryCard from "../../molecules/Category/CategoryCard";
 import SubcategoryItem from "../../molecules/Category/SubcategoryItem";
 
 interface Props {
   phrasesListStatus: PhrasesListStatus | undefined;
   categoryId: string;
+  category?: CategoryDTO;
+  fetchCategoryById: any;
   subcategories: SubcategoryDTO[];
   fetchSubcategoriesByCategoryId: any;
   initializeSubcategories: any;
@@ -36,10 +41,17 @@ class SubcategoryItemList extends React.Component<Props, State> {
   }
 
   initialize() {
-    const { categoryId, initializeSubcategories, fetchSubcategoriesByCategoryId, phrasesListStatus } = this.props;
+    const {
+      categoryId,
+      initializeSubcategories,
+      fetchCategoryById,
+      fetchSubcategoriesByCategoryId,
+      phrasesListStatus
+    } = this.props;
     initializeSubcategories();
 
     // 初期表示用のサブカテゴリーを取得
+    fetchCategoryById(categoryId);
     fetchSubcategoriesByCategoryId(categoryId);
 
     if (phrasesListStatus) {
@@ -80,7 +92,11 @@ class SubcategoryItemList extends React.Component<Props, State> {
   }
 
   render() {
-    const { subcategories, onPress, onPressForAll } = this.props;
+    const { category, subcategories, onPress, onPressForAll } = this.props;
+
+    if (!category || !subcategories) {
+      return null;
+    }
 
     return (
       <FlatList
@@ -88,11 +104,14 @@ class SubcategoryItemList extends React.Component<Props, State> {
         data={subcategories}
         keyExtractor={(subcategory: SubcategoryDTO) => subcategory.id}
         ListHeaderComponent={
-          <CategoryItemForAll
-            onPress={onPressForAll}
-            checked={this.checkedAllSubcategories()}
-            text="すべてのサブカテゴリー"
-          />
+          <View style={{ marginTop: 10 }}>
+            <CategoryCard
+              onPress={onPressForAll}
+              checked={this.checkedAllSubcategories()}
+              name={`すべての${category.name}`}
+              imageSource={{ uri: category.imageUrl }}
+            />
+          </View>
         }
         renderItem={({ item: subcategory }) => (
           <SubcategoryItem
@@ -110,16 +129,20 @@ class SubcategoryItemList extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%"
+    flex: 1,
+    width: "100%",
+    backgroundColor: colors.special.baseBackground
   }
 });
 
 const mapStateToProps = (state: RootState) => ({
+  category: state.categories.category,
   subcategories: state.subcategories.subcategories,
   phrasesListStatus: state.phrasesListStatus.phrasesListStatus
 });
 
 const mapDispatchToProps = {
+  fetchCategoryById: CategoriesAction.fetchCategoryById,
   fetchSubcategoriesByCategoryId: SubcategoriesAction.fetchSubcategoriesByCategoryId,
   initializeSubcategories: SubcategoriesAction.initializeSubcategories
 };

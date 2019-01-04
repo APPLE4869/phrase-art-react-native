@@ -7,6 +7,10 @@ export default class SubcategoryDTO {
   readonly imageUrl?: string;
   readonly introduction?: string;
   readonly videoOnDemandNameKeys: string[];
+  readonly totalPhraseCount: number;
+  readonly totalCommentCount: number;
+  readonly totalLikeCount: number;
+  readonly totalFavoriteCount: number;
 
   constructor({
     id,
@@ -16,7 +20,11 @@ export default class SubcategoryDTO {
     name,
     imageUrl,
     introduction,
-    videoOnDemandNameKeys
+    videoOnDemandNameKeys,
+    totalPhraseCount,
+    totalCommentCount,
+    totalLikeCount,
+    totalFavoriteCount
   }: SubcategoryProperty) {
     this.id = id;
     this.categoryId = categoryId;
@@ -26,6 +34,10 @@ export default class SubcategoryDTO {
     this.imageUrl = imageUrl;
     this.introduction = introduction;
     this.videoOnDemandNameKeys = videoOnDemandNameKeys;
+    this.totalPhraseCount = totalPhraseCount;
+    this.totalCommentCount = totalCommentCount;
+    this.totalLikeCount = totalLikeCount;
+    this.totalFavoriteCount = totalFavoriteCount;
   }
 }
 
@@ -38,6 +50,10 @@ interface SubcategoryProperty {
   imageUrl?: string;
   introduction?: string;
   videoOnDemandNameKeys: string[];
+  totalPhraseCount: number;
+  totalCommentCount: number;
+  totalLikeCount: number;
+  totalFavoriteCount: number;
 }
 
 export interface SubcategoriesResponse {

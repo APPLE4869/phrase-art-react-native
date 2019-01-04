@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
-import { colors } from "../../../styles";
+import CategoryCard from "./CategoryCard";
 
 interface Props {
   category: CategoryDTO;
@@ -25,32 +24,16 @@ export default class CategoryItem extends React.Component<Props> {
     const { category, currentCategoryId } = this.props;
 
     return (
-      <TouchableOpacity activeOpacity={1} onPress={this.onPress} style={styles.item}>
-        <Text style={styles.itemText}>{category.name}</Text>
-        {currentCategoryId && currentCategoryId === category.id ? (
-          <Image
-            style={{ width: 20, height: 20, bottom: 3 }}
-            source={require("../../../../assets/images/icon/clickable-check.png")}
-          />
-        ) : null}
-      </TouchableOpacity>
+      <CategoryCard
+        onPress={this.onPress}
+        checked={!!(currentCategoryId && currentCategoryId === category.id)}
+        name={category.name}
+        imageSource={category.imageUrl ? { uri: category.imageUrl } : undefined}
+        totalPhraseCount={category.totalPhraseCount}
+        totalCommentCount={category.totalCommentCount}
+        totalLikeCount={category.totalLikeCount}
+        totalFavoriteCount={category.totalFavoriteCount}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  item: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.grayLevel4,
-    paddingVertical: 23,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  itemText: {
-    fontSize: 15,
-    letterSpacing: 1,
-    color: colors.baseBlack
-  }
-});

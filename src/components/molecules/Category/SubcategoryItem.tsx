@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity } from "react-native";
 import SubcategoryDTO from "../../../models/dto/SubcategoryDTO";
-import { colors } from "../../../styles";
+import CategoryCard from "./CategoryCard";
 
 interface Props {
   subcategory: SubcategoryDTO;
@@ -25,32 +24,16 @@ export default class SubcategoryItem extends React.Component<Props> {
     const { subcategory, currentSubcategoryId } = this.props;
 
     return (
-      <TouchableOpacity activeOpacity={1} onPress={this.onPress} style={styles.item}>
-        <Text style={styles.itemText}>{subcategory.name}</Text>
-        {currentSubcategoryId && currentSubcategoryId === subcategory.id ? (
-          <Image
-            style={{ width: 20, height: 20, bottom: 3 }}
-            source={require("../../../../assets/images/icon/clickable-check.png")}
-          />
-        ) : null}
-      </TouchableOpacity>
+      <CategoryCard
+        onPress={this.onPress}
+        checked={!!(currentSubcategoryId && currentSubcategoryId === subcategory.id)}
+        name={subcategory.name}
+        imageSource={subcategory.imageUrl ? { uri: subcategory.imageUrl } : undefined}
+        totalPhraseCount={subcategory.totalPhraseCount}
+        totalCommentCount={subcategory.totalCommentCount}
+        totalLikeCount={subcategory.totalLikeCount}
+        totalFavoriteCount={subcategory.totalFavoriteCount}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  item: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.grayLevel4,
-    paddingVertical: 23,
-    paddingHorizontal: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
-  itemText: {
-    fontSize: 15,
-    letterSpacing: 1,
-    color: colors.baseBlack
-  }
-});
