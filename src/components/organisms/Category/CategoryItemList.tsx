@@ -52,7 +52,7 @@ class CategoryItemList extends React.Component<Props, State> {
   render() {
     const { categories, onPress, onPressForAll } = this.props;
 
-    if (!categories) {
+    if (categories.length === 0) {
       return null;
     }
 

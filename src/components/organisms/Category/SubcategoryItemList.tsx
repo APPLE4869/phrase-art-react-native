@@ -94,7 +94,7 @@ class SubcategoryItemList extends React.Component<Props, State> {
   render() {
     const { category, subcategories, onPress, onPressForAll } = this.props;
 
-    if (!category || !subcategories) {
+    if (!category || subcategories.length === 0) {
       return null;
     }
 
