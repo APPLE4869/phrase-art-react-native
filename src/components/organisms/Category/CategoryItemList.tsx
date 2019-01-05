@@ -5,8 +5,9 @@ import * as CategoriesAction from "../../../actions/categories";
 import CategoryDTO from "../../../models/dto/CategoryDTO";
 import PhrasesListStatus from "../../../models/PhrasesListStatus";
 import { State as RootState } from "../../../reducers";
+import { colors } from "../../../styles";
+import CategoryCard from "../../molecules/Category/CategoryCard";
 import CategoryItem from "../../molecules/Category/CategoryItem";
-import CategoryItemForAll from "../../molecules/Category/CategoryItemForAll";
 
 interface Props {
   phrasesListStatus: PhrasesListStatus | undefined;
@@ -51,27 +52,38 @@ class CategoryItemList extends React.Component<Props, State> {
   render() {
     const { categories, onPress, onPressForAll } = this.props;
 
+    if (categories.length === 0) {
+      return null;
+    }
+
     return (
-      <View style={{ flex: 1, width: "100%" }}>
-        <FlatList
-          style={styles.container}
-          data={categories}
-          keyExtractor={(category: CategoryDTO) => category.id}
-          ListHeaderComponent={
-            <CategoryItemForAll onPress={onPressForAll} checked={!this.currentCategoryId} text="すべてのカテゴリー" />
-          }
-          renderItem={({ item: category }) => (
-            <CategoryItem category={category} currentCategoryId={this.currentCategoryId} onPress={onPress} />
-          )}
-        />
-      </View>
+      <FlatList
+        style={styles.container}
+        data={categories}
+        keyExtractor={(category: CategoryDTO) => category.id}
+        ListHeaderComponent={
+          <View style={{ marginTop: 10 }}>
+            <CategoryCard
+              onPress={onPressForAll}
+              checked={!this.currentCategoryId}
+              name="すべてのカテゴリー"
+              imageSource={require("../../../../assets/images/white-wall.png")}
+            />
+          </View>
+        }
+        renderItem={({ item: category }) => (
+          <CategoryItem category={category} currentCategoryId={this.currentCategoryId} onPress={onPress} />
+        )}
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%"
+    flex: 1,
+    width: "100%",
+    backgroundColor: colors.special.baseBackground
   }
 });
 

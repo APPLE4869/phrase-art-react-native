@@ -12,6 +12,7 @@ export const colors = {
   danger: "#FF3B30",
   accent: "#4CD964",
   special: {
+    baseBackground: "#EEE",
     navigationBarBackground: "#F5F5F7",
     navigationBarBorder: "#DDDDDD",
     approve: "#00CED1",
